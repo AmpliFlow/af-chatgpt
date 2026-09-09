@@ -12,14 +12,14 @@ Workspace admins can import this repository from **Admin > Plugins > Add > Impor
 - **Path:** leave empty
 - **Branch, tag, or commit:** leave empty for `main`, or select a reviewed commit
 
-Follow the [setup guide](plugins/ampliflow/README.md) for required-app access, authentication, and testing.
+Follow the [setup guide](plugins/ampliflow/README.md) for authentication and testing.
 
+The package connects directly to `https://mcp.ampliflow.cc/mcp`; it does not depend on a workspace-scoped app ID. Each user authenticates with an AmpliFlow account. The bundled skills are read-only, but the connected server may expose write tools under the user's permissions.
 
-The package references an existing registered AmpliFlow app. Importing it does not grant app access or connect a user's account. The bundled skills are read-only; the connected server may expose write tools under the user's permissions.
 
 ## Moving from the old marketplace
 
-This catalog replaces the pilot previously hosted in `AmpliFlow/af-cli`. With no users to migrate, remove the old marketplace in ChatGPT and import this repository as a new source. Deleting the old marketplace also removes its imported plugins. Keep the original MCP connection so required-app access can be tested separately.
+This catalog replaces the pilot previously hosted in `AmpliFlow/af-cli`. With no users to migrate, remove the old marketplace in ChatGPT and import this repository as a new source. Deleting the old marketplace also removes its imported plugins. A separately registered personal MCP connection is not required by this package.
 
 ## Repository ownership
 
@@ -32,7 +32,7 @@ Edit the plugin here and bump its version before publishing updates. Use the [ac
 ## Development and project setup
 
 
-The current package version is `0.2.0`. Run the deterministic validator and the manual [acceptance checks](plugins/ampliflow/TESTING.md) before expanding the pilot. Keep local auth and `.af` runtime files out of commits. MCP server changes belong in `server repository`; plugin work does not require its old worktree.
+The current package version is `0.3.0`. Run the deterministic validator and the manual [acceptance checks](plugins/ampliflow/TESTING.md) before expanding the pilot. Keep local auth and `.af` runtime files out of commits. MCP server changes belong in `server repository`; plugin work does not require its old worktree.
 
 ## License
 
