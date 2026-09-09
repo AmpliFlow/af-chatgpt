@@ -8,7 +8,7 @@ python3 plugins/ampliflow/tests/validate_skills.py
 python3 -m py_compile plugins/ampliflow/tests/validate_skills.py
 ```
 
-The self-test proves the validator rejects a known-bad skill. The contract check verifies expected skills, required and supported MCP tool names, hosted safety guidance, and prohibited local or incompatible guidance. These checks do not prove tool availability, correct arguments at runtime, installation, OAuth, or answer quality.
+The self-test proves the validator rejects a known-bad skill. The contract check verifies the portable package structure, exact credential-free MCP endpoint, expected skills, required and supported MCP tool names, hosted safety guidance, and prohibited local or incompatible guidance. These checks do not prove tool availability, correct arguments at runtime, installation, OAuth, or answer quality.
 
 Run the cases below in a new chat with the installed package and synthetic or approved pilot data. Inspect tool calls and the answer. Pass requires exact refs, supported read tools, no writes, and explicit reporting of incomplete evidence. Record the package revision, ChatGPT surface, account role, tenant, time, and result without copying private tenant data here.
 
@@ -49,14 +49,17 @@ Run the cases below in a new chat with the installed package and synthetic or ap
 ## Release checks
 
 - Validate `plugin.json` against its declared Agent Plugins JSON Schema.
-- Parse the marketplace and `.app.json`; verify that the local source path resolves inside the marketplace root, the app reference matches the approved pilot App Id, and every referenced package file exists.
+- Parse the marketplace and `mcp.json`; verify that the local source path resolves inside the marketplace root, both schemas use Agent Plugins 1.0, the server uses `streamable-http` at exactly `https://mcp.ampliflow.cc/mcp`, and every referenced package file exists.
+- Confirm `.app.json` and `extensions.com.openai.apps` are absent; the package must not depend on a workspace-scoped app ID.
 - Run both deterministic skill checks and inspect their source contract when the MCP implementation changes.
-- Confirm the package contains no credentials, tenant records, bundled MCP configuration, hooks, or local runtime state.
+- Confirm the package contains no credentials, tenant records, credential-bearing headers, OAuth secrets, hooks, server executable, or local runtime state.
 - Verify that the published revision contains the reviewed package files and assets.
 - Keep CLI binaries, installer scripts, and MCP server implementation outside this repository.
 - Scan package prose and review descriptions for claims beyond tested capability.
 - Import the published marketplace and verify every skill is discoverable by a pilot account.
-- Verify OAuth, tool availability, exact tool arguments, no mutations, and answer quality with approved data.
+- Verify an unauthenticated MCP request produces OAuth discovery, then complete authentication and verify tool availability, exact tool arguments, no mutations, and answer quality with approved data.
+- Confirm the GitHub-imported package is identified as desktop-only and is unavailable on unsupported surfaces.
 - Verify customer workspace access separately before promising self-service installation.
+- Before public **With MCP** submission, verify protected-resource metadata, OAuth resource binding, PKCE `S256`, public-client registration, tool security declarations, and reviewer access against OpenAI's current requirements.
 
 The package can be prepared before live installation checks pass, but it stays a pilot until those checks are recorded.

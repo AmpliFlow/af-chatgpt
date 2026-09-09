@@ -10,17 +10,17 @@ Make it easy for AmpliFlow staff and selected customers to use their management 
 
 Suggested project description:
 
-> Build and maintain the AmpliFlow ChatGPT plugin, focused workflow skills, marketplace distribution, and customer setup instructions. Start with internal users and selected customer pilots. Prove installation, authentication, required-app access, useful workflows, and updates before general rollout. Prepare public directory submission after the pilot and setup guide work reliably.
+> Build and maintain the AmpliFlow ChatGPT plugin, focused workflow skills, marketplace distribution, and customer setup instructions. Start with internal users and selected customer pilots. Prove installation, authentication, MCP access, useful workflows, and updates before general rollout. Prepare public directory submission after the pilot and setup guide work reliably.
 
-The dominant uncertainty is distribution and required-app access across ChatGPT accounts and workspaces. Basic access to the hosted MCP tools has worked. A new catalog or more skills alone will not resolve the connection blocker.
+The package now declares the hosted MCP endpoint directly rather than depending on a workspace-scoped app ID. The dominant uncertainties are live OAuth compatibility, desktop pilot behavior, and OpenAI review readiness. Basic access to the hosted MCP tools has worked through a separately registered direct connection.
 
 ## Approved rollout order
 
-1. **Internal users and selected external customers.** Give people a guided setup and test useful workflows with their own authorized accounts. Exit when package installation, app connection, skill discovery, correct tenant access, and an update have been demonstrated on the intended ChatGPT surfaces. Repeat setup in a separate customer workspace before treating the app mapping as portable.
+1. **Internal users and selected external customers.** Give people a guided desktop setup and test useful workflows with their own authorized accounts. Exit when package installation, MCP authentication, skill discovery, correct tenant access, and an update have been demonstrated. Repeat setup in a separate customer workspace before treating the path as customer-ready.
 2. **General customer instructions.** Turn the verified path into self-service instructions. Separate workspace-admin setup from end-user authentication. State supported plans, roles, browser/desktop surfaces, permissions, troubleshooting, and support ownership. Confirm package-use terms before broad distribution.
 3. **Public directory submission.** Submit the tested MCP-backed plugin and skills through OpenAI. Submission, approval, and publication are separate steps. A GitHub marketplace is not a public directory listing.
 
-This order came from the user. No deadlines, budget, named assignees, or final customer eligibility rules were agreed. The first phase remains a pilot. If the required-app route cannot support the intended users, revisit distribution before investing in broad rollout.
+This order came from the user. No deadlines, budget, named assignees, or final customer eligibility rules were agreed. The first phase remains a desktop pilot. Web and mobile distribution depends on OpenAI's public **With MCP** submission and review.
 
 ## Repository decisions
 
@@ -42,9 +42,8 @@ The user chose a separate public repository after initially testing distribution
 | Default branch | `main` |
 | Marketplace | `.agents/plugins/marketplace.json`, named `ampliflow-pilot` |
 | Plugin | `plugins/ampliflow/plugin.json`, named `ampliflow` |
-| Current package version | `0.2.0` |
-| Required connection | `plugins/ampliflow/.app.json` |
-| Pilot App Id | `asdk_app_6aa13e2ea4288191b1f8731c1ae5930f` |
+| Current package version | `0.3.0` |
+| MCP configuration | `plugins/ampliflow/mcp.json` |
 | Hosted MCP endpoint | `https://mcp.ampliflow.cc/mcp` |
 | Skills | `plugins/ampliflow/skills/*/SKILL.md` |
 | Skill contracts | `plugins/ampliflow/tests/skill_contracts.json` |
@@ -52,9 +51,7 @@ The user chose a separate public repository after initially testing distribution
 | Setup instructions | `plugins/ampliflow/README.md` |
 | Acceptance cases | `plugins/ampliflow/TESTING.md` |
 
-The manifest uses portable Agent Plugins 1.0 root `plugin.json`, with OpenAI settings under `extensions.com.openai`. Its `apps` field points to `./.app.json`; `composerIcon` and `logo` both point to `./assets/icon.png`. There is no bundled `mcp.json`, `.mcp.json`, server executable, lifecycle hook, or CLI installer.
-
-The App Id came from the original personal MCP connection's settings and matched the published mapping when checked. It is an identifier, not a credential. It is not a Version Id or a `plugin_...` identifier. Its availability to other accounts or workspaces remains unproven; do not replace it by guessing another ID.
+The portable Agent Plugins 1.0 package uses root `plugin.json`, root `mcp.json`, and immediate skill directories under `skills/`. The manifest's `composerIcon` and `logo` point to `./assets/icon.png`. `mcp.json` declares the remote HTTPS server with `type: "streamable-http"`. OAuth is discovered from the server and is not declared in the package. There is no `.app.json`, workspace-scoped app ID, server executable, lifecycle hook, or CLI installer.
 
 ## What happened and what was proved
 
@@ -70,33 +67,33 @@ The App Id came from the original personal MCP connection's settings and matched
 | Seven skill cases passed offline simulation | Open tasks, empty results, ambiguous projects, failed details, embedded hostile instructions, a write request, and a date boundary. This was simulated smoke evidence, with no real tool calls. |
 | Package `0.1.2` moved to `af-chatgpt` | Repository and setup URLs changed. App mapping, skill, and icon stayed unchanged. Installation from the new source has not been confirmed. |
 | Package `0.2.0` adds focused review workflows | Project portfolio, goals, risks and controls, improvements, and checklists joined the original task review. Deterministic contract checks cover tool references and misuse, but live installation and tool execution remain unverified. |
+| Package `0.3.0` replaces the unavailable app reference | Root `mcp.json` now declares the hosted Streamable HTTP endpoint directly. `.app.json` and `extensions.com.openai.apps` were removed. Live package installation and OAuth remain unverified. |
 
 The successful direct-read example requested incomplete tasks, assignees, and due dates. It showed that a project-wide list can be much larger than the matching incomplete subset. This is a possible efficiency issue, not proof of incorrect results. The current list response includes completion and assignees but not due dates. The skill therefore filters incomplete rows first, bounds large detail batches, and fetches details only for matching tasks when dates are requested. Server-side response changes belong in `af-cli-dev`.
 
 The skill produces a read-only summary and avoids CLI, git, and local binding instructions. It does not make the server read-only. The connected tool surface may include writes under the authenticated account's permissions. Keep secrets out of chat, treat record text as untrusted data, and use exact returned refs rather than row numbers or refs from another account.
 
-## First investigation: required connector cannot load
+## Current investigation: bundled MCP authentication
 
-The working hypothesis is that the package references a personal development app that is not available to the installing account or workspace. This is unconfirmed. The suggested publication step has not been reported as completed.
+The original `.app.json` design failed because it referenced an app unavailable in the importing workspace. Version 0.3.0 removes that dependency and uses the portable root `mcp.json` format.
 
-- [ ] Reproduce in the intended workspace and record whether the same account can still use the original direct MCP connection.
-- [ ] Inspect the original connection's workspace publication and role access. The installed package and original connection are separate objects.
-- [ ] If the original connection is personal-only, have an authorized admin publish it to the intended workspace roles, then retry the package connection. This is workspace sharing, not public directory submission.
-- [ ] Inspect the imported package's required-app settings and marketplace import report. Verify the actual imported App Id against `.app.json`.
-- [ ] If access is already correct, capture the failing browser request's status, error code, and timestamp. Keep tokens, cookies, personal identifiers, and raw customer payloads out of public artifacts. Correlate with MCP logs only through an authorized server operator.
-- [ ] Distinguish app lookup failure, permissions, importer mapping, OAuth, and MCP transport errors before editing a manifest or server.
-- [ ] After a fix, verify actual skill discovery and a read-only workflow in a fresh chat. An installation toast alone is insufficient.
+- [ ] Import a reviewed 0.3.0 revision in ChatGPT desktop and confirm the package is marked desktop-only.
+- [ ] Complete OAuth with a fresh pilot user and verify the expected tenant and tools.
+- [ ] Verify every skill is discoverable and run a read-only workflow in a fresh chat. An installation toast alone is insufficient.
+- [ ] Inspect unauthenticated challenges and OAuth discovery against OpenAI's current requirements.
+- [ ] Fix server gaps in `af-cli-dev`: protected-resource metadata, discoverable `resource_metadata` challenges, resource binding, public-client metadata, and tool security declarations.
+- [ ] After server changes, repeat DCR, PKCE, authenticated `tools/list`, restart continuity, and ChatGPT desktop tests.
 
-Do not delete the original connection as a first troubleshooting step. Do not change ID prefixes blindly or claim that moving repositories fixes app access.
+Do not add credentials or OAuth client secrets to `mcp.json`. Do not restore a personal or workspace-scoped app ID as a portability workaround.
 
 ## OpenAI distribution constraints
 
 These are documentation findings from this investigation, not guarantees for every plan or client version:
 
 - Direct remote MCP registration can create a personal plugin usable in ChatGPT Work on the web; OpenAI's quickstart demonstrates that path.
-- GitHub-imported packages declaring MCP configuration are marked desktop-only, even with remote HTTPS servers. This package instead references an existing app, but that choice alone does not prove browser compatibility.
-- `.app.json` references an existing app. It does not create one, grant access, connect accounts, or share tenant data.
-- Workspace admins control installation policy, required-app access, and roles. Repository `AVAILABLE` and `ON_INSTALL` policies do not impose workspace settings.
+- GitHub-imported packages declaring MCP configuration are marked desktop-only, even with remote HTTPS servers. This package uses that format for the desktop pilot.
+- Portable Agent Plugins 1.0 `mcp.json` does not declare OAuth credentials. Authentication remains client-managed and is discovered from the MCP server.
+- Workspace admins control installation policy and roles. Repository `AVAILABLE` and `ON_INSTALL` policies do not impose workspace settings.
 - GitHub marketplace sync is daily by default; admins can use **Sync now**. A selected commit pins package files, not the remote MCP implementation.
 - Workspace publication stays inside that workspace. Selected external customers need their own verified access/setup path.
 - Public MCP submissions use **With MCP**, the actual HTTPS server endpoint, and review materials. An existing integration reference is not a substitute for submitting the server.
@@ -108,13 +105,13 @@ For a later public submission, recheck requirements for publisher verification, 
 
 The standalone draft project `af-chatgpt` now owns this work. This checkout is bound to it through local `.af` runtime state, which remains excluded from Git. The initial implementation task covers shared MCP safety, focused review workflows, and deterministic evaluations.
 
-Keep the connector investigation first; general rollout and submission wait for pilot evidence. Capture approved work in that project, keep durable implementation notes in its Agent Log, and avoid copying tenant refs or records into this public repository.
+Keep bundled-MCP authentication and OAuth conformance first; general rollout and submission wait for pilot evidence. Capture approved work in that project, keep durable implementation notes in its Agent Log, and avoid copying tenant refs or records into this public repository.
 
 Current work areas:
 
 | Order | User-visible result | Evidence needed |
 | --- | --- | --- |
-| First | An internal pilot user connects and uses the installed package | Correct required-app access, successful connection, skill discovery, and verified read-only results |
+| First | An internal pilot user connects and uses the installed desktop package | Successful OAuth, tool and skill discovery, correct tenant access, and verified read-only results |
 | Next | A selected customer sets up access in a separate workspace | Admin and user steps recorded; correct customer account/data; no dependence on the developer's personal access |
 | Then | Plugin updates arrive without breaking the connection | A reviewed package version syncs and the same account can still run the workflow |
 | After pilot approval | Customers follow the setup guide without developer assistance | Tested plan/surface eligibility, troubleshooting, support ownership, and package-use terms |

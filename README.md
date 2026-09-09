@@ -12,15 +12,15 @@ Workspace admins can import this repository from **Admin > Plugins > Add > Impor
 - **Path:** leave empty
 - **Branch, tag, or commit:** leave empty for `main`, or select a reviewed commit
 
-Follow the [setup guide](plugins/ampliflow/README.md) for required-app access, authentication, and testing.
+Follow the [setup guide](plugins/ampliflow/README.md) for authentication and testing.
 
-The pilot's direct MCP connection worked, and the package installed with its icon while hosted in `af-cli`. Connecting the package's required app failed with "Couldn't load connector" and still needs investigation. Installation from this new repository has not yet been confirmed. See [PROJECT.md](PROJECT.md) for the evidence and next checks.
+The package connects directly to `https://mcp.ampliflow.cc/mcp`; it does not depend on a workspace-scoped app ID. Each user authenticates with an AmpliFlow account. The bundled skills are read-only, but the connected server may expose write tools under the user's permissions.
 
-The package references an existing registered AmpliFlow app. Importing it does not grant app access or connect a user's account. The bundled skills are read-only; the connected server may expose write tools under the user's permissions.
+OpenAI currently limits GitHub-imported plugins with bundled MCP configuration to ChatGPT desktop. Web and mobile distribution require OpenAI's public **With MCP** submission and review. Live installation through this corrected package has not yet been confirmed. See [PROJECT.md](PROJECT.md) for evidence and next checks.
 
 ## Moving from the old marketplace
 
-This catalog replaces the pilot previously hosted in `AmpliFlow/af-cli`. With no users to migrate, remove the old marketplace in ChatGPT and import this repository as a new source. Deleting the old marketplace also removes its imported plugins. Keep the original MCP connection so required-app access can be tested separately.
+This catalog replaces the pilot previously hosted in `AmpliFlow/af-cli`. With no users to migrate, remove the old marketplace in ChatGPT and import this repository as a new source. Deleting the old marketplace also removes its imported plugins. A separately registered personal MCP connection is not required by this package.
 
 ## Repository ownership
 
@@ -34,7 +34,7 @@ Edit the plugin here and bump its version before publishing updates. Use the [ac
 
 Start work in this repository. [PROJECT.md](PROJECT.md) records the rollout order, package architecture, connector blocker, test evidence, and the bound standalone AmpliFlow project.
 
-The current package version is `0.2.0`. Run the deterministic validator and the manual [acceptance checks](plugins/ampliflow/TESTING.md) before expanding the pilot. Keep local auth and `.af` runtime files out of commits. MCP server changes belong in `af-cli-dev`; plugin work does not require its old worktree.
+The current package version is `0.3.0`. Run the deterministic validator and the manual [acceptance checks](plugins/ampliflow/TESTING.md) before expanding the pilot. Keep local auth and `.af` runtime files out of commits. MCP server changes belong in `af-cli-dev`; plugin work does not require its old worktree.
 
 ## License
 

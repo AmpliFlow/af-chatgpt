@@ -61,10 +61,60 @@ def validate_skill(path: Path, expected_name: str, required_tools: list[str], su
     return errors
 
 
+def validate_package(root: Path) -> list[str]:
+    errors: list[str] = []
+    plugin_path = root / "plugin.json"
+    mcp_path = root / "mcp.json"
+    app_path = root / ".app.json"
+    marketplace_path = root.parents[1] / ".agents" / "plugins" / "marketplace.json"
+
+    try:
+        plugin = json.loads(plugin_path.read_text(encoding="utf-8"))
+        mcp = json.loads(mcp_path.read_text(encoding="utf-8"))
+        marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError) as error:
+        return [f"package metadata is missing or invalid: {error}"]
+
+    expected_plugin_schema = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
+    expected_mcp_schema = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
+    if plugin.get("$schema") != expected_plugin_schema:
+        errors.append(f"{plugin_path}: expected Agent Plugins 1.0 plugin schema")
+    if mcp.get("$schema") != expected_mcp_schema:
+        errors.append(f"{mcp_path}: expected Agent Plugins 1.0 MCP schema")
+    if app_path.exists():
+        errors.append(f"{app_path}: workspace-scoped app mappings are not portable")
+    if plugin.get("extensions", {}).get("com.openai", {}).get("apps") is not None:
+        errors.append(f"{plugin_path}: extensions.com.openai.apps must be absent")
+
+    servers = mcp.get("mcpServers")
+    expected_server = {
+        "type": "streamable-http",
+        "url": "https://mcp.ampliflow.cc/mcp",
+    }
+    if servers != {"ampliflow": expected_server}:
+        errors.append(f"{mcp_path}: expected only the credential-free AmpliFlow Streamable HTTP server")
+
+    marketplace_plugins = marketplace.get("plugins", [])
+    source = next((item.get("source") for item in marketplace_plugins if item.get("name") == plugin.get("name")), None)
+    if not source or source.get("source") != "local":
+        errors.append(f"{marketplace_path}: missing local source for {plugin.get('name')!r}")
+    else:
+        resolved = (marketplace_path.parent.parent.parent / source.get("path", "")).resolve()
+        if resolved != root.resolve():
+            errors.append(f"{marketplace_path}: plugin source resolves outside the package")
+
+    interface = plugin.get("extensions", {}).get("com.openai", {}).get("interface", {})
+    for field in ("composerIcon", "logo"):
+        value = interface.get(field)
+        if not isinstance(value, str) or not (root / value).is_file():
+            errors.append(f"{plugin_path}: {field} must reference an existing package file")
+    return errors
+
+
 def validate(root: Path) -> list[str]:
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     supported = set(contract["supported_tools"])
-    errors: list[str] = []
+    errors = validate_package(root)
     expected_paths: set[Path] = set()
     for name, spec in contract["skills"].items():
         path = root / "skills" / name / "SKILL.md"
@@ -100,7 +150,7 @@ def main() -> int:
     if errors:
         print("\n".join(f"ERROR: {error}" for error in errors))
         return 1
-    print("Skill contract checks passed.")
+    print("Package and skill contract checks passed.")
     return 0
 
 
