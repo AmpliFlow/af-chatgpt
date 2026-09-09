@@ -1,0 +1,78 @@
+{
+  "skills": {
+    "reviewing-project-tasks": {
+      "required_tools": ["list_projects", "list_tasks", "show_task"]
+    },
+    "reviewing-project-portfolio": {
+      "required_tools": ["list_projects", "list_project_summaries", "list_project_timeline", "show_project_workspace_summary", "show_latest_project_status_update"]
+    },
+    "reviewing-goals": {
+      "required_tools": ["list_goals", "show_goal", "list_goal_measurements", "list_goal_measurement_progress"]
+    },
+    "reviewing-risks-and-controls": {
+      "required_tools": ["list_risks", "show_risk", "list_control_sets", "show_control_set", "list_control_items", "show_control_item"]
+    },
+    "reviewing-improvements": {
+      "required_tools": ["list_improvements", "show_improvement", "list_improvement_steps", "list_improvement_activities"]
+    },
+    "reviewing-checklists": {
+      "required_tools": ["list_checklist_templates", "list_checklists", "show_checklist", "show_checklist_template"]
+    }
+  },
+  "supported_tools": [
+    "drill_down_improvements",
+    "export_checklist_report",
+    "list_action_sets",
+    "list_archived_projects",
+    "list_checklist_step_comments",
+    "list_checklist_templates",
+    "list_checklists",
+    "list_control_item_files",
+    "list_control_item_options",
+    "list_control_items",
+    "list_control_sets",
+    "list_control_standards",
+    "list_deleted_projects",
+    "list_goal_measurement_progress",
+    "list_goal_measurement_tasklist",
+    "list_goal_measurements",
+    "list_goal_options",
+    "list_goals",
+    "list_history",
+    "list_impact_grading_options",
+    "list_improvement_activities",
+    "list_improvement_forms",
+    "list_improvement_steps",
+    "list_improvements",
+    "list_process_step_options",
+    "list_project_status_updates",
+    "list_project_summaries",
+    "list_project_timeline",
+    "list_projects",
+    "list_risk_occurrence_options",
+    "list_risk_options_by_process",
+    "list_risk_options_by_subprocess",
+    "list_risk_probability_options",
+    "list_risk_status_options",
+    "list_risk_yes_no_options",
+    "list_risks",
+    "list_risks_by_process_step",
+    "list_standard_controls",
+    "list_tasks",
+    "run_improvement_stats_report",
+    "show_checklist",
+    "show_checklist_template",
+    "show_checklist_template_configuration",
+    "show_control_item",
+    "show_control_set",
+    "show_goal",
+    "show_goal_measurement",
+    "show_improvement",
+    "show_improvement_activity",
+    "show_improvement_form",
+    "show_latest_project_status_update",
+    "show_project_workspace_summary",
+    "show_risk",
+    "show_task"
+  ]
+}
