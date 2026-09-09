@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ampliflow",
-  "version": "0.1.2",
-  "description": "Connect ChatGPT to your AmpliFlow management system. Find project tasks, check ownership and due dates, and prepare follow-ups from live records.",
+  "version": "0.2.0",
+  "description": "Connect ChatGPT to your AmpliFlow management system. Review projects, goals, risks, controls, improvements, and checklists from live records.",
   "author": {
     "name": "AmpliFlow",
     "url": "https://www.ampliflow.com"
@@ -17,11 +17,13 @@
         "composerIcon": "./assets/icon.png",
         "logo": "./assets/icon.png",
         "shortDescription": "Bring your management system into ChatGPT",
-        "longDescription": "AmpliFlow brings processes, goals, risks, projects, and documents into one management system, connecting ownership, ways of working, and follow-up. Use this plugin to work with your AmpliFlow records in ChatGPT through your connected account. The first bundled skill reviews incomplete project tasks, assignees, and due dates without changing records, so you can see what needs attention and prepare your next follow-up. An AmpliFlow account and access to the registered app are required. Available tools depend on the connection and your permissions; the connected server may also offer write actions.",
+        "longDescription": "AmpliFlow brings processes, goals, risks, projects, and documents into one management system, connecting ownership, ways of working, and follow-up. Use focused read-only skills to review project tasks, portfolio status, goals, risks and controls, improvements, and checklists through your connected account. An AmpliFlow account and access to the registered app are required. Available tools depend on the connection and your permissions; the connected server may also offer write actions.",
         "developerName": "AmpliFlow",
         "category": "Productivity",
         "defaultPrompt": [
-          "Show incomplete tasks in a project, including assignees and due dates. Do not change anything."
+          "Show incomplete tasks in a project, including assignees and due dates. Do not change anything.",
+          "Review the project portfolio and show which projects need attention. Do not change anything.",
+          "Review goals and measurements, including progress evidence and action gaps. Do not change anything."
         ]
       }
     }

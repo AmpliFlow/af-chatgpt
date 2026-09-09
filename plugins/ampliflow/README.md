@@ -1,8 +1,8 @@
 # AmpliFlow for ChatGPT: pilot
 
-Bring your management system into ChatGPT. AmpliFlow connects processes, goals, risks, projects, and documents with the people responsible for them. This package adds a project-follow-up skill to the registered AmpliFlow connection.
+Bring your management system into ChatGPT. AmpliFlow connects processes, goals, risks, projects, and documents with the people responsible for them. This package adds focused review skills to the registered AmpliFlow connection.
 
-The first skill reviews incomplete tasks, assignees, and due dates without changing records. It does not restrict the connected server's permissions: other tools may allow writes. Review tool approvals and use an account with suitable access.
+The skills review project tasks, portfolio status, goals, risks and controls, improvements, and checklists without changing records. They do not restrict the connected server's permissions: other tools may allow writes. Review tool approvals and use an account with suitable access.
 
 ## Install and test
 
@@ -14,8 +14,8 @@ For a workspace admin:
 2. Open **Admin > Plugins > Add > Import marketplace**.
 3. Set Source to `https://github.com/AmpliFlow/af-chatgpt`. Leave Path empty. Select a reviewed commit in **Branch, tag, or commit** for a fixed pilot revision, or `main` to receive updates.
 4. Import, inspect the report, and configure the plugin's workspace installation policy and required app access. Repository policy values do not set workspace permissions.
-5. Have the pilot user install the package, complete authentication if prompted, and start a new chat on a supported surface. Verify that the bundled `reviewing-project-tasks` skill is available.
-6. Ask: "Show incomplete tasks in [project name], including assignees and due dates. Do not change anything." Compare the answer with AmpliFlow.
+5. Have the pilot user install the package, complete authentication if prompted, and start a new chat on a supported surface. Verify that the bundled skills are available.
+6. Start with: "Show incomplete tasks in [project name], including assignees and due dates. Do not change anything." Then test the other workflows listed in [TESTING.md](TESTING.md) against approved AmpliFlow data.
 
 For local desktop testing, run `codex plugin marketplace add AmpliFlow/af-chatgpt`, restart the ChatGPT desktop app, and select **AmpliFlow pilot** in the Plugins Directory. The required app still needs to be accessible to that account.
 
