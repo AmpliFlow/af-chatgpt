@@ -1,27 +1,32 @@
 {
   "skills": {
     "reviewing-project-tasks": {
-      "required_tools": ["list_projects", "list_tasks", "show_task"]
+      "required_tools": ["list_projects", "list_tasks", "show_task"],
+      "optional_tools": []
     },
     "reviewing-project-portfolio": {
-      "required_tools": ["list_projects", "list_project_summaries", "list_project_timeline", "show_project_workspace_summary", "show_latest_project_status_update"]
+      "required_tools": ["list_projects", "list_project_summaries", "list_project_timeline", "show_project_workspace_summary", "show_latest_project_status_update"],
+      "optional_tools": ["list_project_status_updates", "list_archived_projects", "list_deleted_projects"]
     },
     "reviewing-goals": {
-      "required_tools": ["list_goals", "show_goal", "list_goal_measurements", "list_goal_measurement_progress"]
+      "required_tools": ["list_goals", "show_goal", "list_goal_measurements", "list_goal_measurement_progress"],
+      "optional_tools": ["show_goal_measurement", "list_action_sets", "list_goal_measurement_tasklist", "list_goal_options"]
     },
     "reviewing-risks-and-controls": {
-      "required_tools": ["list_risks", "show_risk", "list_control_sets", "show_control_set", "list_control_items", "show_control_item"]
+      "required_tools": ["list_risks", "show_risk", "list_control_sets", "show_control_set", "list_control_items", "show_control_item"],
+      "optional_tools": ["list_risk_probability_options", "list_risk_occurrence_options", "list_risk_status_options", "list_risk_yes_no_options", "list_impact_grading_options", "list_process_step_options", "list_risks_by_process_step", "list_risk_options_by_process", "list_risk_options_by_subprocess", "list_control_standards", "list_standard_controls", "list_action_sets", "list_control_item_files", "list_control_item_options"]
     },
     "reviewing-improvements": {
-      "required_tools": ["list_improvements", "show_improvement", "list_improvement_steps", "list_improvement_activities"]
+      "required_tools": ["list_improvements", "show_improvement", "list_improvement_steps", "list_improvement_activities"],
+      "optional_tools": ["show_improvement_activity", "list_improvement_forms", "show_improvement_form", "list_history", "run_improvement_stats_report", "drill_down_improvements"]
     },
     "reviewing-checklists": {
-      "required_tools": ["list_checklist_templates", "list_checklists", "show_checklist", "show_checklist_template"]
+      "required_tools": ["list_checklist_templates", "list_checklists", "show_checklist", "show_checklist_template"],
+      "optional_tools": ["show_checklist_template_configuration", "list_checklist_step_comments", "list_history"]
     }
   },
   "supported_tools": [
     "drill_down_improvements",
-    "export_checklist_report",
     "list_action_sets",
     "list_archived_projects",
     "list_checklist_step_comments",

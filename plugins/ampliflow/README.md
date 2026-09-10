@@ -22,6 +22,10 @@ For local desktop testing, run `codex plugin marketplace add AmpliFlow/af-chatgp
 
 The earlier package installed and displayed its icon, but its `.app.json` dependency referred to an app unavailable in another workspace. Version 0.3.0 removes that dependency and declares the MCP endpoint directly. Verify fresh installation, OAuth, tool discovery, and skill discovery before inviting other users.
 
+## Tool discovery
+
+Version 0.3.1 adds each skill's documented MCP dependency and bounded, conditional host-discovery guidance. These changes do not enable a hidden runtime setting or prove that missing actions are callable. Follow the [discovery guide](DISCOVERY.md) to compare authenticated server inventory, scanned metadata, action policy, and a fresh ChatGPT session. It also covers the five-skill MCP-import limit and the separate workspace browser-pilot option.
+
 ## External customer pilots
 
 A customer can import the same package in ChatGPT desktop. Each user authenticates against `https://mcp.ampliflow.cc/mcp` with their own AmpliFlow account. Importing the catalog does not connect an account, grant AmpliFlow permissions, or share the publisher's tenant data. Never put credentials in package files.
@@ -34,7 +38,7 @@ For browser and mobile access, submit the production endpoint through OpenAI's *
 
 ## Maintenance
 
-This repository is the source of truth for the plugin package and marketplace. Edit the files here, bump `plugins/ampliflow/plugin.json`'s version, and run the checks in [TESTING.md](TESTING.md). Publish `plugin.json`, `mcp.json`, and the skill files together. MCP server implementation stays in `af-cli-dev`; CLI releases and the installer stay in `af-cli`.
+This repository is the source of truth for the plugin package and marketplace. Edit the files here, bump `plugins/ampliflow/plugin.json`'s version, and run the checks in [TESTING.md](TESTING.md). Publish `plugin.json`, `mcp.json`, and the complete skill directories, including `agents/openai.yaml`, together. MCP server implementation stays in `af-cli-dev`; CLI releases and the installer stay in `af-cli`.
 
 Workspace marketplaces sync daily by default. Review changes before publishing; new entries can be imported automatically. A pinned catalog revision pins package files, not the hosted MCP implementation.
 
