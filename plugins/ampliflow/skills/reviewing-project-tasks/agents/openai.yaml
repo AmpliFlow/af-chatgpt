@@ -1,0 +1,7 @@
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "ampliflow"
+      description: "Read AmpliFlow management-system records"
+      transport: "streamable_http"
+      url: "https://mcp.ampliflow.cc/mcp"

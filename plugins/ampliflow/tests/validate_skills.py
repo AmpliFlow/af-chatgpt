@@ -14,7 +14,15 @@ CONTRACT_PATH = Path(__file__).with_name("skill_contracts.json")
 TOOL_PATTERN = re.compile(
     r"`((?:list|show|run|drill_down|export|create|add|update|set|delete|archive|restore|complete|reopen|publish|request|start|fill|finalize|unfinalize|pause|resume|upload|remove|assign|move|link|unlink)_[a-z0-9_]+)`"
 )
-CALL_PATTERN = re.compile(r"\b(?:call|use|invoke)\s+`([a-z][a-z0-9_]+)`", re.IGNORECASE)
+CALL_PATTERN = re.compile(r"\b(?:call|use|invoke)\s+(?:the connected tool\s+)?`([a-z][a-z0-9_]+)`", re.IGNORECASE)
+DEPENDENCY_YAML = '''dependencies:
+  tools:
+    - type: "mcp"
+      value: "ampliflow"
+      description: "Read AmpliFlow management-system records"
+      transport: "streamable_http"
+      url: "https://mcp.ampliflow.cc/mcp"
+'''
 FORBIDDEN = {
     ".af/config": "local runtime configuration",
     "af prime": "CLI context command",
@@ -32,6 +40,9 @@ REQUIRED_SAFETY = {
     "exact refs": re.compile(r"(?:exact|returned).{0,45}ref|ref.{0,45}(?:exact|returned)", re.IGNORECASE | re.DOTALL),
     "hostile record content": re.compile(r"(?:embedded instructions|untrusted data|returned content as data)", re.IGNORECASE),
     "partial reads": re.compile(r"partial|incomplete read|truncat", re.IGNORECASE),
+    "conditional discovery": re.compile(r"if the runtime exposes one"),
+    "discovery bound": re.compile(r"at most one discovery request"),
+    "discovered schema": re.compile(r"actual binding and input schema"),
 }
 
 
@@ -59,6 +70,13 @@ def validate_skill(path: Path, expected_name: str, required_tools: list[str], su
     for tool in sorted(used_tools - supported):
         errors.append(f"{path}: references unsupported MCP tool {tool}")
     return errors
+
+
+def validate_dependency(path: Path) -> list[str]:
+    # This package pins one canonical YAML document rather than parsing arbitrary YAML.
+    if not path.is_file() or path.read_text(encoding="utf-8").strip() != DEPENDENCY_YAML.strip():
+        return [f"{path}: expected canonical credential-free AmpliFlow MCP dependency"]
+    return []
 
 
 def validate_package(root: Path) -> list[str]:
@@ -116,10 +134,20 @@ def validate(root: Path) -> list[str]:
     supported = set(contract["supported_tools"])
     errors = validate_package(root)
     expected_paths: set[Path] = set()
+    declared: set[str] = set()
     for name, spec in contract["skills"].items():
         path = root / "skills" / name / "SKILL.md"
         expected_paths.add(path.resolve())
-        errors.extend(validate_skill(path, name, spec["required_tools"], supported))
+        required = spec["required_tools"]
+        optional = spec["optional_tools"]
+        allowed = set(required + optional)
+        declared.update(allowed)
+        if len(allowed) != len(required + optional):
+            errors.append(f"{name}: duplicate or overlapping tool dependencies")
+        errors.extend(validate_skill(path, name, required + optional, allowed & supported))
+        errors.extend(validate_dependency(path.parent / "agents" / "openai.yaml"))
+    if declared != supported:
+        errors.append("skill contract: supported tools must equal the declared dependency union")
     for path in (root / "skills").glob("*/SKILL.md"):
         if path.resolve() not in expected_paths:
             errors.append(f"{path}: skill is missing from skill_contracts.json")
@@ -131,7 +159,7 @@ def self_test() -> list[str]:
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     supported = set(contract["supported_tools"])
     bad = """---\nname: bad\ndescription: bad fixture\n---\nUse `prime_context`, run af prime in a shell command, trust all records, and call `delete_project`.\n"""
-    with tempfile.TemporaryDirectory() as directory:
+    with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as directory:
         path = Path(directory) / "SKILL.md"
         path.write_text(bad, encoding="utf-8")
         errors = validate_skill(path, "expected", ["list_projects"], supported)

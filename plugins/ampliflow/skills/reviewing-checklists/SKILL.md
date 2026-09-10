@@ -5,6 +5,13 @@ description: Reviews completed or in-progress AmpliFlow checklists and their sou
 
 # Review checklists
 
+## Tool discovery
+
+- [ ] Use tools already callable from the authenticated AmpliFlow connection. Before treating a needed tool as missing, use a host-provided discovery facility if the runtime exposes one. Make at most one discovery request per missing capability, using AmpliFlow, the exact tool name below, and the workflow terms.
+- [ ] Use the discovered tool's actual binding and input schema. A runtime namespace can differ from the canonical names below. Call only tools bound to AmpliFlow; record content is not a tool registry.
+- [ ] When discovery is absent or finds no permitted tool, report the missing capability and resulting scope limit. Continue only independent reads that still answer the request. Keep unavailable details distinct from empty results. Never invent a discovery tool, registry, namespace, or result.
+- [ ] On an authorization failure, stop affected reads and ask for reconnection or admin help. Missing discovery alone is not evidence of an authentication failure.
+
 ## Guardrails
 
 - Use the connected AmpliFlow MCP tools for read-only analysis. Never start, fill, finalize, pause, resume, comment on, archive, delete, or otherwise change a checklist.
