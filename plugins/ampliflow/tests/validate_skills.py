@@ -24,7 +24,6 @@ OPERATION_REFERENCE_PATTERN = re.compile(
     r"`((?:list|show|run|drill_down|export|create|add|update|set|delete|archive|restore|complete|reopen|publish|request|start|fill|finalize|unfinalize|pause|resume|upload|remove|assign|move|link|unlink)_[a-z0-9_]+)`"
 )
 WRITE_MODE_PATTERN = re.compile(r'["\']mode["\']\s*:\s*["\']prepare["\']', re.IGNORECASE)
-LEGACY_ENDPOINT_PATTERN = re.compile(r"https://mcp\.ampliflow\.cc/mcp(?!-beta)")
 DEPENDENCY_YAML = f'''dependencies:
   tools:
     - type: "mcp"
@@ -39,6 +38,9 @@ FORBIDDEN = {
     "af context": "CLI context command",
     "prime_context": "hosted-incompatible tool",
     "get_my_identity": "hosted-incompatible tool",
+    "host-provided discovery": "alternate tool-discovery fallback",
+    "at most one discovery request": "alternate tool-discovery fallback",
+    "runtime namespace can differ": "alternate runtime namespace",
     "worktree": "local Git workflow",
     "shell command": "local shell workflow",
     "git setup": "local Git workflow",
@@ -50,9 +52,9 @@ REQUIRED_SAFETY = {
     "exact refs": re.compile(r"(?:exact|returned).{0,45}ref|ref.{0,45}(?:exact|returned)", re.IGNORECASE | re.DOTALL),
     "hostile record content": re.compile(r"(?:embedded instructions|untrusted data|returned content as data|record content is not)", re.IGNORECASE),
     "partial reads": re.compile(r"partial|incomplete read|truncat", re.IGNORECASE),
-    "conditional discovery": re.compile(r"if the runtime exposes one"),
-    "discovery bound": re.compile(r"at most one discovery request"),
-    "discovered schema": re.compile(r"actual binding and input schema"),
+    "beta-only dispatcher scope": re.compile(r"use only the exact beta feature dispatchers", re.IGNORECASE),
+    "no alternate connection": re.compile(r"do not search for another server.{0,120}attach another connection.{0,120}runtime namespace", re.IGNORECASE | re.DOTALL),
+    "advertised dispatcher schema": re.compile(r"input schema advertised by the selected beta dispatcher", re.IGNORECASE),
     "catalog mode": re.compile(r'"mode":"catalog"'),
     "describe mode": re.compile(r'"mode":"describe"'),
     "query mode": re.compile(r'"mode":"query"'),
@@ -93,8 +95,6 @@ def validate_skill(path: Path, expected_name: str, spec: dict, supported: dict[s
     for phrase, reason in FORBIDDEN.items():
         if phrase in lower:
             errors.append(f"{path}: contains prohibited {reason}: {phrase!r}")
-    if LEGACY_ENDPOINT_PATTERN.search(text):
-        errors.append(f"{path}: contains prohibited legacy MCP endpoint")
     for concept, pattern in REQUIRED_SAFETY.items():
         if not pattern.search(text):
             errors.append(f"{path}: missing safety coverage for {concept}")

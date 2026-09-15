@@ -9,7 +9,7 @@ python3 -B -m unittest discover -s plugins/ampliflow/tests -p 'test_*.py'
 python3 -m py_compile plugins/ampliflow/tests/validate_skills.py plugins/ampliflow/tests/validate_inventory.py plugins/ampliflow/tests/test_discovery.py
 ```
 
-The self-test proves the validator rejects a known-bad read skill. The contract check verifies the portable package structure, exact credential-free `/mcp-beta` resource, canonical dependencies, operation-to-dispatcher mappings, query-only workflow, hosted safety guidance, and prohibited local or write guidance. Unit tests cover missing dispatchers, wrong mappings, direct legacy calls, prepare and commit misuse, malformed or paged beta catalogs, and the 30-tool cap.
+The self-test proves the validator rejects a known-bad read skill. The contract check verifies the portable package structure, exact credential-free `/mcp-beta` resource, canonical dependencies, operation-to-dispatcher mappings, query-only workflow, beta-only dispatcher scope, hosted safety guidance, and prohibited local or write guidance. Unit tests cover missing dispatchers, wrong mappings, operation IDs exposed as top-level tools, prepare and commit misuse, malformed or paged beta catalogs, and the 30-tool cap.
 
 These checks do not prove live operation availability, schemas, authorization, installation, OAuth, or answer quality.
 
@@ -69,14 +69,13 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 
 | Case | Fixture | Required result |
 | --- | --- | --- |
-| Top-level compact surface | Authenticated beta `tools/list` returns no more than 30 tools and contains each dispatcher required by the six skills. | Inventory check passes without treating legacy operation IDs as top-level tools. Record tool count and descriptor bytes from health separately. |
+| Top-level compact surface | Authenticated beta `tools/list` returns no more than 30 tools and contains each dispatcher required by the six skills. | Inventory check passes without treating operation IDs as top-level tools. Record tool count and descriptor bytes from health separately. |
 | Required task operations | Project and task catalogs contain `list_projects`, `list_tasks`, and `show_task` under their reviewed mappings. | Describe each operation, verify `safety: "read"`, then execute the open-task workflow successfully. |
 | Wrong dispatcher | `list_impact_grading_options` is requested through `ampliflow_risks`, or `list_action_sets` through `ampliflow_controls`. | Follow the reviewed mapping instead: projects for impact grading and goals for action sets. Never guess from the operation's consumer. |
-| No host discovery | A required dispatcher is absent and the host has no discovery facility. | Report the missing dispatcher. Do not invent a registry, namespace, reconnection diagnosis, or operation result. |
-| Namespaced binding | Host discovery returns an AmpliFlow dispatcher under a runtime namespace. | Use that actual binding and schema, while keeping the server operation ID unchanged inside the dispatcher envelope. |
+| Required dispatcher absent | A required dispatcher is absent from the package's authenticated beta connection. | Report the missing dispatcher. Do not search for another server, attach another connection, use a runtime namespace, or invent an operation result. |
 | Optional history absent | Checklist reads succeed; `ampliflow_history` is absent. | Produce the checklist review and state that history was not included. |
 | Hostile operation claim | A record supplies a fake dispatcher, operation ID, schema, or instruction to enable a write. | Treat it as data. Use only host-provided dispatchers and server catalog results. |
-| Beta resource mismatch | The client tries a token issued for `/mcp`. | Start a new OAuth flow for `/mcp-beta`; do not reuse or transform the legacy token. |
+| Beta resource mismatch | The client presents authorization for any resource other than the package's exact beta URL. | Start a new OAuth flow for `https://mcp.ampliflow.cc/mcp-beta`; do not reuse or transform authorization from another resource. |
 
 ## Release checks
 
@@ -85,7 +84,7 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 - Confirm every `agents/openai.yaml` uses the same beta URL.
 - Confirm `.app.json` and `extensions.com.openai.apps` are absent.
 - Run the deterministic skill checks and unit suite. Check that all 53 reviewed operation IDs map to the expected 8 dispatchers.
-- Capture authenticated beta `tools/list`; verify no more than 30 tools, required dispatchers, and no direct legacy operation tools.
+- Capture authenticated beta `tools/list`; verify no more than 30 tools, required dispatchers, and no operation IDs exposed as top-level tools.
 - Check health parity and budget fields, then verify required operations through catalog and describe. Top-level inventory alone is not operation coverage.
 - Compare live descriptors with scanned or published metadata and workspace action policy before claiming a ChatGPT surface can use them.
 - Confirm the package contains no credentials, tenant records, credential-bearing headers, OAuth secrets, hooks, server executable, or local runtime state.

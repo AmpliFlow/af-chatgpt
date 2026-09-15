@@ -67,10 +67,10 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(coverage["reviewing-checklists"]["missing_optional_dispatchers"], ["ampliflow_history"])
 
-    def test_direct_legacy_operation_surface_is_rejected(self):
+    def test_operation_id_as_top_level_tool_is_rejected(self):
         capture = {"pages": [page(self.names + ["list_projects"])]}
         errors, _ = check_inventory(capture, CONTRACT)
-        self.assertTrue(any("legacy operation" in error for error in errors))
+        self.assertTrue(any("operation IDs as top-level tools" in error for error in errors))
 
     def test_more_than_30_top_level_tools_is_rejected(self):
         names = [f"ampliflow_extra_{index}" for index in range(31)]
@@ -143,7 +143,7 @@ class SkillDiscoveryTests(unittest.TestCase):
             root = skills.ROOT / "skills" / name
             self.assertEqual(skills.validate_dependency(root / "agents" / "openai.yaml"), [])
             text = (root / "SKILL.md").read_text()
-            self.assertIn("## Tool discovery", text)
+            self.assertIn("## MCP beta availability", text)
             self.assertIn("## Beta operation workflow", text)
             self.assertIn('"mode":"catalog"', text)
             self.assertIn('"mode":"describe"', text)
@@ -195,18 +195,29 @@ class SkillDiscoveryTests(unittest.TestCase):
             errors = skills.validate_skill(path, name, spec, supported)
             self.assertTrue(any("describe mode" in error for error in errors))
 
+    def test_alternate_discovery_fallback_is_rejected(self):
+        name = "reviewing-project-tasks"
+        source = (skills.ROOT / "skills" / name / "SKILL.md").read_text()
+        spec = CONTRACT["skills"][name]
+        supported = skills.supported_operation_mappings(CONTRACT)
+        with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as directory:
+            path = Path(directory) / "SKILL.md"
+            path.write_text(source + "\nUse host-provided discovery when a dispatcher is unavailable.\n")
+            errors = skills.validate_skill(path, name, spec, supported)
+            self.assertTrue(any("alternate tool-discovery fallback" in error for error in errors), errors)
+
     def test_missing_or_wrong_dependency_rejected(self):
         source = skills.ROOT / "skills" / "reviewing-project-tasks" / "agents" / "openai.yaml"
         with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as directory:
             path = Path(directory) / "openai.yaml"
             path.write_text(source.read_text())
             self.assertEqual(skills.validate_dependency(path), [])
-            path.write_text(source.read_text().replace("https://mcp.ampliflow.cc/mcp-beta", "https://wrong.example/mcp"))
+            path.write_text(source.read_text().replace("https://mcp.ampliflow.cc/mcp-beta", "https://wrong.example/unsupported"))
             self.assertTrue(skills.validate_dependency(path))
 
-    def test_package_version_marks_beta_contract(self):
+    def test_package_version_marks_beta_only_contract(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.4.0")
+        self.assertEqual(plugin["version"], "0.4.1")
 
 
 if __name__ == "__main__":

@@ -33,7 +33,7 @@ Edit the plugin here and bump its version before publishing updates. Use the [ac
 ## Development and project setup
 
 
-The current package version is `0.4.0`. Run the deterministic validator and the manual [acceptance checks](plugins/ampliflow/TESTING.md) before expanding the pilot. Keep local auth and `.af` runtime files out of commits. MCP server changes belong in `server repository`; plugin work does not require its old worktree.
+The current package version is `0.4.1`. Run the deterministic validator and the manual [acceptance checks](plugins/ampliflow/TESTING.md) before expanding the pilot. Keep local auth and `.af` runtime files out of commits. MCP server changes belong in `server repository`; plugin work does not require its old worktree.
 
 ## License
 

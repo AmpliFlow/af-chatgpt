@@ -60,10 +60,10 @@ def check_inventory(capture: object, contract: dict) -> tuple[list[str], dict]:
     if len(names) > BETA_TOOL_LIMIT:
         errors.append(f"beta catalog exceeds the {BETA_TOOL_LIMIT}-tool limit: {len(names)} tools")
 
-    legacy_operations = set(supported_operation_mappings(contract))
-    exposed_legacy = sorted(names & legacy_operations)
-    if exposed_legacy:
-        errors.append(f"beta catalog exposes legacy operation tools directly: {', '.join(exposed_legacy)}")
+    operation_ids = set(supported_operation_mappings(contract))
+    exposed_operations = sorted(names & operation_ids)
+    if exposed_operations:
+        errors.append(f"beta catalog exposes operation IDs as top-level tools: {', '.join(exposed_operations)}")
     unexpected = sorted(name for name in names if not name.startswith("ampliflow_") and name not in COMMIT_TOOLS)
     if unexpected:
         errors.append(f"beta catalog contains unexpected top-level tools: {', '.join(unexpected)}")

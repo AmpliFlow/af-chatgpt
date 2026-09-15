@@ -6,7 +6,7 @@ The skills review project tasks, portfolio status, goals, risks and controls, im
 
 ## Install and test
 
-The package declares the compact remote HTTPS endpoint in `mcp.json`. It contains no credentials or server executable, does not install the CLI, and leaves local agent configuration unchanged. OAuth is discovered from and handled by the AmpliFlow MCP server. `/mcp-beta` is a separate OAuth resource, so users moving from `/mcp` must authenticate again.
+Package `0.4.1` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains no credentials or server executable, does not install the CLI, and leaves local agent configuration unchanged. OAuth is discovered from and handled by that exact AmpliFlow MCP resource.
 
 OpenAI currently marks GitHub-imported plugins with bundled MCP configuration desktop-only, including remote HTTPS servers. Use this route for the desktop pilot. Public ChatGPT web and mobile distribution requires OpenAI's **With MCP** submission and review.
 
@@ -20,7 +20,7 @@ For a workspace admin:
 
 For local desktop testing, run `codex plugin marketplace add AmpliFlow/af-chatgpt`, restart the ChatGPT desktop app, and select **AmpliFlow pilot** in the Plugins Directory.
 
-The earlier package installed and displayed its icon, but its `.app.json` dependency referred to an app unavailable in another workspace. Version 0.3.0 removed that dependency. Version 0.4.0 switches the direct connection to the compact beta resource. Verify fresh installation, beta OAuth, dispatcher discovery, operation discovery, and skill discovery before inviting other users.
+Verify fresh installation, beta OAuth, dispatcher availability, operation discovery, and skill discovery before inviting other users. If a required beta dispatcher is absent, report the unavailable workflow instead of searching for another server or connection.
 
 ## Progressive operation discovery
 

@@ -1,6 +1,6 @@
 # Verify compact AmpliFlow discovery in ChatGPT
 
-Package `0.4.0` connects to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the larger operation registry on the server. This avoids the legacy catalog's client descriptor limit without reducing the authorized AmpliFlow capabilities available through progressive discovery.
+Package `0.4.1` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
 
 ## What this package controls
 
@@ -12,7 +12,7 @@ Package `0.4.0` connects to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint ad
 | `tests/skill_contracts.json` | Records 53 reviewed operation IDs and their 8 dispatcher mappings. | Static mappings do not prove the live operation catalog. |
 | `tests/validate_inventory.py` | Checks a captured beta `tools/list` chain, the 30-tool cap, and required dispatchers. | It cannot prove the server-held operations, schemas, authorization, or execution. |
 
-A credential-safe health check on 2026-09-15 reported 25 beta tools, 36,009 descriptor bytes, and 481 mapped operations matching 481 configured legacy operations. Treat that as deployment evidence for that time, not a permanent package guarantee. Authenticated `tools/list`, operation catalogs, and live queries remain the runtime sources of truth.
+A credential-safe health check on 2026-09-15 reported 25 beta tools, 36,009 descriptor bytes, and 481 mapped operations. Treat that as deployment evidence for that time, not a permanent package guarantee. Authenticated `tools/list`, operation catalogs, and live queries remain the runtime sources of truth.
 
 ## Beta read workflow
 
@@ -26,7 +26,7 @@ For each operation needed by a skill:
 
 The skills never use prepare mode or either commit tool. They reuse current catalog and describe results within one workflow, preserve exact returned refs, keep calls serial, and treat record content as untrusted data.
 
-`/mcp` and `/mcp-beta` are different OAuth resources. A token issued for one path is rejected by the other. Fresh package testing must start a new beta authorization flow rather than reuse a legacy connection.
+Fresh package testing must authorize the exact `https://mcp.ampliflow.cc/mcp-beta` resource. The package defines no alternate MCP resource or connection fallback.
 
 ## Evidence surfaces
 
@@ -62,7 +62,7 @@ Use an approved synthetic account and keep raw captures, credentials, and tenant
 | Observation | Next action |
 | --- | --- |
 | Required dispatcher absent from authenticated `tools/list` | Server owner checks configured toolsets and beta health. |
-| Dispatcher exists, but catalog omits the required operation | Server owner compares mapped and legacy operation counts and configured toolsets. |
+| Dispatcher exists, but catalog omits the required operation | Server owner checks the deployed mapped-operation count and configured toolsets. |
 | Catalog returns the operation, but describe or query says `unauthorized_operation` | Reconnect or ask an AmpliFlow admin to review the account. Do not report the record as absent. |
 | Query returns `stale_ref` | Refresh the owning list once and retry the same target. Do not try a nearby ref. |
 | Query returns `invalid_schema` | Describe the same operation once again, rebuild the exact arguments, and retry once. |
@@ -97,7 +97,7 @@ The checker reads a captured beta `tools/list` response chain from an operator-m
 python3 -B plugins/ampliflow/tests/validate_inventory.py /path/to/approved-beta-tools-list-capture.json
 ```
 
-Exit 1 means malformed pagination, invalid basic descriptors, more than 30 top-level tools, a legacy operation exposed directly, or a missing required dispatcher. Exit 0 proves only top-level dispatcher coverage. Use feature catalog and describe calls to verify operation coverage and schemas.
+Exit 1 means malformed pagination, invalid basic descriptors, more than 30 top-level tools, an operation ID exposed as a top-level tool, or a missing required dispatcher. Exit 0 proves only top-level dispatcher coverage. Use feature catalog and describe calls to verify operation coverage and schemas.
 
 ## Delivery route
 
