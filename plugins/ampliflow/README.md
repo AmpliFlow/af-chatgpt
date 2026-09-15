@@ -2,7 +2,9 @@
 
 The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the hosted AmpliFlow MCP server and adds six read-only review skills.
 
-> **Do not use Chat mode for this pilot.** Chat mode runs the conversation in ChatGPT cloud and does not receive the MCP tools loaded by the GitHub-imported desktop plugin. The `@AmpliFlow` mention can still appear there, which makes this failure easy to misread as an authentication or server problem.
+> [!IMPORTANT]
+> **Use Work mode for this pilot**
+> Chat mode runs the conversation in ChatGPT cloud and does not receive the MCP tools loaded by the GitHub-imported desktop plugin. The `@AmpliFlow` mention can still appear there, which makes this failure easy to misread as an authentication or server problem.
 
 ## What the package contains
 
