@@ -217,7 +217,7 @@ class SkillDiscoveryTests(unittest.TestCase):
 
     def test_package_version_marks_beta_only_contract(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.4.1")
+        self.assertEqual(plugin["version"], "0.4.2")
 
 
 if __name__ == "__main__":

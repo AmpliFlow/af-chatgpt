@@ -1,18 +1,20 @@
 # Verify compact AmpliFlow discovery in ChatGPT
 
-Package `0.4.1` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
+Package `0.4.2` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
+
+Run live plugin checks in ChatGPT Desktop **Work** mode. The imported plugin may be selectable in **Chat** mode, but that cloud conversation does not receive the plugin's locally loaded MCP tools.
 
 ## What this package controls
 
 | Surface | Package behavior | Limit |
 | --- | --- | --- |
-| `mcp.json` | Connects to the exact beta OAuth resource. | GitHub imports with MCP declarations remain desktop-only. |
+| `mcp.json` | Connects to the exact beta OAuth resource. | GitHub imports with MCP declarations remain desktop-only and require Work mode for tool execution. |
 | `skills/*/agents/openai.yaml` | Declares the same beta dependency for each skill. | It does not connect an account or grant AmpliFlow permissions. |
 | `skills/*/SKILL.md` | Maps reviewed operation IDs to feature dispatchers and uses catalog, describe, then query. | The six skills are read-only instructions; they do not remove server write tools. |
 | `tests/skill_contracts.json` | Records 53 reviewed operation IDs and their 8 dispatcher mappings. | Static mappings do not prove the live operation catalog. |
 | `tests/validate_inventory.py` | Checks a captured beta `tools/list` chain, the 30-tool cap, and required dispatchers. | It cannot prove the server-held operations, schemas, authorization, or execution. |
 
-A credential-safe health check on 2026-09-15 reported 25 beta tools, 36,009 descriptor bytes, and 481 mapped operations. Treat that as deployment evidence for that time, not a permanent package guarantee. Authenticated `tools/list`, operation catalogs, and live queries remain the runtime sources of truth.
+A credential-safe health check on 2026-09-15 reported 25 beta tools, 36,009 descriptor bytes, and 481 mapped operations. The same installed package and OAuth credential completed a local `ampliflow_projects` catalog call in Work mode. Treat these as evidence for that deployment and client version, not permanent guarantees. Authenticated `tools/list`, operation catalogs, and live queries remain the runtime sources of truth.
 
 ## Beta read workflow
 
@@ -39,7 +41,7 @@ Check these surfaces separately:
 - portal **Scan Tools** or published metadata snapshot
 - workspace **Action control**, when available
 - model-visible dispatcher exposure
-- successful query execution in a fresh chat
+- successful query execution in a fresh Desktop Work conversation
 - answer quality and proof that the skill made no prepare or commit call
 
 A green result on one surface does not prove the next one. In particular, top-level dispatcher presence does not prove an underlying operation is enabled or authorized.
@@ -52,7 +54,8 @@ Use an approved synthetic account and keep raw captures, credentials, and tenant
 - [ ] Complete a fresh OAuth flow for the exact beta resource.
 - [ ] Capture every authenticated `tools/list` page and run the offline inventory check below.
 - [ ] Verify required operation IDs through their mapped catalogs and describe each schema before querying.
-- [ ] In a fresh chat, run one query-only case from each of the six skills.
+- [ ] In a fresh Desktop Work conversation, run one query-only case from each of the six skills.
+- [ ] Confirm a Chat-mode attempt is classified as an unsupported client surface rather than an empty result, server failure, or OAuth failure.
 - [ ] Confirm the task case reaches `list_projects`, `list_tasks`, and `show_task` through `ampliflow_projects` and `ampliflow_tasks`.
 - [ ] Confirm no skill uses prepare mode, `commit_ampliflow_change`, or `commit_destructive_ampliflow_change`.
 - [ ] Record dispatcher selection, operation selection, schema use, stable beta errors, answer quality, package revision, client surface, account role, tenant, and time in approved private evidence storage.
@@ -68,7 +71,8 @@ Use an approved synthetic account and keep raw captures, credentials, and tenant
 | Query returns `invalid_schema` | Describe the same operation once again, rebuild the exact arguments, and retry once. |
 | Query returns `partial_result` | Keep verified earlier results and report exact incomplete coverage. |
 | Portal scan omits a dispatcher present in live `tools/list` | Publisher rescans or republishes the metadata snapshot. |
-| Complete scan and permitted action still fail in a fresh chat | Send sanitized catalog and runtime evidence to OpenAI. |
+| Plugin is selected in Desktop Chat mode, but no AmpliFlow MCP tool reaches the turn | Start a new conversation in Work mode. Do not clear OAuth or add another MCP connection. |
+| Complete scan and permitted action still fail in a fresh Work conversation | Send sanitized catalog and runtime evidence to OpenAI. |
 
 ## Offline inventory check
 
@@ -101,7 +105,7 @@ Exit 1 means malformed pagination, invalid basic descriptors, more than 30 top-l
 
 ## Delivery route
 
-Keep the GitHub package for the desktop pilot. Public web and mobile delivery still requires OpenAI's **With MCP** review. The beta endpoint is the submission candidate only after OAuth, descriptors, privacy, reviewer access, all six query-only workflows, and the exact positive and negative review cases are frozen and approved.
+Keep the GitHub package for the Desktop Work-mode pilot. It does not deliver tools to Desktop Chat mode, web, or mobile. Those cloud surfaces still require OpenAI's **With MCP** review. The beta endpoint is the submission candidate only after OAuth, descriptors, privacy, reviewer access, all six query-only workflows, and the exact positive and negative review cases are frozen and approved.
 
 The separate MCP skill importer currently accepts five skills while this package has six. Approve a selection or consolidation before using that route; do not silently drop a workflow.
 

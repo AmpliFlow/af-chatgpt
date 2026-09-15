@@ -15,7 +15,11 @@ These checks do not prove live operation availability, schemas, authorization, i
 
 ## Manual test rules
 
-Run every case in a new chat with the installed package and synthetic or approved pilot data. Inspect both tool calls and the answer. Pass requires:
+Run every positive workflow case in a new ChatGPT Desktop **Work** conversation with the installed package and synthetic or approved pilot data. Select `@AmpliFlow` before sending the prompt. Inspect both tool calls and the answer.
+
+Do not use **Chat** mode for positive package tests. The GitHub-imported plugin can appear in Chat mode, but its local MCP tools are not mounted into that cloud conversation. Keep one explicit Chat-mode boundary test so a visible mention is never mistaken for successful tool binding.
+
+Pass requires:
 
 - exact returned refs
 - catalog, describe, then query through the mapped feature dispatcher
@@ -63,12 +67,14 @@ Record the package revision, ChatGPT surface, account role, tenant, time, dispat
 | Hosted saturation | A read returns 503 with `Retry-After`. | Retry the same serial read after the stated delay, without fan-out or target changes. |
 | Cross-account ref | The prompt supplies a ref copied from another account. | Resolve the record through current connection results or reject the unresolved ref. |
 
-## Compact discovery cases
+## Compact discovery and surface cases
 
 These are live acceptance cases, not automated model-eval results. Run the top-level inventory checker from [DISCOVERY.md](DISCOVERY.md), then verify operations separately through beta catalog and describe calls.
 
 | Case | Fixture | Required result |
 | --- | --- | --- |
+| Desktop Work mode | Start a new Work conversation, select `@AmpliFlow`, and ask `What projects do I have?` | The turn exposes `ampliflow_projects` and completes catalog, describe, and query as needed. |
+| Desktop Chat mode boundary | Start a new Chat conversation with the same installed plugin and mention. | Treat unavailable plugin MCP tools as an unsupported surface, not an empty AmpliFlow result or an OAuth failure. Direct the tester to a new Work conversation. |
 | Top-level compact surface | Authenticated beta `tools/list` returns no more than 30 tools and contains each dispatcher required by the six skills. | Inventory check passes without treating operation IDs as top-level tools. Record tool count and descriptor bytes from health separately. |
 | Required task operations | Project and task catalogs contain `list_projects`, `list_tasks`, and `show_task` under their reviewed mappings. | Describe each operation, verify `safety: "read"`, then execute the open-task workflow successfully. |
 | Wrong dispatcher | `list_impact_grading_options` is requested through `ampliflow_risks`, or `list_action_sets` through `ampliflow_controls`. | Follow the reviewed mapping instead: projects for impact grading and goals for action sets. Never guess from the operation's consumer. |
@@ -89,10 +95,11 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 - Compare live descriptors with scanned or published metadata and workspace action policy before claiming a ChatGPT surface can use them.
 - Confirm the package contains no credentials, tenant records, credential-bearing headers, OAuth secrets, hooks, server executable, or local runtime state.
 - Scan package prose and review descriptions for claims beyond tested behavior.
-- Import the published marketplace, complete fresh beta OAuth, and verify every skill is discoverable.
-- Run one read workflow per skill and confirm zero prepare or commit calls.
+- Import the published marketplace, complete fresh beta OAuth, restart Desktop, select Work mode, and verify every skill is discoverable.
+- Run one read workflow per skill in a fresh Work conversation and confirm zero prepare or commit calls.
 - Before MCP skill import, approve a selection or consolidation within the documented five-skill limit. The GitHub package still has six skills.
-- Confirm the GitHub-imported package is identified as desktop-only and verify customer workspace access separately before promising self-service installation.
+- Confirm the GitHub-imported package is identified as desktop-only, verify Work-mode execution, and record Chat mode as unsupported for this pilot.
+- Verify customer workspace access separately before promising self-service installation.
 - Before public **With MCP** submission, verify the exact beta deployment, resource-bound OAuth, PKCE `S256`, public-client registration, tool security declarations, privacy posture, reviewer access, and exact five positive plus three negative cases.
 
-The package stays a pilot until fresh installation, beta OAuth, dispatcher and operation discovery, all six query-only workflows, and answer quality are recorded.
+The package stays a pilot until fresh installation, beta OAuth, Work-mode dispatcher and operation discovery, all six query-only workflows, and answer quality are recorded.

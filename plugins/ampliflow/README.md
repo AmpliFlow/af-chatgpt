@@ -1,53 +1,102 @@
-# AmpliFlow for ChatGPT: pilot
+# AmpliFlow for ChatGPT: desktop pilot
 
-Bring your management system into ChatGPT. AmpliFlow connects processes, goals, risks, projects, and documents with the people responsible for them. This package connects to AmpliFlow's hosted MCP server and adds focused review skills.
+The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the hosted AmpliFlow MCP server and adds six read-only review skills.
 
-The skills review project tasks, portfolio status, goals, risks and controls, improvements, and checklists without changing records. They do not restrict the connected server's permissions: other tools may allow writes. Review tool approvals and use an account with suitable access.
+> **Do not use Chat mode for this pilot.** Chat mode runs the conversation in ChatGPT cloud and does not receive the MCP tools loaded by the GitHub-imported desktop plugin. The `@AmpliFlow` mention can still appear there, which makes this failure easy to misread as an authentication or server problem.
 
-## Install and test
+## What the package contains
 
-Package `0.4.1` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains no credentials or server executable, does not install the CLI, and leaves local agent configuration unchanged. OAuth is discovered from and handled by that exact AmpliFlow MCP resource.
+Package `0.4.2` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
 
-OpenAI currently marks GitHub-imported plugins with bundled MCP configuration desktop-only, including remote HTTPS servers. Use this route for the desktop pilot. Public ChatGPT web and mobile distribution requires OpenAI's **With MCP** submission and review.
+- one remote MCP connection
+- six focused review skills
+- the AmpliFlow icon and plugin metadata
+- no credentials, server executable, CLI installer, app ID, custom UI, or write workflow
 
-For a workspace admin:
+OAuth is discovered from and handled for that exact MCP resource. Each user signs in with an AmpliFlow account and receives only the access allowed by that account.
+
+## Admin installation
 
 1. Open **Admin > Plugins > Add > Import marketplace**.
-2. Set Source to `https://github.com/AmpliFlow/af-chatgpt`. Leave Path empty. Select a reviewed commit in **Branch, tag, or commit** for a fixed pilot revision, or `main` to receive updates.
-3. Import, inspect the report, and configure the plugin's workspace installation policy. Repository policy values do not set workspace permissions.
-4. Have the pilot user install the package in ChatGPT desktop, complete AmpliFlow authentication when prompted, and start a new chat. Verify that the bundled skills and AmpliFlow tools are available.
-5. Start with: "Show incomplete tasks in [project name], including assignees and due dates. Do not change anything." Then test the other workflows listed in [TESTING.md](TESTING.md) against approved AmpliFlow data.
+2. Set **Source** to `https://github.com/AmpliFlow/af-chatgpt`.
+3. Leave **Path** empty.
+4. Select a reviewed commit for a pinned pilot, or select `main` for updates.
+5. Import the marketplace and inspect the report.
+6. Configure the workspace installation policy for the pilot users.
 
-For local desktop testing, run `codex plugin marketplace add AmpliFlow/af-chatgpt`, restart the ChatGPT desktop app, and select **AmpliFlow pilot** in the Plugins Directory.
+For a direct local import, run `codex plugin marketplace add AmpliFlow/af-chatgpt`, restart ChatGPT Desktop, and install **AmpliFlow pilot** from the Plugins Directory.
 
-Verify fresh installation, beta OAuth, dispatcher availability, operation discovery, and skill discovery before inviting other users. If a required beta dispatcher is absent, report the unavailable workflow instead of searching for another server or connection.
+## User setup and first test
 
-## Progressive operation discovery
+1. Install **AmpliFlow** from the Plugins Directory.
+2. Complete AmpliFlow authentication when prompted.
+3. Fully quit and reopen ChatGPT Desktop.
+4. On the new-conversation screen, select **Work** at the top.
+5. Add `@AmpliFlow` in the composer.
+6. Ask: `What projects do I have?`
 
-The beta endpoint advertises feature tools such as `ampliflow_projects` and `ampliflow_tasks`, not hundreds of operation tools. Each bundled skill uses the matching dispatcher to catalog a stable operation ID, describe its current schema, then query it. The skills verify `safety: "read"`, consume successful results from the structured `ok` envelope, and never prepare or commit changes.
+Then try:
 
-Follow the [discovery guide](DISCOVERY.md) to compare authenticated beta inventory, operation catalogs, scanned metadata, action policy, and fresh ChatGPT execution. It also covers the five-skill MCP-import limit and the separate workspace browser-pilot option.
+```text
+Show incomplete tasks in [project name], including assignees and due dates. Do not change anything.
+```
 
-## External customer pilots
+A successful request uses `ampliflow_projects` and, when needed, `ampliflow_tasks`. The skill calls each feature dispatcher in this order:
 
-A customer can import the same package in ChatGPT desktop. Each user authenticates against `https://mcp.ampliflow.cc/mcp-beta` with their own AmpliFlow account. Importing the catalog does not connect an account, grant AmpliFlow permissions, or share the publisher's tenant data. Never put credentials in package files.
+```text
+catalog -> describe -> query
+```
 
-Pilot access is by arrangement with AmpliFlow. This package does not change the repository's license or grant additional redistribution rights. Confirm package-use terms before broad customer distribution.
+It requires `safety: "read"` and a successful structured response with `ok: true`. The bundled skills never use `prepare`, `commit_ampliflow_change`, or `commit_destructive_ampliflow_change`.
+
+## Supported surfaces
+
+| Surface | Status |
+| --- | --- |
+| Desktop **Work** mode | Verified pilot path |
+| Desktop **Chat** mode | Unsupported for the imported package; no plugin MCP tools reach the cloud turn |
+| Web and mobile | Not delivered by this GitHub package; use the future **With MCP** review route |
+
+This distinction was verified on ChatGPT Desktop `26.901.20858`: the same installed package, OAuth credential, and 25-tool inventory worked in a local Work turn, while a Chat turn produced no local `thread/start`, `turn/start`, or MCP call.
+
+## Troubleshooting
+
+### The plugin is visible, but no AmpliFlow tools are available
+
+Confirm that the conversation was created in **Work** mode. Switching to or retrying in Chat mode will not mount the imported plugin's MCP tools. Start a new Work conversation after selecting `@AmpliFlow`.
+
+### Authentication does not complete
+
+Confirm the connection targets exactly `https://mcp.ampliflow.cc/mcp-beta`. Do not reuse credentials for another resource. Complete the prompted OAuth flow, restart Desktop, and retry in a new Work conversation.
+
+### The plugin shows no tools after an update
+
+Fully quit and reopen Desktop. If an obsolete AmpliFlow marketplace is still configured, remove it so only one installed plugin owns the `ampliflow` MCP server name. Do not add a duplicate personal MCP connection.
+
+### A dispatcher or operation is unavailable
+
+Report the affected workflow and preserve any independent verified results. Do not search for another endpoint, derive an operation ID from tenant content, or use a runtime namespace fallback.
+
+See [DISCOVERY.md](DISCOVERY.md) for inventory and operation checks, and [TESTING.md](TESTING.md) for the full pilot cases.
+
+## Customer pilots
+
+Each customer workspace imports the same reviewed repository revision. Each user authenticates with their own account; importing the package does not grant AmpliFlow access or share the publisher's tenant data.
+
+Keep the pilot guided until a separate customer workspace has verified installation, Work-mode execution, correct tenant isolation, and package updates. Confirm package-use terms before broad distribution.
 
 ## Public distribution
 
-For browser and mobile access, submit the reviewed production endpoint through OpenAI's **With MCP** flow. The candidate used by this package is `https://mcp.ampliflow.cc/mcp-beta`; do not submit a personal or workspace-scoped app ID. Complete the beta pilot and OpenAI's current OAuth, metadata, reviewer-access, privacy, support, and test requirements before submission.
+The GitHub-imported package is Desktop pilot infrastructure. Public browser and mobile access requires OpenAI's **With MCP** submission and review. Submit the frozen production MCP endpoint only after OAuth, metadata, privacy, support, reviewer access, and exactly five positive plus three negative review tests are ready.
 
 ## Maintenance
 
-This repository is the source of truth for the plugin package and marketplace. Edit the files here, bump `plugins/ampliflow/plugin.json`'s version, and run the checks in [TESTING.md](TESTING.md). Publish `plugin.json`, `mcp.json`, and the complete skill directories, including `agents/openai.yaml`, together. MCP server implementation stays in `server repository`; CLI releases and the installer stay in `af-cli`.
+This repository is the source of truth for the package. For each shipped package update:
 
-Workspace marketplaces sync daily by default. Review changes before publishing; new entries can be imported automatically. A pinned catalog revision pins package files, not the hosted MCP implementation.
+1. edit the package here
+2. bump `plugins/ampliflow/plugin.json`
+3. run [TESTING.md](TESTING.md)
+4. publish the manifest, MCP declaration, and complete skill directories together
+5. verify the imported revision in a fresh Desktop Work conversation
 
-## Sources
-
-- [AmpliFlow](https://www.ampliflow.com/): product positioning.
-- [Package your plugin](https://developers.openai.com/plugins/build/plugins): portable manifests, MCP configuration, and local marketplaces.
-- [Authentication](https://developers.openai.com/plugins/build/auth): MCP OAuth requirements.
-- [Plugin management](https://learn.chatgpt.com/docs/enterprise/plugin-management): GitHub import, permissions, and desktop limits.
-- [Submit plugins](https://developers.openai.com/plugins/deploy/submission): public submission.
+Hosted MCP changes are maintained separately; CLI releases belong in `af-cli`.
