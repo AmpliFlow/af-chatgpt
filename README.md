@@ -1,5 +1,7 @@
 # AmpliFlow for ChatGPT
 
+> **MCP endpoint:** This package uses `https://mcp.ampliflow.cc/mcp-beta`. You can connect a compatible MCP client to this endpoint without installing the ChatGPT plugin, but results may vary because standalone clients do not receive the bundled skills in this repository.
+
 Use AmpliFlow from ChatGPT Desktop in **Work** mode. The imported plugin connects to AmpliFlow's hosted MCP server and adds six focused, read-only review skills for project tasks, project portfolios, goals, risks and controls, improvements, and checklists.
 
 > **Desktop mode matters:** select **Work** before starting the conversation. The GitHub-imported plugin does not expose its MCP tools in **Chat** mode. Chat may still show `@AmpliFlow`, but the cloud conversation cannot call the locally loaded tools.
