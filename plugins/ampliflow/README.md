@@ -19,12 +19,10 @@ OAuth is discovered from and handled for that exact MCP resource. Each user sign
 
 1. Open **Admin > Plugins > Add > Import marketplace**.
 2. Set **Source** to `https://github.com/AmpliFlow/af-chatgpt`.
-3. Leave **Path** empty.
-4. Select a reviewed commit for a pinned pilot, or select `main` for updates.
-5. Import the marketplace and inspect the report.
-6. Configure the workspace installation policy for the pilot users.
+3. Leave **Path** empty and import the marketplace.
+4. Make **AmpliFlow pilot** available to the pilot users.
 
-For a direct local import, run `codex plugin marketplace add AmpliFlow/af-chatgpt`, restart ChatGPT Desktop, and install **AmpliFlow pilot** from the Plugins Directory.
+See OpenAI's [marketplace import guide](https://help.openai.com/en/articles/20001504-importing-and-syncing-plugin-marketplaces-from-github) for current ChatGPT workspace administration steps.
 
 ## User setup and first test
 

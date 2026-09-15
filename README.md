@@ -10,9 +10,10 @@ A workspace admin imports this repository:
 
 1. Open **Admin > Plugins > Add > Import marketplace**.
 2. Set **Source** to `https://github.com/AmpliFlow/af-chatgpt`.
-3. Leave **Path** empty.
-4. Select a reviewed commit for a fixed pilot, or use `main` for updates.
-5. Review the import report and make **AmpliFlow pilot** available to the intended users.
+3. Leave **Path** empty and import the marketplace.
+4. Make **AmpliFlow pilot** available to the intended users.
+
+See OpenAI's [marketplace import guide](https://help.openai.com/en/articles/20001504-importing-and-syncing-plugin-marketplaces-from-github) for current ChatGPT workspace administration steps.
 
 Each pilot user then:
 
