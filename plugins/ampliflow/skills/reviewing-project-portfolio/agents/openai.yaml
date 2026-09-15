@@ -4,4 +4,4 @@ dependencies:
       value: "ampliflow"
       description: "Read AmpliFlow management-system records"
       transport: "streamable_http"
-      url: "https://mcp.ampliflow.cc/mcp"
+      url: "https://mcp.ampliflow.cc/mcp-beta"

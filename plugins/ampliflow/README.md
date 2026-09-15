@@ -6,7 +6,7 @@ The skills review project tasks, portfolio status, goals, risks and controls, im
 
 ## Install and test
 
-The package declares the remote HTTPS endpoint in `mcp.json`. It contains no credentials or server executable, does not install the CLI, and leaves local agent configuration unchanged. OAuth is discovered from and handled by the AmpliFlow MCP server.
+The package declares the compact remote HTTPS endpoint in `mcp.json`. It contains no credentials or server executable, does not install the CLI, and leaves local agent configuration unchanged. OAuth is discovered from and handled by the AmpliFlow MCP server. `/mcp-beta` is a separate OAuth resource, so users moving from `/mcp` must authenticate again.
 
 OpenAI currently marks GitHub-imported plugins with bundled MCP configuration desktop-only, including remote HTTPS servers. Use this route for the desktop pilot. Public ChatGPT web and mobile distribution requires OpenAI's **With MCP** submission and review.
 
@@ -20,21 +20,23 @@ For a workspace admin:
 
 For local desktop testing, run `codex plugin marketplace add AmpliFlow/af-chatgpt`, restart the ChatGPT desktop app, and select **AmpliFlow pilot** in the Plugins Directory.
 
-The earlier package installed and displayed its icon, but its `.app.json` dependency referred to an app unavailable in another workspace. Version 0.3.0 removes that dependency and declares the MCP endpoint directly. Verify fresh installation, OAuth, tool discovery, and skill discovery before inviting other users.
+The earlier package installed and displayed its icon, but its `.app.json` dependency referred to an app unavailable in another workspace. Version 0.3.0 removed that dependency. Version 0.4.0 switches the direct connection to the compact beta resource. Verify fresh installation, beta OAuth, dispatcher discovery, operation discovery, and skill discovery before inviting other users.
 
-## Tool discovery
+## Progressive operation discovery
 
-Version 0.3.1 adds each skill's documented MCP dependency and bounded, conditional host-discovery guidance. These changes do not enable a hidden runtime setting or prove that missing actions are callable. Follow the [discovery guide](DISCOVERY.md) to compare authenticated server inventory, scanned metadata, action policy, and a fresh ChatGPT session. It also covers the five-skill MCP-import limit and the separate workspace browser-pilot option.
+The beta endpoint advertises feature tools such as `ampliflow_projects` and `ampliflow_tasks`, not hundreds of operation tools. Each bundled skill uses the matching dispatcher to catalog a stable operation ID, describe its current schema, then query it. The skills verify `safety: "read"`, consume successful results from the structured `ok` envelope, and never prepare or commit changes.
+
+Follow the [discovery guide](DISCOVERY.md) to compare authenticated beta inventory, operation catalogs, scanned metadata, action policy, and fresh ChatGPT execution. It also covers the five-skill MCP-import limit and the separate workspace browser-pilot option.
 
 ## External customer pilots
 
-A customer can import the same package in ChatGPT desktop. Each user authenticates against `https://mcp.ampliflow.cc/mcp` with their own AmpliFlow account. Importing the catalog does not connect an account, grant AmpliFlow permissions, or share the publisher's tenant data. Never put credentials in package files.
+A customer can import the same package in ChatGPT desktop. Each user authenticates against `https://mcp.ampliflow.cc/mcp-beta` with their own AmpliFlow account. Importing the catalog does not connect an account, grant AmpliFlow permissions, or share the publisher's tenant data. Never put credentials in package files.
 
 Pilot access is by arrangement with AmpliFlow. This package does not change the repository's license or grant additional redistribution rights. Confirm package-use terms before broad customer distribution.
 
 ## Public distribution
 
-For browser and mobile access, submit the production endpoint through OpenAI's **With MCP** flow. Submit `https://mcp.ampliflow.cc/mcp` directly and include the reviewed skills; do not submit a personal or workspace-scoped app ID. Complete OpenAI's current OAuth, metadata, reviewer-access, privacy, support, and test requirements before submission.
+For browser and mobile access, submit the reviewed production endpoint through OpenAI's **With MCP** flow. The candidate used by this package is `https://mcp.ampliflow.cc/mcp-beta`; do not submit a personal or workspace-scoped app ID. Complete the beta pilot and OpenAI's current OAuth, metadata, reviewer-access, privacy, support, and test requirements before submission.
 
 ## Maintenance
 

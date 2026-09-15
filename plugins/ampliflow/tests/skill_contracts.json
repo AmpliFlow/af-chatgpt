@@ -1,83 +1,110 @@
 {
+  "endpoint": "https://mcp.ampliflow.cc/mcp-beta",
   "skills": {
     "reviewing-project-tasks": {
-      "required_tools": ["list_projects", "list_tasks", "show_task"],
-      "optional_tools": []
+      "required_operations": {
+        "list_projects": "ampliflow_projects",
+        "list_tasks": "ampliflow_tasks",
+        "show_task": "ampliflow_tasks"
+      },
+      "optional_operations": {}
     },
     "reviewing-project-portfolio": {
-      "required_tools": ["list_projects", "list_project_summaries", "list_project_timeline", "show_project_workspace_summary", "show_latest_project_status_update"],
-      "optional_tools": ["list_project_status_updates", "list_archived_projects", "list_deleted_projects"]
+      "required_operations": {
+        "list_projects": "ampliflow_projects",
+        "list_project_summaries": "ampliflow_projects",
+        "list_project_timeline": "ampliflow_projects",
+        "show_project_workspace_summary": "ampliflow_projects",
+        "show_latest_project_status_update": "ampliflow_projects"
+      },
+      "optional_operations": {
+        "list_project_status_updates": "ampliflow_projects",
+        "list_archived_projects": "ampliflow_projects",
+        "list_deleted_projects": "ampliflow_projects"
+      }
     },
     "reviewing-goals": {
-      "required_tools": ["list_goals", "show_goal", "list_goal_measurements", "list_goal_measurement_progress"],
-      "optional_tools": ["show_goal_measurement", "list_action_sets", "list_goal_measurement_tasklist", "list_goal_options"]
+      "required_operations": {
+        "list_goals": "ampliflow_goals",
+        "show_goal": "ampliflow_goals",
+        "list_goal_measurements": "ampliflow_goals",
+        "list_goal_measurement_progress": "ampliflow_goals"
+      },
+      "optional_operations": {
+        "show_goal_measurement": "ampliflow_goals",
+        "list_action_sets": "ampliflow_goals",
+        "list_goal_measurement_tasklist": "ampliflow_goals",
+        "list_goal_options": "ampliflow_goals"
+      }
     },
     "reviewing-risks-and-controls": {
-      "required_tools": ["list_risks", "show_risk", "list_control_sets", "show_control_set", "list_control_items", "show_control_item"],
-      "optional_tools": ["list_risk_probability_options", "list_risk_occurrence_options", "list_risk_status_options", "list_risk_yes_no_options", "list_impact_grading_options", "list_process_step_options", "list_risks_by_process_step", "list_risk_options_by_process", "list_risk_options_by_subprocess", "list_control_standards", "list_standard_controls", "list_action_sets", "list_control_item_files", "list_control_item_options"]
+      "required_operations": {
+        "list_risks": "ampliflow_risks",
+        "show_risk": "ampliflow_risks",
+        "list_control_sets": "ampliflow_controls",
+        "show_control_set": "ampliflow_controls",
+        "list_control_items": "ampliflow_controls",
+        "show_control_item": "ampliflow_controls"
+      },
+      "optional_operations": {
+        "list_risk_probability_options": "ampliflow_risks",
+        "list_risk_occurrence_options": "ampliflow_risks",
+        "list_risk_status_options": "ampliflow_risks",
+        "list_risk_yes_no_options": "ampliflow_risks",
+        "list_impact_grading_options": "ampliflow_projects",
+        "list_process_step_options": "ampliflow_risks",
+        "list_risks_by_process_step": "ampliflow_risks",
+        "list_risk_options_by_process": "ampliflow_risks",
+        "list_risk_options_by_subprocess": "ampliflow_risks",
+        "list_control_standards": "ampliflow_controls",
+        "list_standard_controls": "ampliflow_controls",
+        "list_action_sets": "ampliflow_goals",
+        "list_control_item_files": "ampliflow_controls",
+        "list_control_item_options": "ampliflow_controls"
+      }
     },
     "reviewing-improvements": {
-      "required_tools": ["list_improvements", "show_improvement", "list_improvement_steps", "list_improvement_activities"],
-      "optional_tools": ["show_improvement_activity", "list_improvement_forms", "show_improvement_form", "list_history", "run_improvement_stats_report", "drill_down_improvements"]
+      "required_operations": {
+        "list_improvements": "ampliflow_improvements",
+        "show_improvement": "ampliflow_improvements",
+        "list_improvement_steps": "ampliflow_improvements",
+        "list_improvement_activities": "ampliflow_improvements"
+      },
+      "optional_operations": {
+        "show_improvement_activity": "ampliflow_improvements",
+        "list_improvement_forms": "ampliflow_improvements",
+        "show_improvement_form": "ampliflow_improvements",
+        "list_history": "ampliflow_history",
+        "run_improvement_stats_report": "ampliflow_improvements",
+        "drill_down_improvements": "ampliflow_improvements"
+      }
     },
     "reviewing-checklists": {
-      "required_tools": ["list_checklist_templates", "list_checklists", "show_checklist", "show_checklist_template"],
-      "optional_tools": ["show_checklist_template_configuration", "list_checklist_step_comments", "list_history"]
+      "required_operations": {
+        "list_checklist_templates": "ampliflow_checklists",
+        "list_checklists": "ampliflow_checklists",
+        "show_checklist": "ampliflow_checklists",
+        "show_checklist_template": "ampliflow_checklists"
+      },
+      "optional_operations": {
+        "show_checklist_template_configuration": "ampliflow_checklists",
+        "list_checklist_step_comments": "ampliflow_checklists",
+        "list_history": "ampliflow_history"
+      }
     }
   },
-  "supported_tools": [
-    "drill_down_improvements",
-    "list_action_sets",
-    "list_archived_projects",
-    "list_checklist_step_comments",
-    "list_checklist_templates",
-    "list_checklists",
-    "list_control_item_files",
-    "list_control_item_options",
-    "list_control_items",
-    "list_control_sets",
-    "list_control_standards",
-    "list_deleted_projects",
-    "list_goal_measurement_progress",
-    "list_goal_measurement_tasklist",
-    "list_goal_measurements",
-    "list_goal_options",
-    "list_goals",
-    "list_history",
-    "list_impact_grading_options",
-    "list_improvement_activities",
-    "list_improvement_forms",
-    "list_improvement_steps",
-    "list_improvements",
-    "list_process_step_options",
-    "list_project_status_updates",
-    "list_project_summaries",
-    "list_project_timeline",
-    "list_projects",
-    "list_risk_occurrence_options",
-    "list_risk_options_by_process",
-    "list_risk_options_by_subprocess",
-    "list_risk_probability_options",
-    "list_risk_status_options",
-    "list_risk_yes_no_options",
-    "list_risks",
-    "list_risks_by_process_step",
-    "list_standard_controls",
-    "list_tasks",
-    "run_improvement_stats_report",
-    "show_checklist",
-    "show_checklist_template",
-    "show_checklist_template_configuration",
-    "show_control_item",
-    "show_control_set",
-    "show_goal",
-    "show_goal_measurement",
-    "show_improvement",
-    "show_improvement_activity",
-    "show_improvement_form",
-    "show_latest_project_status_update",
-    "show_project_workspace_summary",
-    "show_risk",
-    "show_task"
+  "supported_dispatchers": [
+    "ampliflow_checklists",
+    "ampliflow_controls",
+    "ampliflow_goals",
+    "ampliflow_history",
+    "ampliflow_improvements",
+    "ampliflow_projects",
+    "ampliflow_risks",
+    "ampliflow_tasks"
+  ],
+  "forbidden_commit_tools": [
+    "commit_ampliflow_change",
+    "commit_destructive_ampliflow_change"
   ]
 }

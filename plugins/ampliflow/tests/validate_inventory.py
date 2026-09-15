@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a captured tools/list cursor chain against local skill dependencies."""
+"""Check a captured beta tools/list cursor chain against local skill dispatchers."""
 
 from __future__ import annotations
 
@@ -8,7 +8,10 @@ import json
 import re
 from pathlib import Path
 
-from validate_skills import CONTRACT_PATH
+from validate_skills import CONTRACT_PATH, supported_operation_mappings
+
+BETA_TOOL_LIMIT = 30
+COMMIT_TOOLS = {"commit_ampliflow_change", "commit_destructive_ampliflow_change"}
 
 
 def check_inventory(capture: object, contract: dict) -> tuple[list[str], dict]:
@@ -54,20 +57,36 @@ def check_inventory(capture: object, contract: dict) -> tuple[list[str], dict]:
 
     if expected_cursor is not None:
         errors.append("incomplete catalog: nextCursor requires another page")
+    if len(names) > BETA_TOOL_LIMIT:
+        errors.append(f"beta catalog exceeds the {BETA_TOOL_LIMIT}-tool limit: {len(names)} tools")
+
+    legacy_operations = set(supported_operation_mappings(contract))
+    exposed_legacy = sorted(names & legacy_operations)
+    if exposed_legacy:
+        errors.append(f"beta catalog exposes legacy operation tools directly: {', '.join(exposed_legacy)}")
+    unexpected = sorted(name for name in names if not name.startswith("ampliflow_") and name not in COMMIT_TOOLS)
+    if unexpected:
+        errors.append(f"beta catalog contains unexpected top-level tools: {', '.join(unexpected)}")
+
     for name, spec in contract["skills"].items():
-        missing = sorted(set(spec["required_tools"]) - names)
+        required_operations = spec.get("required_operations", {})
+        optional_operations = spec.get("optional_operations", {})
+        required_dispatchers = set(required_operations.values())
+        optional_dispatchers = set(optional_operations.values()) - required_dispatchers
+        missing_required = sorted(required_dispatchers - names)
         coverage[name] = {
-            "missing_required": missing,
-            "missing_optional": sorted(set(spec["optional_tools"]) - names),
+            "missing_required_dispatchers": missing_required,
+            "missing_optional_dispatchers": sorted(optional_dispatchers - names),
+            "operations_require_runtime_catalog": sorted(set(required_operations) | set(optional_operations)),
         }
-        if missing:
-            errors.append(f"{name}: missing required tools: {', '.join(missing)}")
+        if missing_required:
+            errors.append(f"{name}: missing required dispatchers: {', '.join(missing_required)}")
     return errors, coverage
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("capture", type=Path, help="tools/list pages with request params and response result")
+    parser.add_argument("capture", type=Path, help="beta tools/list pages with request params and response result")
     args = parser.parse_args()
     try:
         capture = json.loads(args.capture.read_text(encoding="utf-8"))
@@ -77,15 +96,15 @@ def main() -> int:
         return 1
     errors, coverage = check_inventory(capture, contract)
     for name, result in coverage.items():
-        optional = result["missing_optional"]
+        optional = result["missing_optional_dispatchers"]
         if optional:
-            print(f"{name}: optional tools not captured: {', '.join(optional)}")
+            print(f"{name}: optional dispatchers not captured: {', '.join(optional)}")
     for error in errors:
         print(f"ERROR: {error}")
     if errors:
         return 1
-    print("Captured catalog covers core skill dependencies. Optional gaps are listed above.")
-    print("This does not prove ChatGPT discovery, callability, authorization, or read-only enforcement.")
+    print("Captured beta catalog covers the skills' top-level dispatchers. Optional gaps are listed above.")
+    print("This does not prove operation catalog coverage, schemas, callability, authorization, or read-only behavior.")
     return 0
 
 
