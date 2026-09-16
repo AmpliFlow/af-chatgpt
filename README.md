@@ -37,7 +37,7 @@ See the package [setup guide](plugins/ampliflow/README.md), [acceptance checks](
 
 | Surface | Pilot status |
 | --- | --- |
-| ChatGPT Desktop, **Work** mode | Supported pilot path; package `0.5.0` requires fresh verification |
+| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import and installation verified for package `0.5.0` |
 | ChatGPT Desktop, **Chat** mode | Not supported by the GitHub-imported package; the cloud conversation does not receive its local MCP tools |
 | ChatGPT web and mobile | Requires OpenAI's **With MCP** submission and review |
 
