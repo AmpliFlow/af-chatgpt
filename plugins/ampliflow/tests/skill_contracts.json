@@ -1,6 +1,49 @@
 {
   "endpoint": "https://mcp.ampliflow.cc/mcp-beta",
   "skills": {
+    "using-ampliflow": {
+      "required_dispatchers": [
+        "ampliflow_checklists",
+        "ampliflow_communications",
+        "ampliflow_content",
+        "ampliflow_controls",
+        "ampliflow_customer_requirements",
+        "ampliflow_custom_lists",
+        "ampliflow_customers",
+        "ampliflow_environment",
+        "ampliflow_equipment",
+        "ampliflow_goals",
+        "ampliflow_improvements",
+        "ampliflow_items",
+        "ampliflow_kpis",
+        "ampliflow_legislation",
+        "ampliflow_people",
+        "ampliflow_processes",
+        "ampliflow_projects",
+        "ampliflow_purchase_orders",
+        "ampliflow_risks",
+        "ampliflow_stakeholders",
+        "ampliflow_suppliers",
+        "ampliflow_tasks",
+        "ampliflow_timesheets",
+        "ampliflow_training_plans",
+        "ampliflow_year_wheels"
+      ],
+      "optional_dispatchers": [
+        "ampliflow_history"
+      ],
+      "references": [
+        "projects-work-and-time.md",
+        "goals-and-performance.md",
+        "processes-risks-controls-and-improvements.md",
+        "people-and-training.md",
+        "supply-and-assets.md",
+        "context-and-obligations.md",
+        "assurance-content-and-planning.md"
+      ],
+      "required_operations": {},
+      "optional_operations": {}
+    },
     "reviewing-project-tasks": {
       "required_operations": {
         "list_projects": "ampliflow_projects",
@@ -95,13 +138,31 @@
   },
   "supported_dispatchers": [
     "ampliflow_checklists",
+    "ampliflow_communications",
+    "ampliflow_content",
     "ampliflow_controls",
+    "ampliflow_customer_requirements",
+    "ampliflow_custom_lists",
+    "ampliflow_customers",
+    "ampliflow_environment",
+    "ampliflow_equipment",
     "ampliflow_goals",
     "ampliflow_history",
     "ampliflow_improvements",
+    "ampliflow_items",
+    "ampliflow_kpis",
+    "ampliflow_legislation",
+    "ampliflow_people",
+    "ampliflow_processes",
     "ampliflow_projects",
+    "ampliflow_purchase_orders",
     "ampliflow_risks",
-    "ampliflow_tasks"
+    "ampliflow_stakeholders",
+    "ampliflow_suppliers",
+    "ampliflow_tasks",
+    "ampliflow_timesheets",
+    "ampliflow_training_plans",
+    "ampliflow_year_wheels"
   ],
   "forbidden_commit_tools": [
     "commit_ampliflow_change",

@@ -101,6 +101,11 @@ def validate_skill(path: Path, expected_name: str, spec: dict, supported: dict[s
 
     expected = dict(spec.get("required_operations", {}))
     expected.update(spec.get("optional_operations", {}))
+    expected_dispatchers = (
+        set(expected.values())
+        | set(spec.get("required_dispatchers", []))
+        | set(spec.get("optional_dispatchers", []))
+    )
     mapped_pairs = MAPPING_PATTERN.findall(text)
     mapped: dict[str, str] = {}
     for operation, dispatcher in mapped_pairs:
@@ -127,10 +132,40 @@ def validate_skill(path: Path, expected_name: str, spec: dict, supported: dict[s
             errors.append(f"{path}: operation {called} must be queried through its dispatcher, not called as a top-level tool")
         elif called in forbidden_commits:
             errors.append(f"{path}: read-only skill must not call commit tool {called}")
-        elif called.startswith("ampliflow_") and called not in set(expected.values()):
+        elif called.startswith("ampliflow_") and called not in expected_dispatchers:
             errors.append(f"{path}: undeclared dispatcher call {called}")
     if WRITE_MODE_PATTERN.search(text):
         errors.append(f"{path}: read-only skill must not instruct write mode prepare")
+
+    references = spec.get("references", [])
+    reference_root = path.parent / "references"
+    for reference in references:
+        reference_path = reference_root / reference
+        if Path(reference).name != reference or not reference_path.is_file():
+            errors.append(f"{path}: missing declared reference {reference}")
+        elif reference_path.is_symlink():
+            errors.append(f"{reference_path}: skill references must be regular files")
+        else:
+            reference_text = reference_path.read_text(encoding="utf-8")
+            reference_lower = reference_text.lower()
+            for phrase, reason in FORBIDDEN.items():
+                if phrase in reference_lower:
+                    errors.append(f"{reference_path}: contains prohibited {reason}: {phrase!r}")
+            if WRITE_MODE_PATTERN.search(reference_text) or any(
+                commit in reference_text for commit in forbidden_commits
+            ):
+                errors.append(f"{reference_path}: read-only reference must not instruct writes")
+            if OPERATION_REFERENCE_PATTERN.search(reference_text):
+                errors.append(f"{reference_path}: router references must not pin operation IDs")
+            for dispatcher in re.findall(r"`(ampliflow_[a-z0-9_]+)`", reference_text):
+                if dispatcher not in expected_dispatchers:
+                    errors.append(f"{reference_path}: undeclared dispatcher {dispatcher}")
+        if f"`references/{reference}`" not in text:
+            errors.append(f"{path}: no load condition for reference {reference}")
+    if reference_root.exists():
+        actual_references = {item.name for item in reference_root.glob("*.md")}
+        if actual_references != set(references):
+            errors.append(f"{path}: reference files must exactly match the skill contract")
     return errors
 
 
@@ -211,6 +246,8 @@ def validate(root: Path) -> list[str]:
             errors.append(f"{name}: duplicate required and optional operations")
         declared_dispatchers.update(required.values())
         declared_dispatchers.update(optional.values())
+        declared_dispatchers.update(spec.get("required_dispatchers", []))
+        declared_dispatchers.update(spec.get("optional_dispatchers", []))
         errors.extend(validate_skill(path, name, spec, supported))
         errors.extend(validate_dependency(path.parent / "agents" / "openai.yaml"))
 

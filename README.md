@@ -4,7 +4,7 @@
 > **MCP endpoint**
 > This package uses `https://mcp.ampliflow.cc/mcp-beta`. You can connect a compatible MCP client to this endpoint without installing the ChatGPT plugin, but results may vary because standalone clients do not receive the bundled skills in this repository.
 
-Use AmpliFlow from ChatGPT Desktop in **Work** mode. The imported plugin connects to AmpliFlow's hosted MCP server and adds six focused, read-only review skills for project tasks, project portfolios, goals, risks and controls, improvements, and checklists.
+Use AmpliFlow from ChatGPT Desktop in **Work** mode. The imported plugin connects to AmpliFlow's hosted MCP server and adds one general read-only router plus six focused review skills for project tasks, project portfolios, goals, risks and controls, improvements, and checklists.
 
 > [!IMPORTANT]
 > **Desktop mode matters**
@@ -37,13 +37,13 @@ See the package [setup guide](plugins/ampliflow/README.md), [acceptance checks](
 
 | Surface | Pilot status |
 | --- | --- |
-| ChatGPT Desktop, **Work** mode | Supported and verified with package `0.4.2` |
+| ChatGPT Desktop, **Work** mode | Supported pilot path; package `0.5.0` requires fresh verification |
 | ChatGPT Desktop, **Chat** mode | Not supported by the GitHub-imported package; the cloud conversation does not receive its local MCP tools |
 | ChatGPT web and mobile | Requires OpenAI's **With MCP** submission and review |
 
 The package connects only to `https://mcp.ampliflow.cc/mcp-beta`. It does not add another MCP connection, use an alternate endpoint, depend on a workspace app ID, or install the AmpliFlow CLI.
 
-The six bundled skills use read operations only. This is an instruction-level limit, not a server permission boundary: the connected server may expose other approved tools under the user's AmpliFlow permissions.
+The seven bundled skills use read operations only. This is an instruction-level limit, not a server permission boundary: the connected server may expose other approved tools under the user's AmpliFlow permissions.
 
 ## Troubleshooting
 

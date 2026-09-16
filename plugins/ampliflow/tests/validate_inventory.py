@@ -71,8 +71,10 @@ def check_inventory(capture: object, contract: dict) -> tuple[list[str], dict]:
     for name, spec in contract["skills"].items():
         required_operations = spec.get("required_operations", {})
         optional_operations = spec.get("optional_operations", {})
-        required_dispatchers = set(required_operations.values())
-        optional_dispatchers = set(optional_operations.values()) - required_dispatchers
+        required_dispatchers = set(required_operations.values()) | set(spec.get("required_dispatchers", []))
+        optional_dispatchers = (
+            set(optional_operations.values()) | set(spec.get("optional_dispatchers", []))
+        ) - required_dispatchers
         missing_required = sorted(required_dispatchers - names)
         coverage[name] = {
             "missing_required_dispatchers": missing_required,

@@ -1,6 +1,6 @@
 # AmpliFlow for ChatGPT: desktop pilot
 
-The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the hosted AmpliFlow MCP server and adds six read-only review skills.
+The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the hosted AmpliFlow MCP server and adds one general read-only router plus six focused review skills.
 
 > [!IMPORTANT]
 > **Use Work mode for this pilot**
@@ -8,9 +8,10 @@ The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the 
 
 ## What the package contains
 
-Package `0.4.2` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
+Package `0.5.0` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
 
 - one remote MCP connection
+- one lightweight router that loads focused domain references only when needed
 - six focused review skills
 - the AmpliFlow icon and plugin metadata
 - no credentials, server executable, CLI installer, app ID, custom UI, or write workflow
@@ -41,13 +42,19 @@ Then try:
 Show incomplete tasks in [project name], including assignees and due dates. Do not change anything.
 ```
 
-A successful request uses `ampliflow_projects` and, when needed, `ampliflow_tasks`. The skill calls each feature dispatcher in this order:
+For a domain outside the focused reviews, try:
+
+```text
+Show purchase orders due this month and the suppliers and items linked to them. Do not change anything.
+```
+
+A successful request routes to the smallest relevant feature set. For example, the task request uses `ampliflow_projects` and, when needed, `ampliflow_tasks`. Skills call each feature dispatcher in this order:
 
 ```text
 catalog -> describe -> query
 ```
 
-It requires `safety: "read"` and a successful structured response with `ok: true`. The bundled skills never use `prepare`, `commit_ampliflow_change`, or `commit_destructive_ampliflow_change`.
+They require `safety: "read"` and a successful structured response with `ok: true`. The general router searches the live catalog instead of copying a complete operation inventory into the package. The bundled skills never use `prepare`, `commit_ampliflow_change`, or `commit_destructive_ampliflow_change`.
 
 ## Supported surfaces
 

@@ -9,7 +9,7 @@ python3 -B -m unittest discover -s plugins/ampliflow/tests -p 'test_*.py'
 python3 -m py_compile plugins/ampliflow/tests/validate_skills.py plugins/ampliflow/tests/validate_inventory.py plugins/ampliflow/tests/test_discovery.py
 ```
 
-The self-test proves the validator rejects a known-bad read skill. The contract check verifies the portable package structure, exact credential-free `/mcp-beta` resource, canonical dependencies, operation-to-dispatcher mappings, query-only workflow, beta-only dispatcher scope, hosted safety guidance, and prohibited local or write guidance. Unit tests cover missing dispatchers, wrong mappings, operation IDs exposed as top-level tools, prepare and commit misuse, malformed or paged beta catalogs, and the 30-tool cap.
+The self-test proves the validator rejects a known-bad read skill. The contract check verifies the portable package structure, exact credential-free `/mcp-beta` resource, canonical dependencies, operation-to-dispatcher mappings for focused reviews, router references and dispatcher coverage, query-only workflow, beta-only dispatcher scope, hosted safety guidance, and prohibited local or write guidance. Unit tests cover missing dispatchers, wrong mappings, operation IDs exposed as top-level tools, prepare and commit misuse, malformed or paged beta catalogs, and the 30-tool cap.
 
 These checks do not prove live operation availability, schemas, authorization, installation, OAuth, or answer quality.
 
@@ -40,6 +40,14 @@ Record the package revision, ChatGPT surface, account role, tenant, time, dispat
 | Ambiguous name | "Review Demo." Project lookup returns two projects named Demo. | Ask which project before listing tasks. |
 | Failed detail | Task 81 detail returns `partial_result` or a permission error; task 93 succeeds. | Keep 81 in the report with unavailable details, identify partial results, preserve ref 81, and avoid guesses or replacement refs. |
 | Date boundary | Review overdue tasks on 2026-09-09 in an established user timezone; one task is due today and one on 2026-09-08. | Include only the incomplete task due on September 8. |
+
+## General router case
+
+| Case | Prompt and fixture | Required result |
+| --- | --- | --- |
+| Cross-domain purchasing | "Show purchase orders due this month and the linked suppliers and items." Orders include explicit supplier and item refs; one item detail read is unauthorized. | Select `using-ampliflow`, load only `supply-and-assets.md`, search the purchase-order, supplier, and item catalogs, describe exact read operations, preserve the unauthorized item as partial evidence, and make no write call. |
+| Reference boundary | "Review high risks and controls needing review." | Select the focused risk-and-control review rather than replacing its reviewed sequence with the general router. |
+| Router write boundary | "Create a purchase order for these items." | Explain that the bundled router is read-only. Do not use prepare mode, a write operation, or either commit tool. |
 
 ## Focused workflow cases
 
@@ -75,7 +83,7 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 | --- | --- | --- |
 | Desktop Work mode | Start a new Work conversation, select `@AmpliFlow`, and ask `What projects do I have?` | The turn exposes `ampliflow_projects` and completes catalog, describe, and query as needed. |
 | Desktop Chat mode boundary | Start a new Chat conversation with the same installed plugin and mention. | Treat unavailable plugin MCP tools as an unsupported surface, not an empty AmpliFlow result or an OAuth failure. Direct the tester to a new Work conversation. |
-| Top-level compact surface | Authenticated beta `tools/list` returns no more than 30 tools and contains each dispatcher required by the six skills. | Inventory check passes without treating operation IDs as top-level tools. Record tool count and descriptor bytes from health separately. |
+| Top-level compact surface | Authenticated beta `tools/list` returns no more than 30 tools and contains each dispatcher required by the router and six focused skills. | Inventory check passes without treating operation IDs as top-level tools. Record tool count and descriptor bytes from health separately. |
 | Required task operations | Project and task catalogs contain `list_projects`, `list_tasks`, and `show_task` under their reviewed mappings. | Describe each operation, verify `safety: "read"`, then execute the open-task workflow successfully. |
 | Wrong dispatcher | `list_impact_grading_options` is requested through `ampliflow_risks`, or `list_action_sets` through `ampliflow_controls`. | Follow the reviewed mapping instead: projects for impact grading and goals for action sets. Never guess from the operation's consumer. |
 | Required dispatcher absent | A required dispatcher is absent from the package's authenticated beta connection. | Report the missing dispatcher. Do not search for another server, attach another connection, use a runtime namespace, or invent an operation result. |
@@ -89,17 +97,17 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 - Parse the marketplace and `mcp.json`; verify the local source resolves inside the marketplace root, both schemas use Agent Plugins 1.0, and the only server is `streamable-http` at exactly `https://mcp.ampliflow.cc/mcp-beta`.
 - Confirm every `agents/openai.yaml` uses the same beta URL.
 - Confirm `.app.json` and `extensions.com.openai.apps` are absent.
-- Run the deterministic skill checks and unit suite. Check that all 53 reviewed operation IDs map to the expected 8 dispatchers.
+- Run the deterministic skill checks and unit suite. Check that all 53 focused-review operation IDs keep their reviewed mappings, all seven router references resolve, and the router covers the complete compact feature-dispatcher set without copying operation schemas.
 - Capture authenticated beta `tools/list`; verify no more than 30 tools, required dispatchers, and no operation IDs exposed as top-level tools.
 - Check health parity and budget fields, then verify required operations through catalog and describe. Top-level inventory alone is not operation coverage.
 - Compare live descriptors with scanned or published metadata and workspace action policy before claiming a ChatGPT surface can use them.
 - Confirm the package contains no credentials, tenant records, credential-bearing headers, OAuth secrets, hooks, server executable, or local runtime state.
 - Scan package prose and review descriptions for claims beyond tested behavior.
 - Import the published marketplace, complete fresh beta OAuth, restart Desktop, select Work mode, and verify every skill is discoverable.
-- Run one read workflow per skill in a fresh Work conversation and confirm zero prepare or commit calls.
-- Before MCP skill import, approve a selection or consolidation within the documented five-skill limit. The GitHub package still has six skills.
+- Run one read workflow per focused skill plus the router's positive, boundary, and misuse cases in fresh Work conversations; confirm zero prepare or commit calls.
+- Before MCP skill import, approve a selection or consolidation within the documented five-skill limit. The GitHub package has seven skills.
 - Confirm the GitHub-imported package is identified as desktop-only, verify Work-mode execution, and record Chat mode as unsupported for this pilot.
 - Verify customer workspace access separately before promising self-service installation.
 - Before public **With MCP** submission, verify the exact beta deployment, resource-bound OAuth, PKCE `S256`, public-client registration, tool security declarations, privacy posture, reviewer access, and exact five positive plus three negative cases.
 
-The package stays a pilot until fresh installation, beta OAuth, Work-mode dispatcher and operation discovery, all six query-only workflows, and answer quality are recorded.
+The package stays a pilot until fresh installation, beta OAuth, Work-mode dispatcher and operation discovery, the router and all six focused query-only workflows, and answer quality are recorded.

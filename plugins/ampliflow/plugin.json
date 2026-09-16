@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ampliflow",
-  "version": "0.4.2",
-  "description": "Connect ChatGPT to your AmpliFlow management system. Review projects, goals, risks, controls, improvements, and checklists from live records.",
+  "version": "0.5.0",
+  "description": "Connect ChatGPT to your AmpliFlow management system. Find live records across AmpliFlow and run focused read-only reviews.",
   "author": {
     "name": "AmpliFlow",
     "url": "https://www.ampliflow.com"
@@ -16,7 +16,7 @@
         "composerIcon": "./assets/icon.png",
         "logo": "./assets/icon.png",
         "shortDescription": "Bring your management system into ChatGPT",
-        "longDescription": "AmpliFlow brings processes, goals, risks, projects, and documents into one management system, connecting ownership, ways of working, and follow-up. This package connects to AmpliFlow's compact hosted MCP endpoint and adds focused read-only skills for project tasks, portfolio status, goals, risks and controls, improvements, and checklists. Each user authenticates with an AmpliFlow account. Available tools depend on the connection and permissions; the connected server may also offer write actions.",
+        "longDescription": "AmpliFlow brings processes, goals, risks, projects, and documents into one management system, connecting ownership, ways of working, and follow-up. This package connects to AmpliFlow's compact hosted MCP endpoint and adds a general read-only router with focused domain guidance, plus review skills for project tasks, portfolio status, goals, risks and controls, improvements, and checklists. Each user authenticates with an AmpliFlow account. Available tools depend on the connection and permissions; the connected server may also offer write actions.",
         "developerName": "AmpliFlow",
         "category": "Productivity",
         "defaultPrompt": [

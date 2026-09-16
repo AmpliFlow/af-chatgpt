@@ -149,6 +149,17 @@ class SkillDiscoveryTests(unittest.TestCase):
             self.assertIn('"mode":"describe"', text)
             self.assertIn('"mode":"query"', text)
             self.assertIn("optional_operations", spec)
+            for reference in spec.get("references", []):
+                self.assertTrue((root / "references" / reference).is_file())
+                self.assertIn(f"`references/{reference}`", text)
+
+    def test_missing_router_reference_is_rejected(self):
+        name = "using-ampliflow"
+        path = skills.ROOT / "skills" / name / "SKILL.md"
+        spec = copy.deepcopy(CONTRACT["skills"][name])
+        spec["references"].append("missing-reference.md")
+        errors = skills.validate_skill(path, name, spec, skills.supported_operation_mappings(CONTRACT))
+        self.assertTrue(any("missing declared reference" in error for error in errors), errors)
 
     def test_unknown_operation_wrong_mapping_and_direct_call_are_rejected(self):
         name = "reviewing-project-tasks"
@@ -217,7 +228,7 @@ class SkillDiscoveryTests(unittest.TestCase):
 
     def test_package_version_marks_beta_only_contract(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.4.2")
+        self.assertEqual(plugin["version"], "0.5.0")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # Verify compact AmpliFlow discovery in ChatGPT
 
-Package `0.4.2` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
+Package `0.5.0` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
 
 Run live plugin checks in ChatGPT Desktop **Work** mode. The imported plugin may be selectable in **Chat** mode, but that cloud conversation does not receive the plugin's locally loaded MCP tools.
 
@@ -10,18 +10,18 @@ Run live plugin checks in ChatGPT Desktop **Work** mode. The imported plugin may
 | --- | --- | --- |
 | `mcp.json` | Connects to the exact beta OAuth resource. | GitHub imports with MCP declarations remain desktop-only and require Work mode for tool execution. |
 | `skills/*/agents/openai.yaml` | Declares the same beta dependency for each skill. | It does not connect an account or grant AmpliFlow permissions. |
-| `skills/*/SKILL.md` | Maps reviewed operation IDs to feature dispatchers and uses catalog, describe, then query. | The six skills are read-only instructions; they do not remove server write tools. |
-| `tests/skill_contracts.json` | Records 53 reviewed operation IDs and their 8 dispatcher mappings. | Static mappings do not prove the live operation catalog. |
+| `skills/*/SKILL.md` | Uses catalog, describe, then query. Six focused reviews map reviewed operations; the general router searches current feature catalogs and loads bounded references. | The seven skills are read-only instructions; they do not remove server write tools. |
+| `tests/skill_contracts.json` | Records the focused reviews' 53 operation mappings, the router's feature dispatchers, and its seven references. | Static contracts do not prove the live operation catalog. |
 | `tests/validate_inventory.py` | Checks a captured beta `tools/list` chain, the 30-tool cap, and required dispatchers. | It cannot prove the server-held operations, schemas, authorization, or execution. |
 
-A credential-safe health check on 2026-09-15 reported 25 beta tools, 36,009 descriptor bytes, and 481 mapped operations. The same installed package and OAuth credential completed a local `ampliflow_projects` catalog call in Work mode. Treat these as evidence for that deployment and client version, not permanent guarantees. Authenticated `tools/list`, operation catalogs, and live queries remain the runtime sources of truth.
+A credential-safe production health check reported 28 beta tools, 40,250 descriptor bytes, and 554 mapped operations. The same installed package and OAuth credential completed a local `ampliflow_projects` catalog call in Work mode. Treat these as evidence for that deployment and client version, not permanent guarantees. Authenticated `tools/list`, operation catalogs, and live queries remain the runtime sources of truth.
 
 ## Beta read workflow
 
 For each operation needed by a skill:
 
-1. Use the mapped `ampliflow_<feature>` dispatcher in catalog mode with the exact operation ID as the query and a limit of 5.
-2. Continue only when the result contains that exact ID with `safety: "read"`.
+1. Choose the owning `ampliflow_<feature>` dispatcher. Focused reviews query their reviewed exact operation ID; the general router uses a short capability phrase from the user's intent.
+2. Continue only when the result contains one unambiguous matching operation with `safety: "read"`. The router uses only the exact ID returned by the live catalog.
 3. Use describe mode for the exact current input schema.
 4. Use query mode with arguments that match that schema.
 5. Check both the MCP error state and the structured response envelope. A successful envelope has `ok: true` and the business result under `result`.
@@ -54,7 +54,7 @@ Use an approved synthetic account and keep raw captures, credentials, and tenant
 - [ ] Complete a fresh OAuth flow for the exact beta resource.
 - [ ] Capture every authenticated `tools/list` page and run the offline inventory check below.
 - [ ] Verify required operation IDs through their mapped catalogs and describe each schema before querying.
-- [ ] In a fresh Desktop Work conversation, run one query-only case from each of the six skills.
+- [ ] In fresh Desktop Work conversations, run one query-only case from each focused skill plus the router's positive, boundary, and misuse cases.
 - [ ] Confirm a Chat-mode attempt is classified as an unsupported client surface rather than an empty result, server failure, or OAuth failure.
 - [ ] Confirm the task case reaches `list_projects`, `list_tasks`, and `show_task` through `ampliflow_projects` and `ampliflow_tasks`.
 - [ ] Confirm no skill uses prepare mode, `commit_ampliflow_change`, or `commit_destructive_ampliflow_change`.
@@ -105,9 +105,9 @@ Exit 1 means malformed pagination, invalid basic descriptors, more than 30 top-l
 
 ## Delivery route
 
-Keep the GitHub package for the Desktop Work-mode pilot. It does not deliver tools to Desktop Chat mode, web, or mobile. Those cloud surfaces still require OpenAI's **With MCP** review. The beta endpoint is the submission candidate only after OAuth, descriptors, privacy, reviewer access, all six query-only workflows, and the exact positive and negative review cases are frozen and approved.
+Keep the GitHub package for the Desktop Work-mode pilot. It does not deliver tools to Desktop Chat mode, web, or mobile. Those cloud surfaces still require OpenAI's **With MCP** review. The beta endpoint is the submission candidate only after OAuth, descriptors, privacy, reviewer access, the router and all six focused query-only workflows, and the exact positive and negative review cases are frozen and approved.
 
-The separate MCP skill importer currently accepts five skills while this package has six. Approve a selection or consolidation before using that route; do not silently drop a workflow.
+The separate MCP skill importer currently accepts five skills while this package has seven. Approve a selection or consolidation before using that route; do not silently drop a workflow.
 
 ## Official sources
 
