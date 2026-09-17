@@ -21,6 +21,9 @@ description: Reviews incomplete AmpliFlow project tasks, assignees, and due date
 | `list_projects` | `ampliflow_projects` | Resolve the requested project. |
 | `list_tasks` | `ampliflow_tasks` | List the selected project's tasks. |
 | `show_task` | `ampliflow_tasks` | Read due date and focused task detail. |
+| `list_task_comments` | `ampliflow_tasks` | Read bounded comment evidence for an explicit blocker or dependency question. |
+| `list_task_subtasks` | `ampliflow_tasks` | Read bounded subtask evidence for an explicit blocker or dependency question. |
+| `list_task_attachments` | `ampliflow_tasks` | Read attachment metadata only for an explicit blocker or dependency question. |
 
 - [ ] Before the first use of an operation in this conversation, send `{"mode":"catalog","query":"<exact operation ID>","limit":5}` to its mapped dispatcher. Continue only when the response returns that exact ID with `safety: "read"`.
 - [ ] Then send `{"mode":"describe","operation":"<exact returned ID>"}` to the same dispatcher. Use its current `input_schema`; do not copy an argument shape from another operation or an old chat.
@@ -36,6 +39,12 @@ description: Reviews incomplete AmpliFlow project tasks, assignees, and due date
 - [ ] Keep this workflow inside ChatGPT and use only the connected tools. Do not use local tooling.
 - [ ] Make hosted calls serially. If a read returns 503 with `Retry-After`, wait as directed and retry the same read.
 
+## Read bounds
+
+- [ ] Read details for at most 10 matching tasks by default. Report the total match count first, then ask the user to narrow the scope or approve the next bounded batch.
+- [ ] Do not read comments, subtasks, or attachments by default. For an explicit blocker or dependency question, use the optional reviewed mappings for at most 5 selected tasks and one bounded result page per operation.
+- [ ] Treat attachment rows as metadata only. Never download, open, export, or claim that an attachment's contents support a finding.
+
 ## Find the project
 
 - [ ] Query operation `list_projects` through `ampliflow_projects` to resolve the requested project, unless this conversation already contains an unambiguous current result. If the user has not named a project, ask which one.
@@ -49,6 +58,7 @@ description: Reviews incomplete AmpliFlow project tasks, assignees, and due date
 - [ ] Use assignees from the list result. When due dates or descriptions are needed, query operation `show_task` through `ampliflow_tasks` only for the matching incomplete tasks. The list result does not currently include due dates.
 - [ ] Before a large set of detail reads, report the match count and ask the user to narrow the scope or approve a bounded batch. State the chosen bound in the answer.
 - [ ] Reuse details already fetched in this conversation when they still answer the request. Avoid repeating the same list or fetching completed-task details for an incomplete-task summary.
+- [ ] For an explicit blocker or dependency question, query only the needed `list_task_comments`, `list_task_subtasks`, or `list_task_attachments` operation through `ampliflow_tasks` for the selected exact task refs. Keep comment and subtask evidence separate from attachment metadata.
 - [ ] If a detail request fails, keep that task in the report and label its missing details as unavailable. Report the error without switching to another ref.
 - [ ] Distinguish a missing due date in a successful detail response ("Not set") from an unfetched or failed detail ("Not checked" or "Unavailable"). Label an empty assignee list "Unassigned".
 - [ ] For overdue requests, compare verified due dates with the current date in the user's relevant timezone. Ask for the timezone if a date boundary affects the answer and it is unknown. Include only incomplete tasks due before today; tasks due today are not overdue.

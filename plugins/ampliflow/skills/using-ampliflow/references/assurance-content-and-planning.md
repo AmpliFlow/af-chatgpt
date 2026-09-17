@@ -19,6 +19,17 @@ Load this reference for checklists, pages, documents, custom lists, news, announ
 4. Resolve a year wheel before categories and items; preserve template identity separately from a tenant wheel.
 5. Resolve a communication before engagement, acknowledgement, comment, or reaction details.
 
+## Annual management-plan review
+
+1. Resolve one exact year wheel before reading categories or items. If names are ambiguous, show the candidates and wait for the user to select one.
+2. Default to at most 20 categories, 50 items, and 10 focused item-detail reads. Stop at the first reached ceiling, state coverage, and ask before another bounded batch.
+3. Discover the exact wheel, category, item, and option reads from the live year-wheel catalog. Build arguments from current schemas and preserve wheel, template, category, item, owner, and recurrence identities separately.
+4. Report returned dates, recurrence definitions, categories, and owners. Flag missing ownership only when an owner field was returned empty; label an omitted or failed field "not verified."
+5. Treat same-date or overlapping returned ranges as possible collisions, not scheduling errors. Identify a coverage gap only against an explicit expected activity supplied by the user or a returned template/category requirement.
+6. Separate recorded facts, possible collisions or supported gaps, and recommendations. Preserve successful sections when another category or item read is partial or unavailable.
+
+A scheduled item is not completed work. A recurrence rule is not an expanded occurrence list, and a date is not reminder evidence. State that task linkage, completion state, reminders, or occurrence expansion are unsupported when the returned contract omits them. This workflow is read-only: do not create, update, delete, or apply year-wheel templates.
+
 ## Interpretation
 
 - A current checklist template may differ from the revision used by a historical run.

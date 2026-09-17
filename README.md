@@ -4,7 +4,7 @@
 > **MCP endpoint**
 > This package uses `https://mcp.ampliflow.cc/mcp-beta`. You can connect a compatible MCP client to this endpoint without installing the ChatGPT plugin, but results may vary because standalone clients do not receive the bundled skills in this repository.
 
-Use AmpliFlow from ChatGPT Desktop in **Work** mode. The imported plugin connects to AmpliFlow's hosted MCP server and adds one general read-only router plus six focused review skills for project tasks, project portfolios, goals, risks and controls, improvements, and checklists.
+Use AmpliFlow from ChatGPT Desktop in **Work** mode. The imported plugin connects to AmpliFlow's hosted MCP server and adds one general router for reads and explicit user-confirmed changes plus six read-only review skills for project tasks, project portfolios, goals, risks and controls, improvements, and checklists.
 
 > [!IMPORTANT]
 > **Desktop mode matters**
@@ -29,7 +29,7 @@ Each pilot user then:
 4. Selects **Work** at the top of the new-conversation screen.
 5. Adds `@AmpliFlow` and asks, for example: `What projects do I have?`
 
-A successful request calls a compact feature tool such as `ampliflow_projects`. The skill discovers the required read operation with `catalog`, reads its schema with `describe`, and executes it with `query`.
+A successful request calls a compact feature tool such as `ampliflow_projects`. Reads use `catalog`, `describe`, then `query`. For an explicit change request, the general router reads the current state, shows the exact proposal, waits for confirmation, calls `prepare`, commits the unchanged approval receipt with the tool matching the server's safety class, then reads the target back.
 
 See the package [setup guide](plugins/ampliflow/README.md), [acceptance checks](plugins/ampliflow/TESTING.md), and [discovery guide](plugins/ampliflow/DISCOVERY.md).
 
@@ -37,13 +37,13 @@ See the package [setup guide](plugins/ampliflow/README.md), [acceptance checks](
 
 | Surface | Pilot status |
 | --- | --- |
-| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import and installation verified for package `0.5.0` |
+| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import verified for package `0.5.0`; package `0.6.0` adds the confirmed-write contract and requires fresh acceptance |
 | ChatGPT Desktop, **Chat** mode | Not supported by the GitHub-imported package; the cloud conversation does not receive its local MCP tools |
 | ChatGPT web and mobile | Requires OpenAI's **With MCP** submission and review |
 
 The package connects only to `https://mcp.ampliflow.cc/mcp-beta`. It does not add another MCP connection, use an alternate endpoint, depend on a workspace app ID, or install the AmpliFlow CLI.
 
-The seven bundled skills use read operations only. This is an instruction-level limit, not a server permission boundary: the connected server may expose other approved tools under the user's AmpliFlow permissions.
+The general skill supports only explicit user-confirmed writes discovered through the live catalog. Its six focused review skills remain read-only. The server remains authoritative for availability, authorization, target preconditions, safety class, plan expiry, and read-back behavior.
 
 ## Troubleshooting
 

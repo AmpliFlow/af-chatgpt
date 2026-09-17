@@ -2,6 +2,7 @@
   "endpoint": "https://mcp.ampliflow.cc/mcp-beta",
   "skills": {
     "using-ampliflow": {
+      "operation_policy": "confirmed_writes",
       "required_dispatchers": [
         "ampliflow_checklists",
         "ampliflow_communications",
@@ -45,14 +46,20 @@
       "optional_operations": {}
     },
     "reviewing-project-tasks": {
+      "operation_policy": "read_only",
       "required_operations": {
         "list_projects": "ampliflow_projects",
         "list_tasks": "ampliflow_tasks",
         "show_task": "ampliflow_tasks"
       },
-      "optional_operations": {}
+      "optional_operations": {
+        "list_task_comments": "ampliflow_tasks",
+        "list_task_subtasks": "ampliflow_tasks",
+        "list_task_attachments": "ampliflow_tasks"
+      }
     },
     "reviewing-project-portfolio": {
+      "operation_policy": "read_only",
       "required_operations": {
         "list_projects": "ampliflow_projects",
         "list_project_summaries": "ampliflow_projects",
@@ -67,6 +74,7 @@
       }
     },
     "reviewing-goals": {
+      "operation_policy": "read_only",
       "required_operations": {
         "list_goals": "ampliflow_goals",
         "show_goal": "ampliflow_goals",
@@ -81,6 +89,7 @@
       }
     },
     "reviewing-risks-and-controls": {
+      "operation_policy": "read_only",
       "required_operations": {
         "list_risks": "ampliflow_risks",
         "show_risk": "ampliflow_risks",
@@ -107,6 +116,7 @@
       }
     },
     "reviewing-improvements": {
+      "operation_policy": "read_only",
       "required_operations": {
         "list_improvements": "ampliflow_improvements",
         "show_improvement": "ampliflow_improvements",
@@ -123,6 +133,7 @@
       }
     },
     "reviewing-checklists": {
+      "operation_policy": "read_only",
       "required_operations": {
         "list_checklist_templates": "ampliflow_checklists",
         "list_checklists": "ampliflow_checklists",
@@ -164,8 +175,8 @@
     "ampliflow_training_plans",
     "ampliflow_year_wheels"
   ],
-  "forbidden_commit_tools": [
-    "commit_ampliflow_change",
-    "commit_destructive_ampliflow_change"
-  ]
+  "commit_tools": {
+    "normal": "commit_ampliflow_change",
+    "destructive": "commit_destructive_ampliflow_change"
+  }
 }

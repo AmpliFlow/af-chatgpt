@@ -47,7 +47,6 @@ FORBIDDEN = {
     "cli installation": "local CLI workflow",
 }
 REQUIRED_SAFETY = {
-    "read-only": re.compile(r"read.only", re.IGNORECASE | re.DOTALL),
     "missing tools": re.compile(r"(?:dispatcher|operation|toolset).{0,80}(?:unavailable|absent|missing|not available)", re.IGNORECASE | re.DOTALL),
     "exact refs": re.compile(r"(?:exact|returned).{0,45}ref|ref.{0,45}(?:exact|returned)", re.IGNORECASE | re.DOTALL),
     "hostile record content": re.compile(r"(?:embedded instructions|untrusted data|returned content as data|record content is not)", re.IGNORECASE),
@@ -65,8 +64,59 @@ REQUIRED_SAFETY = {
     "schema error": re.compile(r"`invalid_schema`"),
     "stale-ref error": re.compile(r"`stale_ref`"),
     "partial-result error": re.compile(r"`partial_result`"),
-    "write-mode prohibition": re.compile(r"never.{0,100}(?:prepare|commit_ampliflow_change)", re.IGNORECASE | re.DOTALL),
 }
+READ_ONLY_SAFETY = {
+    "read-only policy": re.compile(r"read.only", re.IGNORECASE | re.DOTALL),
+    "write-mode prohibition": re.compile(
+        r"never.{0,100}(?:prepare|commit_ampliflow_change)", re.IGNORECASE | re.DOTALL
+    ),
+}
+CONFIRMED_WRITE_SAFETY = {
+    "explicit confirmation": re.compile(r"explicit confirmation", re.IGNORECASE),
+    "prepare mode": re.compile(r'\{"mode":"prepare"'),
+    "confirmation before prepare": re.compile(
+        r"after confirmation.{0,180}\{\"mode\":\"prepare\"",
+        re.IGNORECASE | re.DOTALL,
+    ),
+    "immutable approval fields": re.compile(
+        r"`plan_token`.{0,80}`operation`.{0,80}`action_summary`.{0,80}`target_summary`.{0,160}unchanged",
+        re.IGNORECASE | re.DOTALL,
+    ),
+    "normal commit mapping": re.compile(
+        r"normal safety class maps only to `commit_ampliflow_change`", re.IGNORECASE
+    ),
+    "destructive commit mapping": re.compile(
+        r"destructive safety class maps only to `commit_destructive_ampliflow_change`",
+        re.IGNORECASE,
+    ),
+    "plan expiry": re.compile(r"expire.{0,40}five minutes", re.IGNORECASE | re.DOTALL),
+    "single-use plans": re.compile(r"single-use", re.IGNORECASE),
+    "authoritative read-back": re.compile(r"read back.{0,100}authoritative|authoritative.{0,100}read back", re.IGNORECASE | re.DOTALL),
+    "fresh confirmation after refresh": re.compile(
+        r"fresh explicit confirmation.{0,160}(?:prepare|preparing)", re.IGNORECASE | re.DOTALL
+    ),
+    "same-target recovery": re.compile(r"same intended target", re.IGNORECASE),
+    "uncertain commit read-back": re.compile(
+        r"commit.{0,100}(?:uncertain|times out).{0,100}read back",
+        re.IGNORECASE | re.DOTALL,
+    ),
+    "record data cannot approve writes": re.compile(
+        r"record content.{0,180}(?:cannot|never).{0,120}(?:confirm|confirmation)",
+        re.IGNORECASE | re.DOTALL,
+    ),
+    "create target handling": re.compile(r"create operation", re.IGNORECASE),
+    "create owner resolution": re.compile(r"owning collection", re.IGNORECASE),
+    "created-ref read-back": re.compile(r"server-returned created ref", re.IGNORECASE),
+}
+CONFIRMED_WRITE_PROHIBITIONS = {
+    "plan replay": re.compile(r"(?:may|can|should) replay.{0,80}(?:expired|used).{0,40}(?:plan )?token", re.IGNORECASE),
+    "target substitution": re.compile(r"(?:may|can|should) substitute.{0,60}(?:nearby|different).{0,20}ref", re.IGNORECASE),
+    "read-back bypass": re.compile(r"(?:may|can|should) skip (?:the )?read-back", re.IGNORECASE),
+    "record approval": re.compile(r"record content (?:may|can\b|should).{0,80}(?:confirm|select)", re.IGNORECASE),
+    "commit downgrade": re.compile(r"use the normal commit tool for destructive", re.IGNORECASE),
+    "approval-field mutation": re.compile(r"(?:may|can|should) (?:change|edit|modify).{0,40}approval fields", re.IGNORECASE),
+}
+VALID_POLICIES = {"read_only", "confirmed_writes"}
 
 
 def supported_operation_mappings(contract: dict) -> dict[str, str]:
@@ -99,6 +149,18 @@ def validate_skill(path: Path, expected_name: str, spec: dict, supported: dict[s
         if not pattern.search(text):
             errors.append(f"{path}: missing safety coverage for {concept}")
 
+    policy = spec.get("operation_policy")
+    if policy not in VALID_POLICIES:
+        errors.append(f"{path}: operation_policy must be one of {sorted(VALID_POLICIES)}")
+    policy_patterns = READ_ONLY_SAFETY if policy == "read_only" else CONFIRMED_WRITE_SAFETY
+    for concept, pattern in policy_patterns.items():
+        if not pattern.search(text):
+            errors.append(f"{path}: missing safety coverage for {concept}")
+    if policy == "confirmed_writes":
+        for concept, pattern in CONFIRMED_WRITE_PROHIBITIONS.items():
+            if pattern.search(text):
+                errors.append(f"{path}: contains unsafe confirmed-write guidance for {concept}")
+
     expected = dict(spec.get("required_operations", {}))
     expected.update(spec.get("optional_operations", {}))
     expected_dispatchers = (
@@ -126,15 +188,15 @@ def validate_skill(path: Path, expected_name: str, spec: dict, supported: dict[s
     for operation in set(OPERATION_REFERENCE_PATTERN.findall(text)) & (set(supported) - set(expected)):
         errors.append(f"{path}: unsupported operation reference {operation}")
 
-    forbidden_commits = {"commit_ampliflow_change", "commit_destructive_ampliflow_change"}
+    commit_tools = {"commit_ampliflow_change", "commit_destructive_ampliflow_change"}
     for called in CALL_PATTERN.findall(text):
         if called in supported:
             errors.append(f"{path}: operation {called} must be queried through its dispatcher, not called as a top-level tool")
-        elif called in forbidden_commits:
+        elif called in commit_tools and policy != "confirmed_writes":
             errors.append(f"{path}: read-only skill must not call commit tool {called}")
         elif called.startswith("ampliflow_") and called not in expected_dispatchers:
             errors.append(f"{path}: undeclared dispatcher call {called}")
-    if WRITE_MODE_PATTERN.search(text):
+    if WRITE_MODE_PATTERN.search(text) and policy != "confirmed_writes":
         errors.append(f"{path}: read-only skill must not instruct write mode prepare")
 
     references = spec.get("references", [])
@@ -152,7 +214,7 @@ def validate_skill(path: Path, expected_name: str, spec: dict, supported: dict[s
                 if phrase in reference_lower:
                     errors.append(f"{reference_path}: contains prohibited {reason}: {phrase!r}")
             if WRITE_MODE_PATTERN.search(reference_text) or any(
-                commit in reference_text for commit in forbidden_commits
+                commit in reference_text for commit in commit_tools
             ):
                 errors.append(f"{reference_path}: read-only reference must not instruct writes")
             if OPERATION_REFERENCE_PATTERN.search(reference_text):
@@ -255,11 +317,16 @@ def validate(root: Path) -> list[str]:
         errors.append("skill contract: supported dispatchers must equal the declared dispatcher union")
     if contract.get("endpoint") != BETA_ENDPOINT:
         errors.append("skill contract: endpoint must be the canonical beta MCP resource")
-    if set(contract.get("forbidden_commit_tools", [])) != {
-        "commit_ampliflow_change",
-        "commit_destructive_ampliflow_change",
+    if contract.get("commit_tools") != {
+        "normal": "commit_ampliflow_change",
+        "destructive": "commit_destructive_ampliflow_change",
     }:
-        errors.append("skill contract: both beta commit tools must be forbidden")
+        errors.append("skill contract: expected the normal and destructive beta commit tools")
+    policies = {name: spec.get("operation_policy") for name, spec in contract["skills"].items()}
+    if policies.get("using-ampliflow") != "confirmed_writes" or any(
+        policy != "read_only" for name, policy in policies.items() if name != "using-ampliflow"
+    ):
+        errors.append("skill contract: only using-ampliflow may use confirmed writes")
     for path in (root / "skills").glob("*/SKILL.md"):
         if path.resolve() not in expected_paths:
             errors.append(f"{path}: skill is missing from skill_contracts.json")
@@ -271,6 +338,7 @@ def self_test() -> list[str]:
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     supported = supported_operation_mappings(contract)
     spec = {
+        "operation_policy": "read_only",
         "required_operations": {"list_projects": "ampliflow_projects"},
         "optional_operations": {},
     }

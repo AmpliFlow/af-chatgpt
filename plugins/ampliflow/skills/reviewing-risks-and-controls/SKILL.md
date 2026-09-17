@@ -53,6 +53,12 @@ description: Reviews AmpliFlow risks and controls through read-only MCP tools. U
 - Refresh list results and reuse exact returned refs. Re-list once if a ref fails, then stop rather than guessing.
 - Make calls serially and prefer structured results. State when truncation, authorization, failed reads, or sampling makes the review partial.
 
+## Read bounds
+
+- Review focused details for at most 10 risks and 10 control items by default. Ask the user to narrow the scope or approve the next bounded batch before reading more.
+- Reuse the initial unfiltered control-item result as the denominator. Do not repeat a full-set read when a local filter or a bounded focused read answers the question.
+- Read file listings only for selected controls and only as metadata. Never treat a file name, count, timestamp, or presence as evidence that a control works.
+
 ## Risk sequence
 
 1. Query operation `list_risks` through `ampliflow_risks` to establish current risk refs and stored scores.

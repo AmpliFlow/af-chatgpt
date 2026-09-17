@@ -41,6 +41,12 @@ description: Reviews AmpliFlow goals, measurements, progress, and action coverag
 - Get goal and measurement refs from current list or detail results and reuse them exactly. Re-list once if a ref fails, then stop rather than guessing.
 - Make calls serially and prefer structured results. State when truncation, failed reads, authorization, or sampling makes the review partial.
 
+## Read bounds
+
+- Review at most 10 selected goals and 10 material measurements per goal by default. Ask the user to narrow the scope or approve the next bounded batch before reading more details.
+- Progress history is optional. Request at most 20 progress rows per selected measurement when the described schema supports a limit; otherwise use only the first response.
+- Keep KPI evidence outside this workflow. Goal measurements are not KPI records, even when their labels or values look similar.
+
 ## Review sequence
 
 1. Query operation `list_goals` through `ampliflow_goals`. Preserve parent and child refs. For a large portfolio, select the named goals or state a bounded, concern-based sample.

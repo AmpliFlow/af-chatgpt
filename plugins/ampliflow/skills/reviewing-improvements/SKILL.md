@@ -43,9 +43,15 @@ description: Reviews AmpliFlow improvements and their workflow evidence without 
 - Use the exact number, UUID, or ref returned for the selected improvement. Never use a row position. Re-list once after a ref failure, then stop rather than guessing.
 - Make calls serially and prefer structured results. State when truncation, redacted content, authorization, failed reads, or sampling makes the review partial.
 
+## Read bounds
+
+- Request at most 20 improvement rows per page when the described schema supports paging. Stop after the first page by default; follow `has_more` only when the user's requested record or sample is not resolved.
+- Review one improvement in detail by default. Ask before reading the next bounded batch, with a maximum of 10 improvements per batch.
+- Read at most 10 relevant activity details per improvement. For optional history, request at most 20 newest-first rows when supported; otherwise use only the first response.
+
 ## Review sequence
 
-1. If the user did not provide an exact identifier, query operation `list_improvements` through `ampliflow_improvements` with the narrowest described status, form, query, sort, or paging filters. Follow `has_more` only as needed. If the user supplied an identifier, select `show_improvement` directly unless list metadata is needed and can be resolved without an unbounded scan.
+1. If the user did not provide an exact identifier, query operation `list_improvements` through `ampliflow_improvements` with the narrowest described status, form, query, sort, or paging filters. Follow `has_more` only within the read bounds. If the user supplied an identifier, select `show_improvement` directly unless list metadata is needed and can be resolved without an unbounded scan.
 2. Avoid date filters unless the user asks for them; they may require scanning the full backlog.
 3. Query operation `show_improvement` through `ampliflow_improvements` with `improvement_ref`. Keep metadata from any matched list row because the detail response may be narrower. Label list-only fields not returned when no row was resolved.
 4. Query operations `list_improvement_steps` and `list_improvement_activities` through `ampliflow_improvements` with the same `improvement_ref`.

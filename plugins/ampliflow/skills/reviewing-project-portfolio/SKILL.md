@@ -42,14 +42,22 @@ description: Reviews AmpliFlow project health, schedules, workload, and status n
 - Make calls serially. If a hosted read returns 503 with `Retry-After`, wait as directed and retry that read.
 - Prefer structured results. State when truncation, authorization, failed reads, or sampling make the review partial.
 
+## Read bounds
+
+- Review at most 10 selected projects by default. Ask the user to narrow the scope or approve the next bounded batch before reading more project details.
+- Read workspace and latest-status detail only for those selected refs. For status history, request at most 5 rows per project when the described schema supports a limit; otherwise use only the first response.
+- Pass only the selected project refs to summary reads. Do not run an unfiltered full-portfolio summary when the described schema cannot accept that bounded selection.
+- Read timeline data only when the user asks about schedule, date exposure, or trends. Do not repeat summary or timeline reads to narrow the set.
+
 ## Review sequence
 
-1. Query operation `list_projects` through `ampliflow_projects`. Use its favorite-only argument only when the user asks for favorites and the described schema provides it.
-2. Query operations `list_project_summaries` and `list_project_timeline` through `ampliflow_projects`.
-3. Correlate results by the exact project ref. Do not treat a row position as a ref.
-4. For projects in scope, query operations `show_project_workspace_summary` and `show_latest_project_status_update` through `ampliflow_projects` with `project_ref`.
-5. Query operation `list_project_status_updates` through `ampliflow_projects` only when history or trend matters. Keep the requested limit small.
-6. Query operation `list_archived_projects` only for lifecycle reconciliation. Query operation `list_deleted_projects` only when the user asks about deleted projects and authorization permits it.
+1. Query operation `list_projects` through `ampliflow_projects`. Use its favorite-only argument only when the user asks for favorites and the described schema provides it. Select at most 10 exact project refs before broader reads.
+2. Query operation `list_project_summaries` through `ampliflow_projects` with only those selected refs. If the current schema cannot bound the request to selected refs, report summary evidence unavailable instead of reading the full portfolio.
+3. Query operation `list_project_timeline` through `ampliflow_projects` with only the selected refs and only when schedule, date exposure, or trend evidence is needed. Otherwise skip it.
+4. Correlate results by the exact project ref. Do not treat a row position as a ref.
+5. For projects in scope, query operations `show_project_workspace_summary` and `show_latest_project_status_update` through `ampliflow_projects` with `project_ref`.
+6. Query operation `list_project_status_updates` through `ampliflow_projects` only when history or trend matters. Keep the requested limit small.
+7. Query operation `list_archived_projects` only for lifecycle reconciliation. Query operation `list_deleted_projects` only when the user asks about deleted projects and authorization permits it.
 
 ## Interpretation
 

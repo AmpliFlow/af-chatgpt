@@ -67,6 +67,11 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(coverage["reviewing-checklists"]["missing_optional_dispatchers"], ["ampliflow_history"])
 
+    def test_missing_commit_tool_fails_confirmed_write_inventory(self):
+        names = [name for name in self.names if name != "commit_destructive_ampliflow_change"]
+        errors, _ = check_inventory({"pages": [page(names)]}, CONTRACT)
+        self.assertTrue(any("missing commit tools" in error for error in errors), errors)
+
     def test_operation_id_as_top_level_tool_is_rejected(self):
         capture = {"pages": [page(self.names + ["list_projects"])]}
         errors, _ = check_inventory(capture, CONTRACT)
@@ -153,6 +158,36 @@ class SkillDiscoveryTests(unittest.TestCase):
                 self.assertTrue((root / "references" / reference).is_file())
                 self.assertIn(f"`references/{reference}`", text)
 
+    def test_focused_skills_define_explicit_read_bounds(self):
+        focused = [name for name in CONTRACT["skills"] if name != "using-ampliflow"]
+        for name in focused:
+            with self.subTest(skill=name):
+                text = (skills.ROOT / "skills" / name / "SKILL.md").read_text()
+                self.assertIn("## Read bounds", text)
+                self.assertRegex(text, r"at most \d+|maximum of \d+")
+
+    def test_portfolio_reads_are_scoped_to_selected_refs_and_needed_timeline(self):
+        text = (skills.ROOT / "skills" / "reviewing-project-portfolio" / "SKILL.md").read_text()
+        self.assertIn("with only those selected refs", text)
+        self.assertIn("only when schedule, date exposure, or trend evidence is needed", text)
+        self.assertIn("Otherwise skip it", text)
+
+    def test_task_blocker_reads_are_optional_bounded_and_metadata_only(self):
+        name = "reviewing-project-tasks"
+        text = (skills.ROOT / "skills" / name / "SKILL.md").read_text()
+        optional = CONTRACT["skills"][name]["optional_operations"]
+        self.assertEqual(
+            optional,
+            {
+                "list_task_comments": "ampliflow_tasks",
+                "list_task_subtasks": "ampliflow_tasks",
+                "list_task_attachments": "ampliflow_tasks",
+            },
+        )
+        self.assertIn("at most 5 selected tasks", text)
+        self.assertIn("attachment rows as metadata only", text)
+        self.assertIn("Never download, open, export", text)
+
     def test_missing_router_reference_is_rejected(self):
         name = "using-ampliflow"
         path = skills.ROOT / "skills" / name / "SKILL.md"
@@ -226,9 +261,9 @@ class SkillDiscoveryTests(unittest.TestCase):
             path.write_text(source.read_text().replace("https://mcp.ampliflow.cc/mcp-beta", "https://wrong.example/unsupported"))
             self.assertTrue(skills.validate_dependency(path))
 
-    def test_package_version_marks_beta_only_contract(self):
+    def test_package_version_marks_confirmed_write_contract(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.5.0")
+        self.assertEqual(plugin["version"], "0.6.0")
 
 
 if __name__ == "__main__":

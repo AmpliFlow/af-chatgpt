@@ -40,13 +40,20 @@ description: Reviews completed or in-progress AmpliFlow checklists and their sou
 - Keep template, template revision, actual checklist, and recurrence identities distinct. Reuse exact returned refs and UUIDs; never use row positions.
 - Re-list once if a ref fails, then stop rather than guessing. Make calls serially and state when truncation, authorization, failed reads, or sampling makes the review partial.
 
+## Read bounds
+
+- Request at most 20 checklist rows per page when the described schema supports paging. Stop after the first page by default and ask before continuing.
+- Review one actual checklist in detail by default, with at most 10 actual checklists in an approved batch.
+- Read comments for at most 10 relevant steps. Request at most 20 comments per step when supported; otherwise make one comment call per selected step and do not page further.
+- Optional history uses at most 20 newest-first rows when supported; otherwise use only the first response.
+
 ## Review sequence
 
 1. Query operation `list_checklist_templates` through `ampliflow_checklists` when filtering by template, resolve the exact template, then query `list_checklists` with `checklist_template_ref`. Otherwise query `list_checklists` without that filter.
 2. Select an actual checklist from its returned `checklist_id` or ref. Do not substitute a template or revision ID.
 3. Query operation `show_checklist` through `ampliflow_checklists` with exactly one selector: `checklist_id` or `checklist_ref`. Prefer the known checklist UUID in hosted flows.
 4. Query operation `show_checklist_template` through `ampliflow_checklists` with the returned `checklist_template_ref`. Select `show_checklist_template_configuration` only when responsibility or sharing is in scope.
-5. For relevant `checklist_step_id` values, query operation `list_checklist_step_comments` through `ampliflow_checklists` with `step_instance_id`. Page until the result has fewer rows than `page_size`.
+5. For relevant `checklist_step_id` values, query operation `list_checklist_step_comments` through `ampliflow_checklists` with `step_instance_id`, within the read bounds.
 6. If `ampliflow_history` is available, query operation `list_history` through it with the actual checklist UUID as `entity_id` and `entity_type` checklist.
 7. Do not export reports. The report operation cannot target one actual checklist and may include other records.
 

@@ -67,6 +67,10 @@ def check_inventory(capture: object, contract: dict) -> tuple[list[str], dict]:
     unexpected = sorted(name for name in names if not name.startswith("ampliflow_") and name not in COMMIT_TOOLS)
     if unexpected:
         errors.append(f"beta catalog contains unexpected top-level tools: {', '.join(unexpected)}")
+    required_commit_tools = set(contract.get("commit_tools", {}).values())
+    missing_commit_tools = sorted(required_commit_tools - names)
+    if missing_commit_tools:
+        errors.append(f"beta catalog missing commit tools: {', '.join(missing_commit_tools)}")
 
     for name, spec in contract["skills"].items():
         required_operations = spec.get("required_operations", {})
@@ -105,8 +109,8 @@ def main() -> int:
         print(f"ERROR: {error}")
     if errors:
         return 1
-    print("Captured beta catalog covers the skills' top-level dispatchers. Optional gaps are listed above.")
-    print("This does not prove operation catalog coverage, schemas, callability, authorization, or read-only behavior.")
+    print("Captured beta catalog covers the skills' top-level dispatchers and commit tools. Optional gaps are listed above.")
+    print("This does not prove operation catalog coverage, schemas, callability, authorization, or confirmed-write behavior.")
     return 0
 
 

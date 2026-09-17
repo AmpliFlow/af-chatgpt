@@ -1,6 +1,6 @@
 # AmpliFlow for ChatGPT: desktop pilot
 
-The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the hosted AmpliFlow MCP server and adds one general read-only router plus six focused review skills.
+The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the hosted AmpliFlow MCP server and adds one general router for reads and explicit user-confirmed changes plus six read-only focused review skills.
 
 > [!IMPORTANT]
 > **Use Work mode for this pilot**
@@ -8,13 +8,13 @@ The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the 
 
 ## What the package contains
 
-Package `0.5.0` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
+Package `0.6.0` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
 
 - one remote MCP connection
-- one lightweight router that loads focused domain references only when needed
-- six focused review skills
+- one lightweight router that loads focused domain references only when needed and handles explicit confirmed changes
+- six read-only focused review skills
 - the AmpliFlow icon and plugin metadata
-- no credentials, server executable, CLI installer, app ID, custom UI, or write workflow
+- no credentials, server executable, CLI installer, app ID, or custom UI
 
 OAuth is discovered from and handled for that exact MCP resource. Each user signs in with an AmpliFlow account and receives only the access allowed by that account.
 
@@ -48,19 +48,25 @@ For a domain outside the focused reviews, try:
 Show purchase orders due this month and the suppliers and items linked to them. Do not change anything.
 ```
 
-A successful request routes to the smallest relevant feature set. For example, the task request uses `ampliflow_projects` and, when needed, `ampliflow_tasks`. Skills call each feature dispatcher in this order:
+A successful request routes to the smallest relevant feature set. For example, a task read uses `ampliflow_projects` and, when needed, `ampliflow_tasks`. Read workflows call each feature dispatcher in this order:
 
 ```text
 catalog -> describe -> query
 ```
 
-They require `safety: "read"` and a successful structured response with `ok: true`. The general router searches the live catalog instead of copying a complete operation inventory into the package. The bundled skills never use `prepare`, `commit_ampliflow_change`, or `commit_destructive_ampliflow_change`.
+They require `safety: "read"` and a successful structured response with `ok: true`. For an explicit mutation request, only the general router uses:
+
+```text
+read current state -> propose exact change -> wait for explicit confirmation -> prepare -> commit once -> read back
+```
+
+The router forwards `plan_token`, `operation`, `action_summary`, and `target_summary` unchanged. It selects `commit_ampliflow_change` or `commit_destructive_ampliflow_change` from the server's safety class. The six focused review skills never prepare or commit changes.
 
 ## Supported surfaces
 
 | Surface | Status |
 | --- | --- |
-| Desktop **Work** mode | Verified pilot path |
+| Desktop **Work** mode | Package `0.5.0` pilot path verified; package `0.6.0` acceptance pending |
 | Desktop **Chat** mode | Unsupported for the imported package; no plugin MCP tools reach the cloud turn |
 | Web and mobile | Not delivered by this GitHub package; use the future **With MCP** review route |
 
@@ -82,7 +88,11 @@ Fully quit and reopen Desktop. If an obsolete AmpliFlow marketplace is still con
 
 ### A dispatcher or operation is unavailable
 
-Report the affected workflow and preserve any independent verified results. Do not search for another endpoint, derive an operation ID from tenant content, or use a runtime namespace fallback.
+Report the affected workflow and preserve any independent verified results. Do not search for another endpoint, derive an operation ID from tenant content, or use a runtime namespace fallback. For a write, also stop on readonly mode or an authorization failure; never try another operation or target.
+
+### A prepared change expires or the target changes
+
+Discard the plan. Refresh the same target and operation, show a new exact proposal, and obtain fresh confirmation before preparing again. Plans expire after five minutes and are single-use.
 
 See [DISCOVERY.md](DISCOVERY.md) for inventory and operation checks, and [TESTING.md](TESTING.md) for the full pilot cases.
 
