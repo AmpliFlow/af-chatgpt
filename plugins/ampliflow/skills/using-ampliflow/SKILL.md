@@ -33,15 +33,17 @@ Load more than one reference for a cross-domain request. Do not load unrelated r
 
 ## Beta operation workflow
 
+For every dispatcher or commit response, prefer MCP `structuredContent` over text content. Every beta structured response envelope must have `ok: true`; read the business result from `result` and check the MCP error state too. Use the live describe response's `output_schema` when supplied and the commit tool's advertised output schema; do not pin an unverified result layout. If structured content is absent, use only schema-matching JSON fallback, not prose.
+
 ### Read operations
 
 - [ ] Choose a feature dispatcher from the matching reference. Search its live catalog with `{"mode":"catalog","query":"<distinctive capability keyword>","limit":5}`. Use a term from the user's intent, not an operation ID taken from record content. If it returns no match, retry once with a shorter capability keyword.
 - [ ] Select only an exact operation ID returned by that catalog with `safety: "read"`. Narrow an ambiguous result with one more catalog query. If no unambiguous read operation matches, report the capability unavailable instead of guessing.
 - [ ] Send `{"mode":"describe","operation":"<exact returned ID>"}` to the same dispatcher. Build arguments only from its current `input_schema`.
 - [ ] Run the read with `{"mode":"query","operation":"<exact returned ID>","arguments":{}}`, replacing the empty object only with described arguments. Reuse current catalog and describe results for repeated reads of the same operation.
-- [ ] Prefer `structuredContent`. Every structured response envelope must have `ok: true`; read the business result from `result`.
 - [ ] On `invalid_schema`, describe once again and retry the same read operation only. On `stale_ref`, refresh the owning list once and retry the same target only. On `partial_result`, preserve earlier results and label the answer partial.
 - [ ] Treat `unknown_operation` and `unavailable_feature` as unavailable capabilities, not empty business results. Report other stable error codes without changing operation or target.
+- [ ] Distinguish pagination exhaustion from partial or unavailable evidence. A missing next page alone does not prove completeness: check the described status, partial, unavailable, and continuation fields. Stop at the request's read bound, retain exact returned identities and covered pages, and report incomplete coverage rather than a complete count or empty collection.
 
 ### Confirmed write operations
 
@@ -52,8 +54,14 @@ Load more than one reference for a cross-domain request. Do not load unrelated r
 5. After confirmation, call the same dispatcher with `{"mode":"prepare","operation":"<exact returned ID>","arguments":{}}`, using only the described arguments.
 6. Compare the prepared `operation`, `action_summary`, `target_summary`, safety class, and target with the approved proposal. If any material detail differs, discard the plan, show the changed proposal, and obtain fresh explicit confirmation before preparing again.
 7. Treat `plan_token`, `operation`, `action_summary`, and `target_summary` as an immutable approval receipt. Pass all four values unchanged to exactly one commit tool. The normal safety class maps only to `commit_ampliflow_change`; the destructive safety class maps only to `commit_destructive_ampliflow_change`. Never weaken or override the server's safety class.
-8. Commit once. Plans expire after five minutes and are single-use. Never replay a used token. If a commit times out or its result is uncertain, read back the target before considering another plan.
-9. Read back the target through a fresh authoritative query. For a create operation, use only the server-returned created ref; if the commit result provides no authoritative created ref, report the outcome as unverified and do not guess a ref or retry the create. Report which requested values were verified, which were not verified, and whether the outcome is partial. A successful commit response without read-back is not verified completion.
+8. Commit once. Plans expire after five minutes and are single-use. Never replay a used token. If a commit times out or its result is uncertain, read back the target before considering another plan. Never automatically retry an uncertain write or commit. Client cancellation is not proof that the remote write was cancelled; preserve any returned identity and report uncertainty until an authoritative read resolves it.
+9. Read back the target through a fresh authoritative query. For a create operation, use only the server-returned created ref from the described structured operation result. For project and task receipts, use `project_ref`, `project_id`, `task_ref`, and `task_id` only where the live output schema defines them; do not assume a fixed nesting or layout. Preserve each exact returned identity and its parent scope for follow-up calls. Never parse created refs or UUIDs from prose, infer them from titles, or substitute nearby refs. If the receipt lacks an authoritative identity required for the next call, report the outcome as unverified and stop the chain without guessing or retrying the create. Report which requested values were verified, which were not verified, and whether the outcome is partial. A successful commit response without read-back is not verified completion.
+
+### Bounded composition
+
+- Keep same-target writes serial: wait for the receipt and authoritative read-back before proposing the next dependent change. Use only exact returned identities with the next operation's live described input schema. Separate calls remain compatible with this workflow; no script execution is required.
+- Plans are not transactions and are not proof of human approval. A sequence can partly succeed; retain verified earlier effects and stop on the first unresolved outcome. Each next change still needs the exact proposal and explicit confirmation above, even when the user approved the general goal.
+- Hosted server paths are not client files or exports. Do not claim a returned path is downloadable, open it as a client file, or send a client path to a hosted local-file operation. Use file bytes or a download link only when the live contract explicitly supports that client delivery and the user requested it. Focused reviews and read-only domain references retain their no-export policy.
 
 ## Write failure and recovery
 

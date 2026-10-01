@@ -8,7 +8,7 @@ The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the 
 
 ## What the package contains
 
-Package `0.6.0` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
+Package `0.6.1` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
 
 - one remote MCP connection
 - one lightweight router that loads focused domain references only when needed and handles explicit confirmed changes
@@ -60,13 +60,13 @@ They require `safety: "read"` and a successful structured response with `ok: tru
 read current state -> propose exact change -> wait for explicit confirmation -> prepare -> commit once -> read back
 ```
 
-The router forwards `plan_token`, `operation`, `action_summary`, and `target_summary` unchanged. It selects `commit_ampliflow_change` or `commit_destructive_ampliflow_change` from the server's safety class. The six focused review skills never prepare or commit changes.
+The router forwards `plan_token`, `operation`, `action_summary`, and `target_summary` unchanged. It selects `commit_ampliflow_change` or `commit_destructive_ampliflow_change` from the server's safety class. Follow-up calls use exact identities from the described structured operation result, never from prose. Missing receipt identities stop the chain as unverified. Calls stay serial; plans are neither transactions nor proof of human approval. Client cancellation does not prove a remote write was cancelled, and uncertain writes are never automatically retried. Hosted server paths are not client files or exports. The six focused review skills never prepare or commit changes.
 
 ## Supported surfaces
 
 | Surface | Status |
 | --- | --- |
-| Desktop **Work** mode | Package `0.5.0` pilot path verified; package `0.6.0` acceptance pending |
+| Desktop **Work** mode | Package `0.5.0` pilot path verified; package `0.6.1` acceptance pending |
 | Desktop **Chat** mode | Unsupported for the imported package; no plugin MCP tools reach the cloud turn |
 | Web and mobile | Not delivered by this GitHub package; use the future **With MCP** review route |
 

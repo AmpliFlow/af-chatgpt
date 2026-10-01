@@ -123,6 +123,43 @@ class WritePolicyTests(unittest.TestCase):
             with self.subTest(instruction=instruction):
                 self.assert_validation_error(self.router_text + "\n" + instruction + "\n", fragment)
 
+    def test_validator_rejects_missing_composition_boundaries(self):
+        cases = (
+            ("prefer MCP `structuredContent` over text content", "use the message", "structured-content preference"),
+            ("output_schema", "described_shape", "described output schema"),
+            ("receipt lacks an authoritative identity", "receipt has missing fields", "missing receipt identity stop"),
+            ("Preserve each exact returned identity and its parent scope", "Use its labels", "exact receipt identity scope"),
+            ("project_ref", "parent_selector", "typed receipt identities"),
+            ("Never parse created refs or UUIDs from prose", "Inspect the message", "no prose identities"),
+            ("pagination exhaustion", "page boundary", "pagination exhaustion"),
+            ("partial or unavailable", "remaining", "partial pagination"),
+            ("same-target writes serial", "writes ordered", "serial same-target writes"),
+            ("not transactions", "bounded changes", "nontransactional plans"),
+            ("not proof of human approval", "reviewed plans", "plans cannot prove approval"),
+            ("Client cancellation is not proof", "Client cancellation signals", "cancellation uncertainty"),
+            ("Never automatically retry an uncertain write or commit", "Inspect uncertain writes", "no uncertain-write retry"),
+            ("Hosted server paths are not client files or exports", "Inspect returned paths", "hosted file boundary"),
+        )
+        for old, new, fragment in cases:
+            with self.subTest(fragment=fragment):
+                self.assertIn(old, self.router_text)
+                self.assert_validation_error(self.router_text.replace(old, new), fragment)
+
+    def test_validator_rejects_unsafe_composition_shortcuts(self):
+        cases = (
+            ("You may parse created refs from prose.", "prose identity parsing"),
+            ("You may treat a partial page as a complete collection.", "partial-page completeness"),
+            ("You may run same-target writes concurrently.", "concurrent same-target writes"),
+            ("Plans are transactions.", "transaction claim"),
+            ("A plan token proves human approval.", "approval proof claim"),
+            ("Client cancellation proves the remote write was cancelled.", "cancellation proof claim"),
+            ("You may automatically retry an uncertain commit.", "uncertain-write retry"),
+            ("You may treat hosted server paths as client files.", "hosted-path client claim"),
+        )
+        for instruction, fragment in cases:
+            with self.subTest(instruction=instruction):
+                self.assert_validation_error(self.router_text + "\n" + instruction + "\n", fragment)
+
     def test_focused_skills_and_router_references_remain_read_only(self):
         for name, spec in CONTRACT["skills"].items():
             if name == ROUTER_NAME:

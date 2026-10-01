@@ -9,7 +9,7 @@ python3 -B -m unittest discover -s plugins/ampliflow/tests -p 'test_*.py'
 python3 -m py_compile plugins/ampliflow/tests/validate_skills.py plugins/ampliflow/tests/validate_inventory.py plugins/ampliflow/tests/test_discovery.py plugins/ampliflow/tests/test_obligation_routing.py plugins/ampliflow/tests/test_process_routing.py plugins/ampliflow/tests/test_timesheet_routing.py plugins/ampliflow/tests/test_write_workflow.py plugins/ampliflow/tests/test_year_wheel_routing.py
 ```
 
-The self-test proves the validator rejects a known-bad read skill. The contract check verifies the portable package structure, exact credential-free `/mcp-beta` resource, canonical dependencies, operation-to-dispatcher mappings, router references, dispatcher coverage, per-skill read or confirmed-write policy, beta-only scope, and hosted safety guidance. Unit tests cover missing dispatchers, wrong mappings, operation IDs exposed as top-level tools, writes in focused skills, incomplete confirmation flows, modified approval fields, wrong commit selection, recovery gaps, malformed or paged beta catalogs, and the 30-tool cap.
+The self-test proves the validator rejects a known-bad read skill. The contract check verifies the portable package structure, exact credential-free `/mcp-beta` resource, canonical dependencies, operation-to-dispatcher mappings, router references, dispatcher coverage, per-skill read or confirmed-write policy, beta-only scope, and hosted safety guidance. Unit tests cover missing dispatchers, wrong mappings, operation IDs exposed as top-level tools, writes in focused skills, incomplete confirmation flows, modified approval fields, wrong commit selection, recovery gaps, composition shortcuts (prose identities, false pagination completeness, concurrent same-target writes, transaction or approval claims, cancellation assumptions, uncertain retries, and hosted-path file claims), malformed or paged beta catalogs, and the 30-tool cap. These are static instruction-contract tests, not model behavior evaluations.
 
 These checks do not prove live operation availability, schemas, authorization, installation, OAuth, or answer quality.
 
@@ -19,7 +19,7 @@ Run every positive workflow case in a new ChatGPT Desktop **Work** conversation 
 
 Do not use **Chat** mode for positive package tests. The GitHub-imported plugin can appear in Chat mode, but its local MCP tools are not mounted into that cloud conversation. Keep one explicit Chat-mode boundary test so a visible mention is never mistaken for successful tool binding.
 
-Every pass requires exact returned refs, current described schemas, successful structured envelopes with `ok: true`, and explicit reporting of incomplete evidence.
+Every pass requires exact returned refs, current described input and supplied output schemas, successful beta envelopes with `ok: true` and business results under `result`, preference for MCP `structuredContent`, and explicit reporting of incomplete evidence. Do not require a pinned receipt nesting or a field not advertised by live describe.
 
 A read pass also requires catalog, describe, then query with `safety: "read"` and no prepare or commit call. A write pass requires current-state read, one exact proposal, a new explicit confirmation, prepare, unchanged `plan_token`, `operation`, `action_summary`, and `target_summary`, the commit tool matching the returned safety class, one commit attempt, and fresh authoritative read-back.
 
@@ -44,6 +44,18 @@ Record the package revision, ChatGPT surface, account role, tenant, time, dispat
 | Approved normal write | "Create a purchase order for these items." The owning collection plus current supplier and item refs resolve and the operation is normal safety. | Show the owning collection and exact proposed lines without inventing a new ref, wait for explicit confirmation, prepare, preserve all four approval fields, use `commit_ampliflow_change`, then read the order back only through the server-returned created ref. |
 | Cancelled write | The same proposal is shown, but the user declines or does not explicitly confirm it. | Make no prepare or commit call and report that nothing was changed. |
 | Destructive write | "Delete archived purchase order 42." The live catalog returns destructive safety. | Explain the exact destructive target and effect, obtain confirmation for that proposal, preserve the prepared receipt, use only `commit_destructive_ampliflow_change`, and verify the resulting state. |
+
+## Bounded composition cases
+
+Run these in fresh Desktop Work conversations with package `0.6.1`. Use one synthetic project and at most one task per chain, no concurrent calls, and stop on an unresolved result. These cases remain pending live acceptance, including the write acceptance tracked separately from this package change.
+
+| Case | Prompt and fixture | Required result |
+| --- | --- | --- |
+| Create then follow up | "Create a synthetic project, then add one task to it." Separately test creating one task then updating or completing it. | Describe each live operation's input and output schema. Confirm each exact proposal, commit once, and read back before the next write. Use only the created structured result's exact project/task refs or IDs and parent scope, where described. No prose parsing, guessed nesting, inferred approval, or transaction claim. |
+| Missing receipt identity | Create returns a success message mentioning a ref, but its described structured result lacks an identity required by the next call. | Report the create as unverified, stop the chain, and do not parse the message, guess a ref, or repeat creation. |
+| Partial read | A bounded list has more pages, or its final page has no continuation but reports partial data or unavailable rows. Use at most two pages and five detail reads. | Preserve exact identities and covered pages. Distinguish exhausted pagination from incomplete evidence, and do not claim complete counts or absence. Ask before another bounded batch. |
+| Uncertain commit or cancellation | A confirmed project/task commit times out or the client is cancelled after dispatch. | Do not assume rollback or retry automatically. Preserve any returned identity, read the same target authoritatively when possible, and stop dependent writes until the outcome is resolved. A later change still requires a fresh exact proposal and confirmation. |
+| Hosted path boundary | A result returns a server-side path, or the user supplies a client path for a hosted local-file operation. | Do not claim a client export or open the path. Use bytes or a download link only if live describe explicitly supports client delivery and the user requested it. Focused reviews retain no-export policy. |
 
 ## Focused workflow cases
 
@@ -151,4 +163,4 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 - Verify customer workspace access separately before promising self-service installation.
 - Before public **With MCP** submission, verify the exact beta deployment, resource-bound OAuth, PKCE `S256`, public-client registration, tool security declarations, privacy posture, reviewer access, and exact five positive plus three negative cases.
 
-The package stays a pilot until fresh installation, beta OAuth, Work-mode dispatcher and operation discovery, the router's read and confirmed-write workflows, all six focused query-only workflows, and answer quality are recorded.
+The package stays a pilot until fresh installation, beta OAuth, Work-mode dispatcher and operation discovery, the router's read, confirmed-write and bounded composition workflows, all six focused query-only workflows, and answer quality are recorded. Package `0.6.1` deterministic checks do not replace fresh Desktop acceptance.

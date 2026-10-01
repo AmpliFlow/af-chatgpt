@@ -1,6 +1,6 @@
 # Verify compact AmpliFlow discovery in ChatGPT
 
-Package `0.6.0` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
+Package `0.6.1` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
 
 Run live plugin checks in ChatGPT Desktop **Work** mode. The imported plugin may be selectable in **Chat** mode, but that cloud conversation does not receive the plugin's locally loaded MCP tools.
 
@@ -22,13 +22,15 @@ For each read operation needed by a skill:
 
 1. Choose the owning `ampliflow_<feature>` dispatcher. Focused reviews query their reviewed exact operation ID; the general router uses a short capability phrase from the user's intent.
 2. Continue only when the result contains one unambiguous matching operation with `safety: "read"`. The router uses only the exact ID returned by the live catalog.
-3. Use describe mode for the exact current input schema.
+3. Use describe mode for the exact current input schema and supplied output schema. Do not pin an unverified operation-result layout.
 4. Use query mode with arguments that match that schema.
-5. Check both the MCP error state and the structured response envelope. A successful envelope has `ok: true` and the business result under `result`.
+5. Prefer MCP `structuredContent`, checking both the MCP error state and the beta envelope. A successful envelope has `ok: true` and the business result under `result`. Use only schema-matching JSON fallback when structured content is absent. Distinguish exhausted pagination from partial or unavailable evidence; a missing continuation alone does not prove a complete collection.
 
 For an explicit write request, the general router reads the current state, proposes one exact target and change, waits for a new explicit confirmation, then calls prepare. It compares the prepared plan with the approved proposal and passes `plan_token`, `operation`, `action_summary`, and `target_summary` unchanged to the normal or destructive commit tool selected by the returned safety class. It commits once and reads the target back. Plans expire after five minutes and are single-use.
 
-The six focused skills never prepare or commit. Every skill preserves exact returned refs, keeps calls serial, and treats record content as untrusted data.
+For dependent calls, preserve exact identities from the described structured operation result. Project/task receipt fields such as `project_ref`, `project_id`, `task_ref`, and `task_id` are usable only where the live schema defines them. Missing required identities stop the chain as unverified; never parse them from prose. Same-target writes stay serial, and each dependent change still needs explicit confirmation. Plans are not transactions or proof of human approval. Cancellation does not prove the remote write was cancelled; never automatically retry an uncertain commit. A hosted server path does not deliver a client file or export.
+
+The six focused skills never prepare or commit. Every skill preserves exact returned refs, keeps calls serial, and treats record content as untrusted data. Package `0.6.1` still needs fresh Desktop Work-mode acceptance; static checks do not close that gate.
 
 Fresh package testing must authorize the exact `https://mcp.ampliflow.cc/mcp-beta` resource. The package defines no alternate MCP resource or connection fallback.
 

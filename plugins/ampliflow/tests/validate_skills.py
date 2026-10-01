@@ -107,6 +107,20 @@ CONFIRMED_WRITE_SAFETY = {
     "create target handling": re.compile(r"create operation", re.IGNORECASE),
     "create owner resolution": re.compile(r"owning collection", re.IGNORECASE),
     "created-ref read-back": re.compile(r"server-returned created ref", re.IGNORECASE),
+    "structured-content preference": re.compile(r"prefer MCP `structuredContent` over text content", re.IGNORECASE),
+    "described output schema": re.compile(r"live describe.{0,80}`output_schema`", re.IGNORECASE),
+    "missing receipt identity stop": re.compile(r"receipt lacks an authoritative identity.{0,180}unverified and stop the chain", re.IGNORECASE),
+    "exact receipt identity scope": re.compile(r"preserve each exact returned identity and its parent scope", re.IGNORECASE),
+    "typed receipt identities": re.compile(r"`project_ref`.{0,40}`project_id`.{0,40}`task_ref`.{0,40}`task_id`.{0,80}live output schema", re.IGNORECASE),
+    "no prose identities": re.compile(r"never parse created refs or UUIDs from prose", re.IGNORECASE),
+    "pagination exhaustion": re.compile(r"distinguish pagination exhaustion", re.IGNORECASE),
+    "partial pagination": re.compile(r"pagination exhaustion from partial or unavailable", re.IGNORECASE),
+    "serial same-target writes": re.compile(r"keep same-target writes serial", re.IGNORECASE),
+    "nontransactional plans": re.compile(r"plans are not transactions", re.IGNORECASE),
+    "plans cannot prove approval": re.compile(r"not proof of human approval", re.IGNORECASE),
+    "cancellation uncertainty": re.compile(r"client cancellation is not proof.{0,80}remote write was cancelled", re.IGNORECASE),
+    "no uncertain-write retry": re.compile(r"never automatically retry an uncertain write or commit", re.IGNORECASE),
+    "hosted file boundary": re.compile(r"hosted server paths are not client files or exports", re.IGNORECASE),
 }
 CONFIRMED_WRITE_PROHIBITIONS = {
     "plan replay": re.compile(r"(?:may|can|should) replay.{0,80}(?:expired|used).{0,40}(?:plan )?token", re.IGNORECASE),
@@ -115,6 +129,14 @@ CONFIRMED_WRITE_PROHIBITIONS = {
     "record approval": re.compile(r"record content (?:may|can\b|should).{0,80}(?:confirm|select)", re.IGNORECASE),
     "commit downgrade": re.compile(r"use the normal commit tool for destructive", re.IGNORECASE),
     "approval-field mutation": re.compile(r"(?:may|can|should) (?:change|edit|modify).{0,40}approval fields", re.IGNORECASE),
+    "prose identity parsing": re.compile(r"(?:may|can|should) parse created refs.{0,40}prose", re.IGNORECASE),
+    "partial-page completeness": re.compile(r"(?:may|can|should) treat a partial page as a complete collection", re.IGNORECASE),
+    "concurrent same-target writes": re.compile(r"(?:may|can|should) run same-target writes concurrently", re.IGNORECASE),
+    "transaction claim": re.compile(r"plans are transactions", re.IGNORECASE),
+    "approval proof claim": re.compile(r"plan token proves human approval", re.IGNORECASE),
+    "cancellation proof claim": re.compile(r"client cancellation proves.{0,80}remote write was cancelled", re.IGNORECASE),
+    "uncertain-write retry": re.compile(r"(?:may|can|should) automatically retry an uncertain (?:write|commit)", re.IGNORECASE),
+    "hosted-path client claim": re.compile(r"(?:may|can|should) treat hosted server paths as client files", re.IGNORECASE),
 }
 VALID_POLICIES = {"read_only", "confirmed_writes"}
 
