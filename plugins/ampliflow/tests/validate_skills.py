@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = Path(__file__).with_name("skill_contracts.json")
+IMPROVEMENT_GUIDANCE_PATH = ROOT / "skills/reviewing-improvements/SKILL.md"
 BETA_ENDPOINT = "https://mcp.ampliflow.cc/mcp-beta"
 MAPPING_PATTERN = re.compile(
     r"^\|\s*`([a-z][a-z0-9_]+)`\s*\|\s*`(ampliflow_[a-z0-9_]+)`\s*\|",
@@ -239,8 +240,8 @@ def validate_skill(path: Path, expected_name: str, spec: dict, supported: dict[s
                 commit in reference_text for commit in commit_tools
             ):
                 errors.append(f"{reference_path}: read-only reference must not instruct writes")
-            if OPERATION_REFERENCE_PATTERN.search(reference_text):
-                errors.append(f"{reference_path}: router references must not pin operation IDs")
+            if set(OPERATION_REFERENCE_PATTERN.findall(reference_text)) - set(expected):
+                errors.append(f"{reference_path}: router references must not pin undeclared operation IDs")
             for dispatcher in re.findall(r"`(ampliflow_[a-z0-9_]+)`", reference_text):
                 if dispatcher not in expected_dispatchers:
                     errors.append(f"{reference_path}: undeclared dispatcher {dispatcher}")
@@ -311,9 +312,60 @@ def validate_package(root: Path) -> list[str]:
     return errors
 
 
+def improvement_guidance_errors(text: str) -> list[str]:
+    concepts = {
+        "credential principal": r"credential principal",
+        "responsible filter": r"responsible_user_ids",
+        "creator filter": r"created_by_user_ids",
+        "involved filter": r"involved_user_ids",
+        "filter intersection": r"AND, not OR",
+        "union deduplication": r"deduplicate",
+        "bounded pages": r"two pages",
+        "all score definitions": r"all five score labels/descriptions",
+        "active options": r"active tenant options",
+        "relevant categories": r"distinct consequence",
+        "no category quota": r"not an API limit or quota",
+        "live forms": r"Resolve deviation forms from live form options and definitions",
+        "no false completeness": r"forbid a complete count",
+        "native ownership": r"Preserve native ownership fields",
+    }
+    return [f"improvement guidance missing {name}" for name, pattern in concepts.items()
+            if not re.search(pattern, text, re.IGNORECASE)]
+
+
+def validate_improvement_guidance(root: Path) -> list[str]:
+    path = root / "skills/reviewing-improvements/SKILL.md"
+    if not path.is_file():
+        return ["missing improvement guidance"]
+    errors = improvement_guidance_errors(path.read_text(encoding="utf-8"))
+    requirements = {
+        path: (
+            "result.authenticated_identity", "effective_principal", "tenant_uuid", "tenant_binding",
+            "identity_evidence", "original_executor_evidence", "write_attribution_evidence",
+            "server_side_effect", "JWT/cookie", "automatically retry an uncertain identity read",
+            "show_improvement_gradings", "result.improvement_gradings", "impact_list",
+            "selected but ungraded", "separate_non_atomic_reads",
+        ),
+        root / "skills/using-ampliflow/SKILL.md": ("show_improvement_gradings",),
+        root / "skills/using-ampliflow/references/processes-risks-controls-and-improvements.md": (
+            "show_improvement_gradings", "ampliflow_improvements", "improvement_ref", "same-tenant URL",
+            "result.improvement_gradings", "`ref`", "`number`", "`id`", "`impact`", "impact_list",
+            "consistency", "separate_non_atomic_reads", "selected but ungraded", "0..5",
+            "Generic improvement detail", "mismatch", "do not automatically repeat",
+        ),
+    }
+    for source, concepts in requirements.items():
+        if not source.is_file():
+            errors.append(f"missing grading read-back guidance: {source.name}")
+            continue
+        text = source.read_text(encoding="utf-8")
+        errors.extend(f"{source.name}: missing read-back contract {concept}" for concept in concepts if concept not in text)
+    return errors
+
+
 def validate(root: Path) -> list[str]:
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
-    errors = validate_package(root)
+    errors = validate_package(root) + validate_improvement_guidance(root)
     try:
         supported = supported_operation_mappings(contract)
     except ValueError as error:

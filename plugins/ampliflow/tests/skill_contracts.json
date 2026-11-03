@@ -42,7 +42,9 @@
         "context-and-obligations.md",
         "assurance-content-and-planning.md"
       ],
-      "required_operations": {},
+      "required_operations": {
+        "show_improvement_gradings": "ampliflow_improvements"
+      },
       "optional_operations": {}
     },
     "reviewing-project-tasks": {
@@ -118,8 +120,12 @@
     "reviewing-improvements": {
       "operation_policy": "read_only",
       "required_operations": {
+        "get_authenticated_identity": "ampliflow_people",
+        "list_impact_grading_options": "ampliflow_projects",
+        "show_impact_grading": "ampliflow_projects",
         "list_improvements": "ampliflow_improvements",
         "show_improvement": "ampliflow_improvements",
+        "show_improvement_gradings": "ampliflow_improvements",
         "list_improvement_steps": "ampliflow_improvements",
         "list_improvement_activities": "ampliflow_improvements"
       },

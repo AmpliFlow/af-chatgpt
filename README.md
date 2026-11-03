@@ -37,13 +37,13 @@ See the package [setup guide](plugins/ampliflow/README.md), [acceptance checks](
 
 | Surface | Pilot status |
 | --- | --- |
-| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import verified for package `0.5.0`; package `0.6.1` strengthens the confirmed-write composition contract; fresh acceptance remains pending |
+| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import verified for package `0.5.0`; package `0.7.0` adds bounded personal deviations, live grading guidance, and submission packaging; fresh acceptance remains pending |
 | ChatGPT Desktop, **Chat** mode | Not supported by the GitHub-imported package; the cloud conversation does not receive its local MCP tools |
 | ChatGPT web and mobile | Requires OpenAI's **With MCP** submission and review |
 
 The package connects only to `https://mcp.ampliflow.cc/mcp-beta`. It does not add another MCP connection, use an alternate endpoint, depend on a workspace app ID, or install the AmpliFlow CLI.
 
-The general skill supports only explicit user-confirmed writes discovered through the live catalog. Its six focused review skills remain read-only. The server remains authoritative for availability, authorization, target preconditions, safety class, plan expiry, and read-back behavior.
+The general skill supports only explicit user-confirmed writes discovered through the live catalog. Its six focused review skills remain read-only. Improvement creation and grading changes require the native persisted-score read-back, not generic improvement detail. Identity reads preserve unknown tenant binding and distinguish the effective credential principal from original-executor and write-attribution evidence. These separate reads prove neither an atomic snapshot nor human approval. The server remains authoritative for availability, authorization, target preconditions, safety class, plan expiry, and read-back behavior.
 
 ## Troubleshooting
 
@@ -62,7 +62,9 @@ Package changes require a version bump and the checks in [plugins/ampliflow/TEST
 
 ## Public distribution
 
-The GitHub marketplace is a Desktop pilot route, not a public ChatGPT listing. Browser and mobile distribution requires OpenAI review through **With MCP**, using a frozen production endpoint, privacy and support information, reviewer access, and the required positive and negative tests.
+Use [SUBMIT.md](SUBMIT.md) to prepare the complete plugin ZIP and track remaining reviewer access, video, country, policy, and portal decisions. The kit keeps all seven skills and five positive plus three negative reviewer cases. It does not claim live acceptance or policy approval. [RELEASE.md](RELEASE.md) covers the coordinated GitHub/Desktop delivery; a release does not authorize public-store submission.
+
+The GitHub marketplace remains a Desktop pilot route, not a public ChatGPT listing. Public distribution uses OpenAI's **With MCP** review.
 
 ## License
 

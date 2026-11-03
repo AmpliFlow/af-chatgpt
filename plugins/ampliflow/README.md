@@ -8,7 +8,7 @@ The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the 
 
 ## What the package contains
 
-Package `0.6.1` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
+Package `0.7.0` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
 
 - one remote MCP connection
 - one lightweight router that loads focused domain references only when needed and handles explicit confirmed changes
@@ -62,11 +62,15 @@ read current state -> propose exact change -> wait for explicit confirmation -> 
 
 The router forwards `plan_token`, `operation`, `action_summary`, and `target_summary` unchanged. It selects `commit_ampliflow_change` or `commit_destructive_ampliflow_change` from the server's safety class. Follow-up calls use exact identities from the described structured operation result, never from prose. Missing receipt identities stop the chain as unverified. Calls stay serial; plans are neither transactions nor proof of human approval. Client cancellation does not prove a remote write was cancelled, and uncertain writes are never automatically retried. Hosted server paths are not client files or exports. The six focused review skills never prepare or commit changes.
 
+For improvement creation or grading updates, the router reads `show_improvement_gradings` through `ampliflow_improvements` after the confirmed write and compares the exact persisted `impact` and UUID-to-score `impact_list` with the proposal. Generic `show_improvement` omits the map. Score 0 means selected but ungraded. The result discloses `separate_non_atomic_reads`, not an atomic snapshot or approval evidence. Missing or mismatched fields remain unverified without automatic write retry.
+
+Personal reads use `get_authenticated_identity` through `ampliflow_people` and preserve `result.authenticated_identity` evidence. Unknown tenant binding stays unknown; the effective principal is not proof of an original human or per-write attribution. Profile authentication can issue a JWT/cookie even when discarded; do not automatically retry an uncertain identity read.
+
 ## Supported surfaces
 
 | Surface | Status |
 | --- | --- |
-| Desktop **Work** mode | Package `0.5.0` pilot path verified; package `0.6.1` acceptance pending |
+| Desktop **Work** mode | Package `0.5.0` pilot path verified; package `0.7.0` acceptance pending |
 | Desktop **Chat** mode | Unsupported for the imported package; no plugin MCP tools reach the cloud turn |
 | Web and mobile | Not delivered by this GitHub package; use the future **With MCP** review route |
 

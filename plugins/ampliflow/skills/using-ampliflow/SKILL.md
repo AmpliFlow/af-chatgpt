@@ -7,6 +7,8 @@ description: Reads AmpliFlow records and makes explicit user-confirmed changes t
 
 Use live AmpliFlow records to answer questions and make only changes the user explicitly confirms. Route every create, update, completion, assignment, archive, delete, or other mutation request here, even when a focused review skill covers the same domain. Keep review, comparison, gap analysis, and status assessment in the six read-only focused skills.
 
+For personal improvement reads such as "visa mina avvikelser", use `reviewing-improvements` for bounded credential-principal identity, live form resolution, and responsibility/creation/involvement filters. Do not replace missing server filters with a client-side backlog scan. For improvement creation or grading changes, load `references/processes-risks-controls-and-improvements.md` and follow its live grading guidance before the confirmed-write sequence.
+
 ## MCP beta availability
 
 - [ ] Use only the exact beta feature dispatchers supplied by this package's authenticated AmpliFlow connection and listed in the routing references below.
@@ -56,6 +58,14 @@ For every dispatcher or commit response, prefer MCP `structuredContent` over tex
 7. Treat `plan_token`, `operation`, `action_summary`, and `target_summary` as an immutable approval receipt. Pass all four values unchanged to exactly one commit tool. The normal safety class maps only to `commit_ampliflow_change`; the destructive safety class maps only to `commit_destructive_ampliflow_change`. Never weaken or override the server's safety class.
 8. Commit once. Plans expire after five minutes and are single-use. Never replay a used token. If a commit times out or its result is uncertain, read back the target before considering another plan. Never automatically retry an uncertain write or commit. Client cancellation is not proof that the remote write was cancelled; preserve any returned identity and report uncertainty until an authoritative read resolves it.
 9. Read back the target through a fresh authoritative query. For a create operation, use only the server-returned created ref from the described structured operation result. For project and task receipts, use `project_ref`, `project_id`, `task_ref`, and `task_id` only where the live output schema defines them; do not assume a fixed nesting or layout. Preserve each exact returned identity and its parent scope for follow-up calls. Never parse created refs or UUIDs from prose, infer them from titles, or substitute nearby refs. If the receipt lacks an authoritative identity required for the next call, report the outcome as unverified and stop the chain without guessing or retrying the create. Report which requested values were verified, which were not verified, and whether the outcome is partial. A successful commit response without read-back is not verified completion.
+
+Reviewed native read-back mapping (still requires live catalog and describe):
+
+| Operation | Dispatcher | Purpose |
+| --- | --- | --- |
+| `show_improvement_gradings` | `ampliflow_improvements` | Verify persisted improvement impact and category scores. |
+
+For improvement creation or grading updates, step 9 must include the native `show_improvement_gradings` read through `ampliflow_improvements`, following `references/processes-risks-controls-and-improvements.md`. Generic detail cannot verify the persisted category map. Keep this read after the confirmed write; its non-atomic evidence neither proves approval nor permits another mutation.
 
 ### Bounded composition
 

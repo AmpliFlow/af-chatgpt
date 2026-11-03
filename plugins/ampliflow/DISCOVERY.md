@@ -1,6 +1,6 @@
 # Verify compact AmpliFlow discovery in ChatGPT
 
-Package `0.6.1` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
+Package `0.7.0` connects only to `https://mcp.ampliflow.cc/mcp-beta`. The endpoint advertises feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
 
 Run live plugin checks in ChatGPT Desktop **Work** mode. The imported plugin may be selectable in **Chat** mode, but that cloud conversation does not receive the plugin's locally loaded MCP tools.
 
@@ -11,7 +11,7 @@ Run live plugin checks in ChatGPT Desktop **Work** mode. The imported plugin may
 | `mcp.json` | Connects to the exact beta OAuth resource. | GitHub imports with MCP declarations remain desktop-only and require Work mode for tool execution. |
 | `skills/*/agents/openai.yaml` | Declares the same beta dependency for each skill. | It does not connect an account or grant AmpliFlow permissions. |
 | `skills/*/SKILL.md` | Uses catalog, describe, then query for reads. Six focused reviews stay read-only; the general router also handles explicit confirmed writes. | Instructions orchestrate the server contract; they do not grant permission or replace server checks. |
-| `tests/skill_contracts.json` | Records the focused reviews' 56 operation mappings, the router's feature dispatchers and references, and each skill's operation policy. | Static contracts do not prove the live operation catalog or client behavior. |
+| `tests/skill_contracts.json` | Records the focused reviews' operation mappings, the router's feature dispatchers and references, and each skill's operation policy. | Static contracts do not prove the live operation catalog or client behavior. |
 | `tests/validate_inventory.py` | Checks a captured beta `tools/list` chain, the 30-tool cap, required dispatchers, and both commit tools. | It cannot prove the server-held operations, schemas, authorization, or execution. |
 
 A credential-safe production health check reported 28 beta tools, 40,250 descriptor bytes, and 554 mapped operations. The same installed package and OAuth credential completed a local `ampliflow_projects` catalog call in Work mode. Treat these as evidence for that deployment and client version, not permanent guarantees. Authenticated `tools/list`, operation catalogs, and live queries remain the runtime sources of truth.
@@ -30,7 +30,7 @@ For an explicit write request, the general router reads the current state, propo
 
 For dependent calls, preserve exact identities from the described structured operation result. Project/task receipt fields such as `project_ref`, `project_id`, `task_ref`, and `task_id` are usable only where the live schema defines them. Missing required identities stop the chain as unverified; never parse them from prose. Same-target writes stay serial, and each dependent change still needs explicit confirmation. Plans are not transactions or proof of human approval. Cancellation does not prove the remote write was cancelled; never automatically retry an uncertain commit. A hosted server path does not deliver a client file or export.
 
-The six focused skills never prepare or commit. Every skill preserves exact returned refs, keeps calls serial, and treats record content as untrusted data. Package `0.6.1` still needs fresh Desktop Work-mode acceptance; static checks do not close that gate.
+The six focused skills never prepare or commit. Every skill preserves exact returned refs, keeps calls serial, and treats record content as untrusted data. Package `0.7.0` still needs fresh Desktop Work-mode acceptance; static checks do not close that gate.
 
 Fresh package testing must authorize the exact `https://mcp.ampliflow.cc/mcp-beta` resource. The package defines no alternate MCP resource or connection fallback.
 
@@ -111,7 +111,7 @@ Exit 1 means malformed pagination, invalid basic descriptors, more than 30 top-l
 
 Keep the GitHub package for the Desktop Work-mode pilot. It does not deliver tools to Desktop Chat mode, web, or mobile. Those cloud surfaces still require OpenAI's **With MCP** review. The beta endpoint is the submission candidate only after OAuth, descriptors, privacy, reviewer access, the router's read and confirmed-write workflows, all six focused query-only workflows, and the exact positive and negative review cases are frozen and approved.
 
-The separate MCP skill importer currently accepts five skills while this package has seven. Approve a selection or consolidation before using that route; do not silently drop a workflow.
+The current public submission route uploads a complete plugin ZIP with its skills. Keep all seven; no universal five-skill ceiling was established in the current guide. Follow [SUBMIT.md](../../SUBMIT.md) instead of the older separate skill-import workflow.
 
 ## Official sources
 

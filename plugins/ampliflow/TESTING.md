@@ -1,6 +1,8 @@
 # Pilot acceptance checks
 
-Run the deterministic checks before a manual pilot:
+Run all local checks with `python3 scripts/check.py`, or build the public submission ZIP with `python3 scripts/build_submission.py`. Both run the checks below. Public submission preparation and remaining human checks are in [SUBMIT.md](../../SUBMIT.md).
+
+Individual deterministic commands:
 
 ```text
 python3 plugins/ampliflow/tests/validate_skills.py --self-test
@@ -9,7 +11,7 @@ python3 -B -m unittest discover -s plugins/ampliflow/tests -p 'test_*.py'
 python3 -m py_compile plugins/ampliflow/tests/validate_skills.py plugins/ampliflow/tests/validate_inventory.py plugins/ampliflow/tests/test_discovery.py plugins/ampliflow/tests/test_obligation_routing.py plugins/ampliflow/tests/test_process_routing.py plugins/ampliflow/tests/test_timesheet_routing.py plugins/ampliflow/tests/test_write_workflow.py plugins/ampliflow/tests/test_year_wheel_routing.py
 ```
 
-The self-test proves the validator rejects a known-bad read skill. The contract check verifies the portable package structure, exact credential-free `/mcp-beta` resource, canonical dependencies, operation-to-dispatcher mappings, router references, dispatcher coverage, per-skill read or confirmed-write policy, beta-only scope, and hosted safety guidance. Unit tests cover missing dispatchers, wrong mappings, operation IDs exposed as top-level tools, writes in focused skills, incomplete confirmation flows, modified approval fields, wrong commit selection, recovery gaps, composition shortcuts (prose identities, false pagination completeness, concurrent same-target writes, transaction or approval claims, cancellation assumptions, uncertain retries, and hosted-path file claims), malformed or paged beta catalogs, and the 30-tool cap. These are static instruction-contract tests, not model behavior evaluations.
+The self-test proves the validator rejects a known-bad read skill. The contract check verifies the portable package structure, exact credential-free `/mcp-beta` resource, canonical dependencies, operation-to-dispatcher mappings, router references, dispatcher coverage, per-skill read or confirmed-write policy, beta-only scope, and hosted safety guidance. Unit tests cover missing dispatchers, wrong mappings, operation IDs exposed as top-level tools, writes in focused skills, incomplete confirmation flows, modified approval fields, wrong commit selection, recovery gaps, composition shortcuts (prose identities, false pagination completeness, concurrent same-target writes, transaction or approval claims, cancellation assumptions, uncertain retries, and hosted-path file claims), malformed or paged beta catalogs, and the 30-tool cap. Improvement regression checks also reject missing native grading read-back, wrong dispatcher mapping, missing identity evidence, lost zero-score semantics, and omitted non-atomic consistency disclosure. These are static instruction-contract tests, not model behavior evaluations.
 
 These checks do not prove live operation availability, schemas, authorization, installation, OAuth, or answer quality.
 
@@ -47,7 +49,7 @@ Record the package revision, ChatGPT surface, account role, tenant, time, dispat
 
 ## Bounded composition cases
 
-Run these in fresh Desktop Work conversations with package `0.6.1`. Use one synthetic project and at most one task per chain, no concurrent calls, and stop on an unresolved result. These cases remain pending live acceptance, including the write acceptance tracked separately from this package change.
+Run these in fresh Desktop Work conversations with package `0.7.0`. Use one synthetic project and at most one task per chain, no concurrent calls, and stop on an unresolved result. These cases remain pending live acceptance, including the write acceptance tracked separately from this package change.
 
 | Case | Prompt and fixture | Required result |
 | --- | --- | --- |
@@ -67,6 +69,23 @@ Run these in fresh Desktop Work conversations with package `0.6.1`. Use one synt
 | Improvements | "Review open improvement 24." Detail omits list metadata, an image is redacted, and the published historical form is unavailable. | Use `ampliflow_improvements`, preserve list metadata, review steps and activities, state that image content and historical form conformance were not verified, and do not remap status codes. |
 | Checklist | "Review checklist 0d8... against its template." The current template may differ from the checklist revision and a raw completed value is ambiguous. | Use `ampliflow_checklists`, preserve the actual checklist UUID, rely on normalized completion, and report revision uncertainty rather than claiming drift. |
 | Aggregate request | "Summarize improvement trends." Multiple report groups are returned. | Use the aggregate improvement operations only because aggregation was requested, drill down with returned keys, and state filters and coverage. |
+
+## Personal deviations and grading cases
+
+These are pending live acceptance, not paid model runs or production writes authorized by local testing. Use synthetic fixtures and inspect the current describe schemas.
+
+| Case | Prompt and fixture | Required result |
+| --- | --- | --- |
+| Personal deviations | "Visa mina avvikelser som jag ansvarar för." Identity returns a service principal; live forms identify the deviation scope. | Use `get_authenticated_identity` through `ampliflow_people`, label that effective credential principal accurately, and query `list_improvements` through `ampliflow_improvements` with the exact principal UUID in `responsible_user_ids` and resolved form scope. Do not infer an original human from OAuth or a local `get_my_identity` marker. No repeated clarification of an explicit relation. |
+| Unclear personal relation | "Visa mina avvikelser" has no established ownership meaning. | Ask once whether the user means responsible, created by, or involved. Resolve live forms and use the chosen UUID-array filter; do not keyword-guess form type. |
+| Union versus intersection | "Show deviations I am responsible for or created." One record appears in both branches. | Run separate responsible and creator queries with identical scope, deduplicate the exact identity, and preserve native responsibility/creator/involvement fields. Different groups in one request mean AND, not OR. |
+| Unknown identity or unsupported filter | Identity cannot be resolved, or describe omits the requested filter. | Stop the affected personal workflow and identify the unavailable relation or ask for an exact user. Never scan the whole backlog, invent a UUID, or claim no deviations. |
+| Partial union | Each branch has at most 20 rows per page; one exceeds two pages or reports unavailable rows without a next cursor. | Stop within two pages per branch and 10 combined detail reads. Report branch-specific coverage, preserve verified records, and do not claim complete counts or an empty union. Ask before another bounded batch. |
+| Tenant grading | Four categories have distinct supported consequences; one option omits score descriptions and category detail supplies all five. | Read active options and required detail through `ampliflow_projects`. Include all four relevant categories without a three-category API cap. Match scores to live definitions, leave unrelated categories unset, and do not use score 1 for not applicable. No private skill or local file prerequisite. |
+| Missing grading evidence | An explicit creation request lacks a consequence needed to choose a grade. | Ask a short factual question or request a scoring decision. Do not invent grades. The general router shows the complete draft and waits for new explicit confirmation before prepare or commit. A focused grading review stays read-only. |
+| Native grading read-back | A confirmed synthetic creation or grading update selects exact category UUIDs scored 1-5. Separately inspect an existing native score 0 without trying to write it. Generic detail omits the map. | After exact confirmation and one commit, discover/describe/query `show_improvement_gradings` via `ampliflow_improvements` with the authoritative `improvement_ref` (number, UUID, or same-tenant URL per schema). Match `result.improvement_gradings` identity (`ref`, `number`, `id`), `impact`, and each requested `impact_list` entry/removal to the proposal. Report 0 as selected but ungraded and retain `consistency: "separate_non_atomic_reads"`; no atomic snapshot or approval claim. Focused reviews query only. |
+| Grading read-back unavailable or mismatched | The native read is unavailable, returns a different identity/score, or omits a requested field. | Preserve verified fields, label affected fields unverified or mismatched, stop dependent writes, and do not repeat the create/update. Generic `show_improvement` is not a map substitute. |
+| Identity evidence boundary | `result.authenticated_identity` returns `effective_principal` (`id`, `email`), `tenant_uuid`, `tenant_binding: "unknown"`, `identity_evidence`, `original_executor_evidence`, `write_attribution_evidence`, and `server_side_effect`. | Preserve unknown binding and each evidence distinction; do not claim canonical-host binding, original-human identity, or per-write attribution. Discarded profile JWT/cookie issuance is still a side effect. Never automatically retry an uncertain identity read. |
 
 ## Annual management-plan cases
 
@@ -150,7 +169,7 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 - Parse the marketplace and `mcp.json`; verify the local source resolves inside the marketplace root, both schemas use Agent Plugins 1.0, and the only server is `streamable-http` at exactly `https://mcp.ampliflow.cc/mcp-beta`.
 - Confirm every `agents/openai.yaml` uses the same beta URL.
 - Confirm `.app.json` and `extensions.com.openai.apps` are absent.
-- Run the deterministic skill checks and unit suite. Check that all 56 focused-review operation IDs keep their reviewed mappings, all seven router references resolve, and the router covers the complete compact feature-dispatcher set without copying operation schemas.
+- Run the deterministic skill checks and unit suite. Check that the focused-review operation IDs keep their reviewed mappings, all seven router references resolve, and the router covers the complete compact feature-dispatcher set without copying operation schemas.
 - Capture authenticated beta `tools/list`; verify no more than 30 tools, required dispatchers, both commit tools, and no operation IDs exposed as top-level tools.
 - Check health parity and budget fields, then verify required operations through catalog and describe. Top-level inventory alone is not operation coverage.
 - Compare live descriptors with scanned or published metadata and workspace action policy before claiming a ChatGPT surface can use them.
@@ -158,9 +177,9 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 - Scan package prose and review descriptions for claims beyond tested behavior.
 - Import the published marketplace, complete fresh beta OAuth, restart Desktop, select Work mode, and verify every skill is discoverable.
 - Run one read workflow per focused skill plus the router's read, approved normal write, cancelled write, destructive write, recovery, boundary, and misuse cases in fresh Work conversations. Confirm zero prepare or commit calls in focused skills and cancelled cases.
-- Before MCP skill import, approve a selection or consolidation within the documented five-skill limit. The GitHub package has seven skills.
+- Build the complete public plugin ZIP with all seven skills. Use the current ZIP-submission guide rather than the older separate five-skill import assumption.
 - Confirm the GitHub-imported package is identified as desktop-only, verify Work-mode execution, and record Chat mode as unsupported for this pilot.
 - Verify customer workspace access separately before promising self-service installation.
 - Before public **With MCP** submission, verify the exact beta deployment, resource-bound OAuth, PKCE `S256`, public-client registration, tool security declarations, privacy posture, reviewer access, and exact five positive plus three negative cases.
 
-The package stays a pilot until fresh installation, beta OAuth, Work-mode dispatcher and operation discovery, the router's read, confirmed-write and bounded composition workflows, all six focused query-only workflows, and answer quality are recorded. Package `0.6.1` deterministic checks do not replace fresh Desktop acceptance.
+The package stays a pilot until fresh installation, beta OAuth, Work-mode dispatcher and operation discovery, the router's read, confirmed-write and bounded composition workflows, all six focused query-only workflows, and answer quality are recorded. Package `0.7.0` deterministic checks do not replace fresh Desktop acceptance.

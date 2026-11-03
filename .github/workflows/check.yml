@@ -1,0 +1,27 @@
+name: Check and build submission
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 scripts/build_submission.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ampliflow-submission-local-validation
+          if-no-files-found: error
+          path: |
+            dist/ampliflow-plugin.zip
+            dist/SHA256SUMS
+            dist/build-report.json
+            dist/PORTAL-FIELDS.txt

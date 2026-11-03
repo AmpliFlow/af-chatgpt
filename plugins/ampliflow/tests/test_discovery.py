@@ -261,9 +261,9 @@ class SkillDiscoveryTests(unittest.TestCase):
             path.write_text(source.read_text().replace("https://mcp.ampliflow.cc/mcp-beta", "https://wrong.example/unsupported"))
             self.assertTrue(skills.validate_dependency(path))
 
-    def test_package_version_marks_composition_contract(self):
+    def test_package_version_marks_coordinated_feature_candidate(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.6.1")
+        self.assertEqual(plugin["version"], "0.7.0")
 
 
 if __name__ == "__main__":
