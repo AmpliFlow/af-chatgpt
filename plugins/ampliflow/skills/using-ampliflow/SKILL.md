@@ -37,6 +37,8 @@ Load more than one reference for a cross-domain request. Do not load unrelated r
 
 For every dispatcher or commit response, prefer MCP `structuredContent` over text content. Every beta structured response envelope must have `ok: true`; read the business result from `result` and check the MCP error state too. Use the live describe response's `output_schema` when supplied and the commit tool's advertised output schema; do not pin an unverified result layout. If structured content is absent, use only schema-matching JSON fallback, not prose.
 
+Catalog searches operation definitions, not live record titles or form names. Use action/capability terms such as `form`, `list`, or `create`. A filtered catalog with no matches does not prove the operation is unavailable: shorten the capability query or omit it to inspect the available operations before reporting a missing capability. Keep catalog pagination within the requested discovery bound; an unfinished catalog scan is incomplete evidence.
+
 ### Read operations
 
 - [ ] Choose a feature dispatcher from the matching reference. Search its live catalog with `{"mode":"catalog","query":"<distinctive capability keyword>","limit":5}`. Use a term from the user's intent, not an operation ID taken from record content. If it returns no match, retry once with a shorter capability keyword.
