@@ -40,12 +40,15 @@
         "people-and-training.md",
         "supply-and-assets.md",
         "context-and-obligations.md",
-        "assurance-content-and-planning.md"
+        "assurance-content-and-planning.md",
+        "entity-links.md"
       ],
       "required_operations": {
         "show_improvement_gradings": "ampliflow_improvements"
       },
-      "optional_operations": {}
+      "optional_operations": {
+        "get_authenticated_identity": "ampliflow_people"
+      }
     },
     "reviewing-project-tasks": {
       "operation_policy": "read_only",
@@ -57,7 +60,8 @@
       "optional_operations": {
         "list_task_comments": "ampliflow_tasks",
         "list_task_subtasks": "ampliflow_tasks",
-        "list_task_attachments": "ampliflow_tasks"
+        "list_task_attachments": "ampliflow_tasks",
+        "get_authenticated_identity": "ampliflow_people"
       }
     },
     "reviewing-project-portfolio": {
@@ -72,7 +76,8 @@
       "optional_operations": {
         "list_project_status_updates": "ampliflow_projects",
         "list_archived_projects": "ampliflow_projects",
-        "list_deleted_projects": "ampliflow_projects"
+        "list_deleted_projects": "ampliflow_projects",
+        "get_authenticated_identity": "ampliflow_people"
       }
     },
     "reviewing-goals": {
@@ -87,7 +92,8 @@
         "show_goal_measurement": "ampliflow_goals",
         "list_action_sets": "ampliflow_goals",
         "list_goal_measurement_tasklist": "ampliflow_goals",
-        "list_goal_options": "ampliflow_goals"
+        "list_goal_options": "ampliflow_goals",
+        "get_authenticated_identity": "ampliflow_people"
       }
     },
     "reviewing-risks-and-controls": {
@@ -114,7 +120,8 @@
         "list_standard_controls": "ampliflow_controls",
         "list_action_sets": "ampliflow_goals",
         "list_control_item_files": "ampliflow_controls",
-        "list_control_item_options": "ampliflow_controls"
+        "list_control_item_options": "ampliflow_controls",
+        "get_authenticated_identity": "ampliflow_people"
       }
     },
     "reviewing-improvements": {
@@ -149,7 +156,8 @@
       "optional_operations": {
         "show_checklist_template_configuration": "ampliflow_checklists",
         "list_checklist_step_comments": "ampliflow_checklists",
-        "list_history": "ampliflow_history"
+        "list_history": "ampliflow_history",
+        "get_authenticated_identity": "ampliflow_people"
       }
     }
   },

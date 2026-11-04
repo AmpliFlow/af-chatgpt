@@ -5,6 +5,10 @@ description: Reviews completed or in-progress AmpliFlow checklists and their sou
 
 # Review checklists
 
+## Entity links
+
+Default to readable Markdown entity links in lists, summaries, and follow-ups when current frontend evidence, native UUIDs and required parent identities are present. Before reporting records, load `../using-ampliflow/references/entity-links.md` for exact returned templates, origin checks, label escaping, and missing-evidence handling. Apply it to related entities too; never guess links for unsupported types. Link formatting does not change this skill's read/write policy.
+
 ## MCP normal availability
 
 - [ ] Use only the exact normal feature dispatchers supplied by this package's authenticated AmpliFlow connection and listed below.
@@ -18,6 +22,7 @@ description: Reviews completed or in-progress AmpliFlow checklists and their sou
 
 | Operation | Dispatcher | Purpose |
 | --- | --- | --- |
+| `get_authenticated_identity` | `ampliflow_people` | Optional current frontend evidence for entity links; reuse an existing identity result. |
 | `list_checklist_templates` | `ampliflow_checklists` | Resolve reusable checklist templates. |
 | `list_checklists` | `ampliflow_checklists` | Resolve actual checklist runs. |
 | `show_checklist` | `ampliflow_checklists` | Read one actual checklist. |

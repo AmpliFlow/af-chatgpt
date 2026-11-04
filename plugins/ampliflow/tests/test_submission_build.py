@@ -58,7 +58,7 @@ class SubmissionBuildTests(unittest.TestCase):
             self.assertEqual(names, sorted(names))
             expected_skills = {"using-ampliflow", "reviewing-project-tasks", "reviewing-project-portfolio", "reviewing-risks-and-controls", "reviewing-checklists", "reviewing-goals", "reviewing-improvements"}
             self.assertEqual({name.split("/")[1] for name in names if name.startswith("skills/")}, expected_skills)
-            self.assertTrue({"plugin.json", "mcp.json", "assets/icon.png", "LICENSE"} <= set(names))
+            self.assertTrue({"plugin.json", "mcp.json", "assets/icon.png", "LICENSE", "skills/using-ampliflow/references/entity-links.md", "skills/using-ampliflow/references/people-and-training.md"} <= set(names))
             self.assertFalse(any(name.startswith(("plugins/", "tests/", "submission/", ".")) for name in names))
             for name in names:
                 if name != "plugin.json":

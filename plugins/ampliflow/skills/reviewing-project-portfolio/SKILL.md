@@ -5,6 +5,10 @@ description: Reviews AmpliFlow project health, schedules, workload, and status n
 
 # Review the project portfolio
 
+## Entity links
+
+Default to readable Markdown entity links in lists, summaries, and follow-ups when current frontend evidence, native UUIDs and required parent identities are present. Before reporting records, load `../using-ampliflow/references/entity-links.md` for exact returned templates, origin checks, label escaping, and missing-evidence handling. Apply it to related entities too; never guess links for unsupported types. Link formatting does not change this skill's read/write policy.
+
 ## MCP normal availability
 
 - [ ] Use only the exact normal feature dispatchers supplied by this package's authenticated AmpliFlow connection and listed below.
@@ -18,6 +22,7 @@ description: Reviews AmpliFlow project health, schedules, workload, and status n
 
 | Operation | Dispatcher | Purpose |
 | --- | --- | --- |
+| `get_authenticated_identity` | `ampliflow_people` | Optional current frontend evidence for entity links; reuse an existing identity result. |
 | `list_projects` | `ampliflow_projects` | Resolve active or favorite projects. |
 | `list_project_summaries` | `ampliflow_projects` | Read portfolio attention summaries. |
 | `list_project_timeline` | `ampliflow_projects` | Read schedule ranges and lifecycle coverage. |

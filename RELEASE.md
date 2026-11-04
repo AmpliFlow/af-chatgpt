@@ -29,4 +29,4 @@ The published `0.7.0` beta artifact remains usable for internal tests and rollba
 
 Local tests prove instruction and artifact contracts only, not model behavior or deployed schemas. Fresh normal-origin OAuth, tenant isolation, live operations, Desktop acceptance, and reviewer execution remain pending. Legal, country, policy, store approval, and recording boundaries are unchanged.
 
-Tasks 1236 (entity links) and 1238 (training semantics) are capture-only and are not implemented by this candidate.
+Task 1236 (entity links) now has plugin guidance and deterministic instruction/package tests in this candidate. The backend frontend-context contract and live client behavior remain unverified here. Task 1238 (training semantics) now has local plugin routing, native training-plan workflow guidance, and deterministic guidance/package tests. Its supported-client regression remains PENDING; backend delivery, publication, and live client acceptance are not established here.

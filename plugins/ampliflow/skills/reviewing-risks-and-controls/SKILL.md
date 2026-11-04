@@ -5,6 +5,10 @@ description: Reviews AmpliFlow risks and controls through read-only MCP tools. U
 
 # Review risks and controls
 
+## Entity links
+
+Default to readable Markdown entity links in lists, summaries, and follow-ups when current frontend evidence, native UUIDs and required parent identities are present. Before reporting records, load `../using-ampliflow/references/entity-links.md` for exact returned templates, origin checks, label escaping, and missing-evidence handling. Apply it to related entities too; never guess links for unsupported types. Link formatting does not change this skill's read/write policy.
+
 ## MCP normal availability
 
 - [ ] Use only the exact normal feature dispatchers supplied by this package's authenticated AmpliFlow connection and listed below.
@@ -18,6 +22,7 @@ description: Reviews AmpliFlow risks and controls through read-only MCP tools. U
 
 | Operation | Dispatcher | Purpose |
 | --- | --- | --- |
+| `get_authenticated_identity` | `ampliflow_people` | Optional current frontend evidence for entity links; reuse an existing identity result. |
 | `list_risks` | `ampliflow_risks` | Resolve risks and stored scores. |
 | `show_risk` | `ampliflow_risks` | Read focused risk detail. |
 | `list_risk_probability_options` | `ampliflow_risks` | Resolve probability labels. |

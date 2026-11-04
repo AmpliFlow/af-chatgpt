@@ -237,6 +237,7 @@ class SkillDiscoveryTests(unittest.TestCase):
                 "list_task_comments": "ampliflow_tasks",
                 "list_task_subtasks": "ampliflow_tasks",
                 "list_task_attachments": "ampliflow_tasks",
+                "get_authenticated_identity": "ampliflow_people",
             },
         )
         self.assertIn("at most 5 selected tasks", text)

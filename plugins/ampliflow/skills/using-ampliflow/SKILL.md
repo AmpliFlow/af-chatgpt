@@ -9,6 +9,10 @@ Use live AmpliFlow records to answer questions and make only changes the user ex
 
 For personal improvement reads such as "visa mina avvikelser", use `reviewing-improvements` for bounded credential-principal identity, live form resolution, and responsibility/creation/involvement filters. Do not replace missing server filters with a client-side backlog scan. For improvement creation or grading changes, load `references/processes-risks-controls-and-improvements.md` and follow its live grading guidance before the confirmed-write sequence.
 
+## Entity links
+
+Default to readable Markdown entity links in lists, summaries, and follow-ups when current frontend evidence, native UUIDs and required parent identities are present. Before reporting records, load `references/entity-links.md` for exact returned templates, origin checks, label escaping, and missing-evidence handling. Apply it to related entities too; never guess links for unsupported types. Link formatting does not change this skill's read/write policy.
+
 ## MCP normal availability
 
 - [ ] Use only the exact normal feature dispatchers supplied by this package's authenticated AmpliFlow connection and listed in the routing references below.
@@ -26,7 +30,7 @@ Read every reference whose condition matches the request. References supply doma
 | Projects, project work, collaboration, or time | `references/projects-work-and-time.md` |
 | Goals, measurements, KPIs, or progress | `references/goals-and-performance.md` |
 | Processes, risks, controls, or improvements | `references/processes-risks-controls-and-improvements.md` |
-| People, teams, roles, positions, competencies, or training | `references/people-and-training.md` |
+| People, teams, roles, positions, competencies, training plans (utbildningsplaner), course, training occasion, attendance, or course-certificate requests | `references/people-and-training.md` |
 | Suppliers, items, equipment, or purchase orders | `references/supply-and-assets.md` |
 | Customers, requirements, stakeholders, legislation, or environmental aspects | `references/context-and-obligations.md` |
 | Checklists, pages, custom lists, news, announcements, or year wheels | `references/assurance-content-and-planning.md` |
@@ -61,10 +65,11 @@ Catalog searches operation definitions, not live record titles or form names. Us
 8. Commit once. Plans expire after five minutes and are single-use. Never replay a used token. If a commit times out or its result is uncertain, read back the target before considering another plan. Never automatically retry an uncertain write or commit. Client cancellation is not proof that the remote write was cancelled; preserve any returned identity and report uncertainty until an authoritative read resolves it.
 9. Read back the target through a fresh authoritative query. For a create operation, use only the server-returned created ref from the described structured operation result. For project and task receipts, use `project_ref`, `project_id`, `task_ref`, and `task_id` only where the live output schema defines them; do not assume a fixed nesting or layout. Preserve each exact returned identity and its parent scope for follow-up calls. Never parse created refs or UUIDs from prose, infer them from titles, or substitute nearby refs. If the receipt lacks an authoritative identity required for the next call, report the outcome as unverified and stop the chain without guessing or retrying the create. Report which requested values were verified, which were not verified, and whether the outcome is partial. A successful commit response without read-back is not verified completion.
 
-Reviewed native read-back mapping (still requires live catalog and describe):
+Reviewed read mappings (still require live catalog and describe; identity is optional for links):
 
 | Operation | Dispatcher | Purpose |
 | --- | --- | --- |
+| `get_authenticated_identity` | `ampliflow_people` | Optional current frontend evidence for entity links; reuse an existing identity result. |
 | `show_improvement_gradings` | `ampliflow_improvements` | Verify persisted improvement impact and category scores. |
 
 For improvement creation or grading updates, step 9 must include the native `show_improvement_gradings` read through `ampliflow_improvements`, following `references/processes-risks-controls-and-improvements.md`. Generic detail cannot verify the persisted category map. Keep this read after the confirmed write; its non-atomic evidence neither proves approval nor permits another mutation.

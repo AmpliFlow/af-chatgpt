@@ -5,6 +5,10 @@ description: Reviews AmpliFlow improvements and their workflow evidence without 
 
 # Review improvements
 
+## Entity links
+
+Default to readable Markdown entity links in lists, summaries, and follow-ups when current frontend evidence, native UUIDs and required parent identities are present. Before reporting records, load `../using-ampliflow/references/entity-links.md` for exact returned templates, origin checks, label escaping, and missing-evidence handling. Apply it to related entities too; never guess links for unsupported types. Link formatting does not change this skill's read/write policy.
+
 ## MCP normal availability
 
 - [ ] Use only the exact normal feature dispatchers supplied by this package's authenticated AmpliFlow connection and listed below.
@@ -18,7 +22,7 @@ description: Reviews AmpliFlow improvements and their workflow evidence without 
 
 | Operation | Dispatcher | Purpose |
 | --- | --- | --- |
-| `get_authenticated_identity` | `ampliflow_people` | Resolve the effective credential principal, not an original human. |
+| `get_authenticated_identity` | `ampliflow_people` | Resolve the effective credential principal, not an original human; reuse its current frontend evidence for links. |
 | `list_impact_grading_options` | `ampliflow_projects` | Resolve active grading categories and score labels. |
 | `show_impact_grading` | `ampliflow_projects` | Read category and score definitions missing from options. |
 | `list_improvements` | `ampliflow_improvements` | Resolve improvement records and list metadata. |

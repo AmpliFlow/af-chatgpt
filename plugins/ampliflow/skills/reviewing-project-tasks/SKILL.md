@@ -5,6 +5,10 @@ description: Reviews incomplete AmpliFlow project tasks, assignees, and due date
 
 # Review project tasks
 
+## Entity links
+
+Default to readable Markdown entity links in lists, summaries, and follow-ups when current frontend evidence, native UUIDs and required parent identities are present. Before reporting records, load `../using-ampliflow/references/entity-links.md` for exact returned templates, origin checks, label escaping, and missing-evidence handling. Apply it to related entities too; never guess links for unsupported types. Link formatting does not change this skill's read/write policy.
+
 ## MCP normal availability
 
 - [ ] Use only the exact normal feature dispatchers supplied by this package's authenticated AmpliFlow connection and listed below.
@@ -18,6 +22,7 @@ description: Reviews incomplete AmpliFlow project tasks, assignees, and due date
 
 | Operation | Dispatcher | Purpose |
 | --- | --- | --- |
+| `get_authenticated_identity` | `ampliflow_people` | Optional current frontend evidence for entity links; reuse an existing identity result. |
 | `list_projects` | `ampliflow_projects` | Resolve the requested project. |
 | `list_tasks` | `ampliflow_tasks` | List the selected project's tasks. |
 | `show_task` | `ampliflow_tasks` | Read due date and focused task detail. |
