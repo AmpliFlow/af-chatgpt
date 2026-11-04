@@ -2,7 +2,7 @@
 
 > [!NOTE]
 > **MCP endpoint**
-> This package uses `https://mcp.ampliflow.cc/mcp-beta`. You can connect a compatible MCP client to this endpoint without installing the ChatGPT plugin, but results may vary because standalone clients do not receive the bundled skills in this repository.
+> Unpublished candidate `0.8.0` targets `https://mcp.ampliflow.com/mcp`. Normal-origin TLS and routing are under construction; this source change does not establish hosted readiness or client acceptance. Standalone MCP clients do not receive the bundled skills.
 
 Use AmpliFlow from ChatGPT Desktop in **Work** mode. The imported plugin connects to AmpliFlow's hosted MCP server and adds one general router for reads and explicit user-confirmed changes plus six read-only review skills for project tasks, project portfolios, goals, risks and controls, improvements, and checklists.
 
@@ -10,7 +10,11 @@ Use AmpliFlow from ChatGPT Desktop in **Work** mode. The imported plugin connect
 > **Desktop mode matters**
 > Select **Work** before starting the conversation. The GitHub-imported plugin does not expose its MCP tools in **Chat** mode. Chat may still show `@AmpliFlow`, but the cloud conversation cannot call the locally loaded tools.
 
+The published `0.7.0` beta artifact remains available for internal tests and rollback. It targets the separate `.cc` beta origin; do not rewrite that artifact or silently fall back to it. Moving to the normal origin requires fresh resource-bound OAuth; beta authorization cannot be reused or transformed.
+
 ## Install the desktop pilot
+
+These steps are for a separately authorized release after hosted readiness is verified, not instructions to treat this unpublished candidate as deployed.
 
 A workspace admin imports this repository:
 
@@ -37,18 +41,18 @@ See the package [setup guide](plugins/ampliflow/README.md), [acceptance checks](
 
 | Surface | Pilot status |
 | --- | --- |
-| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import verified for package `0.5.0`; package `0.7.0` adds bounded personal deviations, live grading guidance, and submission packaging; fresh acceptance remains pending |
+| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import verified for package `0.5.0`; candidate `0.8.0` changes the MCP resource; fresh normal-origin acceptance remains pending |
 | ChatGPT Desktop, **Chat** mode | Not supported by the GitHub-imported package; the cloud conversation does not receive its local MCP tools |
 | ChatGPT web and mobile | Requires OpenAI's **With MCP** submission and review |
 
-The package connects only to `https://mcp.ampliflow.cc/mcp-beta`. It does not add another MCP connection, use an alternate endpoint, depend on a workspace app ID, or install the AmpliFlow CLI.
+The package connects only to `https://mcp.ampliflow.com/mcp`. It does not add another MCP connection, use an alternate endpoint, depend on a workspace app ID, or install the AmpliFlow CLI.
 
 The general skill supports only explicit user-confirmed writes discovered through the live catalog. Its six focused review skills remain read-only. Improvement creation and grading changes require the native persisted-score read-back, not generic improvement detail. Identity reads preserve unknown tenant binding and distinguish the effective credential principal from original-executor and write-attribution evidence. These separate reads prove neither an atomic snapshot nor human approval. The server remains authoritative for availability, authorization, target preconditions, safety class, plan expiry, and read-back behavior.
 
 ## Troubleshooting
 
 - **`@AmpliFlow` is visible, but the answer says no tools are available:** start a new conversation in **Work**, not Chat.
-- **Authentication is requested:** complete OAuth for the exact beta resource, then restart Desktop and open a new Work conversation.
+- **Authentication is requested:** complete OAuth for the exact normal resource, then restart Desktop and open a new Work conversation.
 - **A required dispatcher or operation is missing:** report the unavailable workflow. Do not add another MCP server or fall back to another endpoint.
 - **An old AmpliFlow pilot source is also installed:** remove the obsolete source so only the current workspace installation owns the `ampliflow` MCP server name.
 

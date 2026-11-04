@@ -3,7 +3,7 @@
   "mcpServers": {
     "ampliflow": {
       "type": "streamable-http",
-      "url": "https://mcp.ampliflow.cc/mcp-beta"
+      "url": "https://mcp.ampliflow.com/mcp"
     }
   }
 }

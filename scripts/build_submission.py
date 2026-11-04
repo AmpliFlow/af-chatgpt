@@ -107,7 +107,7 @@ def submission_manifest(root, answers_path):
     else:
         valid_url(demo, "demo_recording_url")
         review["demo_recording_url"] = demo
-    publication = {"release_notes": "Add bounded personal deviation reads, credential-principal identity, live tenant grading guidance, and complete seven-skill submission packaging."}
+    publication = {"release_notes": "Target the normal AmpliFlow MCP resource; reconnect with fresh resource-bound OAuth. Preserve seven skills and existing operation and safety contracts. Offline candidate only; deployment and client acceptance remain pending."}
     countries = answers.get("countries")
     if countries in (None, [], ""):
         missing.append("countries")
@@ -138,7 +138,7 @@ def portal_fields(manifest, archive_hash, missing):
         "Upload ONLY ampliflow-plugin.zip at https://platform.openai.com/plugins",
         f"Package version: {manifest['version']}",
         f"ZIP SHA-256: {archive_hash}",
-        "MCP server URL: https://mcp.ampliflow.cc/mcp-beta",
+        "MCP server URL: https://mcp.ampliflow.com/mcp",
         "Authentication: OAuth, discovered from that exact MCP resource",
         "Missing package values: " + (", ".join(missing) if missing else "none"),
         "",

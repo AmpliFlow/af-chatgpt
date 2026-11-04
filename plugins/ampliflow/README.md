@@ -8,7 +8,7 @@ The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the 
 
 ## What the package contains
 
-Package `0.7.0` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`. It contains:
+Package `0.8.0` declares only `https://mcp.ampliflow.com/mcp` in `mcp.json`. It contains:
 
 - one remote MCP connection
 - one lightweight router that loads focused domain references only when needed and handles explicit confirmed changes
@@ -16,9 +16,13 @@ Package `0.7.0` declares only `https://mcp.ampliflow.cc/mcp-beta` in `mcp.json`.
 - the AmpliFlow icon and plugin metadata
 - no credentials, server executable, CLI installer, app ID, or custom UI
 
-OAuth is discovered from and handled for that exact MCP resource. Each user signs in with an AmpliFlow account and receives only the access allowed by that account.
+OAuth is discovered from and handled for that exact MCP resource. Each user signs in with an AmpliFlow account and receives only the access allowed by that account. The new normal origin requires fresh resource-bound OAuth; never reuse or transform beta authorization.
+
+Candidate `0.8.0` is unpublished. Normal-origin TLS and routing are under construction; source agreement is not deployment or client acceptance. The published `0.7.0` beta artifact remains usable for internal tests and rollback, without changing this candidate's connection or adding a fallback.
 
 ## Admin installation
+
+Use these steps only after a separately authorized release and verified hosted readiness.
 
 1. Open **Admin > Plugins > Add > Import marketplace**.
 2. Set **Source** to `https://github.com/AmpliFlow/af-chatgpt`.
@@ -70,11 +74,11 @@ Personal reads use `get_authenticated_identity` through `ampliflow_people` and p
 
 | Surface | Status |
 | --- | --- |
-| Desktop **Work** mode | Package `0.5.0` pilot path verified; package `0.7.0` acceptance pending |
+| Desktop **Work** mode | Package `0.5.0` pilot path verified; package `0.8.0` acceptance pending |
 | Desktop **Chat** mode | Unsupported for the imported package; no plugin MCP tools reach the cloud turn |
 | Web and mobile | Not delivered by this GitHub package; use the future **With MCP** review route |
 
-This distinction was verified on ChatGPT Desktop `26.901.20858`: the same installed package, OAuth credential, and 25-tool inventory worked in a local Work turn, while a Chat turn produced no local `thread/start`, `turn/start`, or MCP call.
+Earlier beta-client evidence, not normal-origin acceptance: this distinction was verified on ChatGPT Desktop `26.901.20858`: the same installed package, OAuth credential, and 25-tool inventory worked in a local Work turn, while a Chat turn produced no local `thread/start`, `turn/start`, or MCP call.
 
 ## Troubleshooting
 
@@ -84,7 +88,7 @@ Confirm that the conversation was created in **Work** mode. Switching to or retr
 
 ### Authentication does not complete
 
-Confirm the connection targets exactly `https://mcp.ampliflow.cc/mcp-beta`. Do not reuse credentials for another resource. Complete the prompted OAuth flow, restart Desktop, and retry in a new Work conversation.
+Confirm the connection targets exactly `https://mcp.ampliflow.com/mcp`. Do not reuse credentials for another resource. Complete the prompted OAuth flow, restart Desktop, and retry in a new Work conversation.
 
 ### The plugin shows no tools after an update
 

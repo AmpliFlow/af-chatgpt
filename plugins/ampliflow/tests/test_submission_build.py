@@ -65,7 +65,7 @@ class SubmissionBuildTests(unittest.TestCase):
                     source = self.root / ("LICENSE" if name == "LICENSE" else f"plugins/ampliflow/{name}")
                     self.assertEqual(archive.read(name), source.read_bytes())
             plugin = json.loads(archive.read("plugin.json"))
-            self.assertEqual(plugin["version"], "0.7.0")
+            self.assertEqual(plugin["version"], "0.8.0")
             extension = plugin["extensions"]["com.openai"]
             self.assertEqual(extension["interface"]["shortDescription"], "Manage work in AmpliFlow")
             self.assertEqual(extension["interface"]["supportURL"], "https://www.ampliflow.com/support/")
@@ -75,14 +75,14 @@ class SubmissionBuildTests(unittest.TestCase):
             self.assertTrue(extension["publication"]["release_notes"])
         fields = first["PORTAL-FIELDS.txt"].decode()
         self.assertIn("Manage work in AmpliFlow", fields)
-        self.assertIn("https://mcp.ampliflow.cc/mcp-beta", fields)
+        self.assertIn("https://mcp.ampliflow.com/mcp", fields)
         self.assertIn("NOT READY FOR SUBMISSION", fields)
         self.assertIn("demo_recording_url, countries", fields)
         self.assertIn("Reviewer credentials: enter only in secure Review details", fields)
         report = json.loads(first["build-report.json"])
         source_version = json.loads((self.root / "plugins/ampliflow/plugin.json").read_text())["version"]
         self.assertEqual(report["source_package_version"], source_version)
-        self.assertEqual(report["package_version"], "0.7.0")
+        self.assertEqual(report["package_version"], "0.8.0")
         self.assertEqual(report["validation"], "local validation only; not portal or runtime acceptance")
         self.assertFalse(report["ready_for_submission"])
         self.assertEqual(report["missing_fields"], ["demo_recording_url", "countries"])
@@ -90,6 +90,22 @@ class SubmissionBuildTests(unittest.TestCase):
             digest = hashlib.sha256(first[name]).hexdigest()
             self.assertIn(f"{digest}  {name}\n", first["SHA256SUMS"].decode())
         self.assertEqual(report["archive"]["sha256"], hashlib.sha256(first["ampliflow-plugin.zip"]).hexdigest())
+
+    def test_archive_and_portal_use_only_normal_resource(self):
+        self.build_bundle()
+        with zipfile.ZipFile(self.root / "dist/ampliflow-plugin.zip") as archive:
+            mcp = json.loads(archive.read("mcp.json"))
+            self.assertEqual(mcp["mcpServers"], {
+                "ampliflow": {"type": "streamable-http", "url": "https://mcp.ampliflow.com/mcp"},
+            })
+            for name in archive.namelist():
+                with self.subTest(member=name):
+                    data = archive.read(name)
+                    self.assertNotIn(b"mcp.ampliflow.cc", data)
+                    self.assertNotIn(b"/mcp-beta", data)
+        fields = (self.root / "dist/PORTAL-FIELDS.txt").read_text()
+        self.assertIn("MCP server URL: https://mcp.ampliflow.com/mcp\n", fields)
+        self.assertNotIn("mcp.ampliflow.cc", fields)
 
     def test_bundle_uses_source_release_version_without_an_independent_override(self):
         manifest = self.root / "plugins/ampliflow/plugin.json"

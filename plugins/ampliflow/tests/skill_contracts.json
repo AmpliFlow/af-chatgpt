@@ -1,5 +1,5 @@
 {
-  "endpoint": "https://mcp.ampliflow.cc/mcp-beta",
+  "endpoint": "https://mcp.ampliflow.com/mcp",
   "skills": {
     "using-ampliflow": {
       "operation_policy": "confirmed_writes",

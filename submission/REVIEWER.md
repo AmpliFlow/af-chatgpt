@@ -45,7 +45,7 @@ Login URL: https://demo-en.ampliflow.com
 Workspace/tenant: demo-en.ampliflow.com
 Reviewer username: [dedicated account once provisioned and verified]
 Reviewer password: [secure credential field only]
-Sign-in steps: Sign in with the dedicated credentials, complete the exact beta MCP OAuth flow, and run the imported cases.
+Sign-in steps: Sign in with the dedicated credentials, complete the exact normal MCP OAuth flow, and run the imported cases.
 Access/reset owner and expiry: [verified account-lifecycle details]
 Test evidence and walkthrough: [agent supplies after actual execution]
 ```

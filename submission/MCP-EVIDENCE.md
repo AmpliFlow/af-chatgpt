@@ -1,6 +1,10 @@
 # MCP acceptance status
 
-Candidate `0.7.0` has offline package checks only. This file is a public status summary, not private investigation evidence or proof of deployment.
+Candidate `0.8.0` has offline package checks only. This file is a public status summary, not private investigation evidence or proof of deployment.
+
+Normal-origin TLS and routing are under construction. The new origin needs fresh resource-bound OAuth; beta authorization cannot be reused or transformed. The published `0.7.0` beta artifact remains usable for internal tests and rollback. This candidate has no beta fallback.
+
+The backend owner owns the compact stable MCP cutover, CI, and IaC. This repository changes only the client package, not the hosted service.
 
 ## Earlier preparation
 
@@ -21,7 +25,7 @@ Package instructions require live catalog and describe discovery before use. Mis
 
 ## Checks still needed with separate authorization
 
-1. Complete fresh OAuth for exactly `https://mcp.ampliflow.cc/mcp-beta`; verify reconnect, expiry, denied access, and tenant isolation through the intended client.
+1. Complete fresh OAuth for exactly `https://mcp.ampliflow.com/mcp`; verify reconnect, expiry, denied access, and tenant isolation through the intended client.
 2. Capture the authenticated tool inventory privately and run the offline inventory checker. Verify operation mappings, filters, native ownership outputs, and grading definitions through live catalog/describe/query.
 3. Run the bounded personal-deviation and grading cases in [TESTING.md](../plugins/ampliflow/TESTING.md), the six focused read workflows, and the router's confirmation and recovery cases. A service principal must not be presented as a human.
 4. Verify the exact candidate in a fresh Desktop Work conversation. Desktop import/sync, OAuth, restart, and human UI steps are not performed by the offline build.

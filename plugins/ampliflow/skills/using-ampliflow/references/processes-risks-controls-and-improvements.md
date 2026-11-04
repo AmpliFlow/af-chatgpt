@@ -38,7 +38,7 @@ Resolve the improvement form through live forms and definitions, not keywords in
 
 ## Persisted improvement grading read-back
 
-After a confirmed improvement creation or grading update, the general router must discover, describe, then query the read-only `show_improvement_gradings` through `ampliflow_improvements`. Use `improvement_ref` from the exact resolved record or authoritative creation receipt. Its beta input accepts a number, UUID, or same-tenant URL; use only the current described schema, never a guessed or cross-tenant identity.
+After a confirmed improvement creation or grading update, the general router must discover, describe, then query the read-only `show_improvement_gradings` through `ampliflow_improvements`. Use `improvement_ref` from the exact resolved record or authoritative creation receipt. Its normal input accepts a number, UUID, or same-tenant URL; use only the current described schema, never a guessed or cross-tenant identity.
 
 Read `result.improvement_gradings`: `ref`, `number`, `id`, `impact`, `impact_list`, and `consistency`. Match the returned identity to the approved target. Compare each requested persisted `impact` value and every requested category UUID/score against the native `impact_list` map, including requested removals and unchanged fields when relevant to the proposal. Report exact matches, mismatch fields, and unavailable fields separately. Scores are 0..5; 0 means selected but ungraded, not score 1, not an absent category, and not evidence of no impact. Generic improvement detail omits this map and is not a grading read-back substitute.
 

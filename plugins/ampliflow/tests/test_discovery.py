@@ -2,6 +2,7 @@
 
 import copy
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -142,14 +143,68 @@ class InventoryTests(unittest.TestCase):
 
 
 class SkillDiscoveryTests(unittest.TestCase):
-    def test_each_skill_has_beta_dependency_and_operation_workflow(self):
+    def test_normal_resource_is_declared_consistently(self):
+        endpoint = "https://mcp.ampliflow.com/mcp"
+        mcp = json.loads((skills.ROOT / "mcp.json").read_text())
+        self.assertEqual(mcp["mcpServers"], {
+            "ampliflow": {"type": "streamable-http", "url": endpoint},
+        })
+        self.assertEqual(CONTRACT["endpoint"], endpoint)
+        for name in CONTRACT["skills"]:
+            dependency = skills.ROOT / "skills" / name / "agents/openai.yaml"
+            self.assertIn(f'url: "{endpoint}"', dependency.read_text())
+
+    def test_dependencies_reject_beta_and_other_resource_variants(self):
+        endpoint = "https://mcp.ampliflow.com/mcp"
+        source = skills.DEPENDENCY_YAML
+        current = CONTRACT["endpoint"]
+        with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as directory:
+            path = Path(directory) / "openai.yaml"
+            path.write_text(source.replace(current, endpoint))
+            self.assertEqual(skills.validate_dependency(path), [])
+            for url in (
+                "https://mcp.ampliflow.cc/mcp-beta",
+                "https://mcp.ampliflow.com/mcp-beta",
+                endpoint + "/",
+                endpoint + "?resource=beta",
+                "https://user:secret@mcp.ampliflow.com/mcp",
+            ):
+                with self.subTest(url=url):
+                    path.write_text(source.replace(current, url))
+                    self.assertTrue(skills.validate_dependency(path))
+
+    def test_package_rejects_beta_resources_and_additional_connections(self):
+        with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as directory:
+            root = Path(directory)
+            shutil.copytree(skills.ROOT, root / "plugins/ampliflow", ignore=shutil.ignore_patterns("tests"))
+            shutil.copytree(skills.ROOT.parents[1] / ".agents", root / ".agents")
+            package = root / "plugins/ampliflow"
+            path = package / "mcp.json"
+            source = json.loads(path.read_text())
+            for url in (
+                "https://mcp.ampliflow.cc/mcp-beta",
+                "https://mcp.ampliflow.com/mcp-beta",
+                "https://mcp.ampliflow.com/mcp/",
+            ):
+                with self.subTest(url=url):
+                    data = copy.deepcopy(source)
+                    data["mcpServers"]["ampliflow"]["url"] = url
+                    path.write_text(json.dumps(data))
+                    self.assertTrue(skills.validate_package(package))
+            source["mcpServers"]["extra"] = {
+                "type": "streamable-http", "url": "https://mcp.ampliflow.com/mcp",
+            }
+            path.write_text(json.dumps(source))
+            self.assertTrue(skills.validate_package(package))
+
+    def test_each_skill_has_normal_dependency_and_operation_workflow(self):
         self.assertEqual(skills.validate(skills.ROOT), [])
         for name, spec in CONTRACT["skills"].items():
             root = skills.ROOT / "skills" / name
             self.assertEqual(skills.validate_dependency(root / "agents" / "openai.yaml"), [])
             text = (root / "SKILL.md").read_text()
-            self.assertIn("## MCP beta availability", text)
-            self.assertIn("## Beta operation workflow", text)
+            self.assertIn("## MCP normal availability", text)
+            self.assertIn("## Normal operation workflow", text)
             self.assertIn('"mode":"catalog"', text)
             self.assertIn('"mode":"describe"', text)
             self.assertIn('"mode":"query"', text)
@@ -230,7 +285,7 @@ class SkillDiscoveryTests(unittest.TestCase):
                 errors = skills.validate_skill(path, name, spec, supported)
                 self.assertTrue(any("write" in error or "commit" in error for error in errors), errors)
 
-    def test_removed_beta_guidance_is_rejected(self):
+    def test_removed_operation_guidance_is_rejected(self):
         name = "reviewing-project-tasks"
         source = (skills.ROOT / "skills" / name / "SKILL.md").read_text()
         spec = CONTRACT["skills"][name]
@@ -258,12 +313,12 @@ class SkillDiscoveryTests(unittest.TestCase):
             path = Path(directory) / "openai.yaml"
             path.write_text(source.read_text())
             self.assertEqual(skills.validate_dependency(path), [])
-            path.write_text(source.read_text().replace("https://mcp.ampliflow.cc/mcp-beta", "https://wrong.example/unsupported"))
+            path.write_text(source.read_text().replace("https://mcp.ampliflow.com/mcp", "https://wrong.example/unsupported"))
             self.assertTrue(skills.validate_dependency(path))
 
     def test_package_version_marks_coordinated_feature_candidate(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.7.0")
+        self.assertEqual(plugin["version"], "0.8.0")
 
 
 if __name__ == "__main__":

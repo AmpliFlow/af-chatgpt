@@ -1,10 +1,10 @@
 # AmpliFlow submission handoff
 
-**Candidate `0.7.0` is a draft, not ready for public submission.** Source and generated ZIP use the same version. Local packaging does not prove live MCP, ChatGPT, policy, or portal acceptance. A GitHub release does not authorize a public-store submission.
+**Candidate `0.8.0` is a draft, not ready for public submission.** Source and generated ZIP use the same version. Local packaging does not prove live MCP, ChatGPT, policy, or portal acceptance. A GitHub release does not authorize a public-store submission.
 
 ## Prepared package
 
-- One complete plugin ZIP: all seven skills and references, exact beta MCP connection, icon, listing, release notes, and five positive plus three negative reviewer cases.
+- One complete plugin ZIP: all seven skills and references, exact normal MCP connection, icon, listing, release notes, and five positive plus three negative reviewer cases.
 - `PORTAL-FIELDS.txt`: generated portal values, missing fields, and ZIP checksum.
 - [Reviewer setup and cases](submission/REVIEWER.md) and [machine-readable cases](submission/review.json).
 - [Proposed license and policy changes](submission/POLICY-APPROVAL.md), still awaiting owner adoption.
@@ -36,6 +36,6 @@ python3 -B scripts/build_submission.py --answers /absolute/private/path/answers.
 (cd dist && sha256sum -c SHA256SUMS)
 ```
 
-Inputs are [answers.example.json](submission/answers.example.json) and [review.json](submission/review.json). Outputs are `dist/ampliflow-plugin.zip`, `PORTAL-FIELDS.txt`, `SHA256SUMS`, and `build-report.json`. The build preserves source version `0.7.0`, adapts only public listing/review/publication metadata, and copies skills and references byte-for-byte. Rebuild after approved answers or content changes; compare exact bytes before handoff. No upload or attachment is performed by these commands.
+Inputs are [answers.example.json](submission/answers.example.json) and [review.json](submission/review.json). Outputs are `dist/ampliflow-plugin.zip`, `PORTAL-FIELDS.txt`, `SHA256SUMS`, and `build-report.json`. The build preserves source version `0.8.0`, adapts only public listing/review/publication metadata, and copies skills and references byte-for-byte. Rebuild after approved answers or content changes; compare exact bytes before handoff. No upload or attachment is performed by these commands.
 
 Keep all seven skills. Do not restore the obsolete separate JSON-import workflow, assumed five-skill cap, legacy endpoint, or invented approval committees. See [release mechanics](RELEASE.md) for the separate GitHub/Desktop route.

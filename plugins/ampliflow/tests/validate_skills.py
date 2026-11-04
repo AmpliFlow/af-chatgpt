@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = Path(__file__).with_name("skill_contracts.json")
 IMPROVEMENT_GUIDANCE_PATH = ROOT / "skills/reviewing-improvements/SKILL.md"
-BETA_ENDPOINT = "https://mcp.ampliflow.cc/mcp-beta"
+NORMAL_ENDPOINT = "https://mcp.ampliflow.com/mcp"
 MAPPING_PATTERN = re.compile(
     r"^\|\s*`([a-z][a-z0-9_]+)`\s*\|\s*`(ampliflow_[a-z0-9_]+)`\s*\|",
     re.MULTILINE,
@@ -31,7 +31,7 @@ DEPENDENCY_YAML = f'''dependencies:
       value: "ampliflow"
       description: "Read AmpliFlow management-system records"
       transport: "streamable_http"
-      url: "{BETA_ENDPOINT}"
+      url: "{NORMAL_ENDPOINT}"
 '''
 FORBIDDEN = {
     ".af/config": "local runtime configuration",
@@ -52,14 +52,14 @@ REQUIRED_SAFETY = {
     "exact refs": re.compile(r"(?:exact|returned).{0,45}ref|ref.{0,45}(?:exact|returned)", re.IGNORECASE | re.DOTALL),
     "hostile record content": re.compile(r"(?:embedded instructions|untrusted data|returned content as data|record content is not)", re.IGNORECASE),
     "partial reads": re.compile(r"partial|incomplete read|truncat", re.IGNORECASE),
-    "beta-only dispatcher scope": re.compile(r"use only the exact beta feature dispatchers", re.IGNORECASE),
+    "normal-only dispatcher scope": re.compile(r"use only the exact normal feature dispatchers", re.IGNORECASE),
     "no alternate connection": re.compile(r"do not search for another server.{0,120}attach another connection.{0,120}runtime namespace", re.IGNORECASE | re.DOTALL),
-    "advertised dispatcher schema": re.compile(r"input schema advertised by the selected beta dispatcher", re.IGNORECASE),
+    "advertised dispatcher schema": re.compile(r"input schema advertised by the selected normal dispatcher", re.IGNORECASE),
     "catalog mode": re.compile(r'"mode":"catalog"'),
     "describe mode": re.compile(r'"mode":"describe"'),
     "query mode": re.compile(r'"mode":"query"'),
     "read safety class": re.compile(r'safety:\s*"read"'),
-    "beta response envelope": re.compile(r"(?:response envelope|structured response).{0,80}`?ok`?", re.IGNORECASE | re.DOTALL),
+    "normal response envelope": re.compile(r"(?:response envelope|structured response).{0,80}`?ok`?", re.IGNORECASE | re.DOTALL),
     "authorization error": re.compile(r"`unauthorized_operation`"),
     "unavailable-operation errors": re.compile(r"`unknown_operation`.{0,100}`unavailable_feature`.{0,100}`readonly_operation`", re.DOTALL),
     "schema error": re.compile(r"`invalid_schema`"),
@@ -256,7 +256,7 @@ def validate_skill(path: Path, expected_name: str, spec: dict, supported: dict[s
 
 def validate_dependency(path: Path) -> list[str]:
     if not path.is_file() or path.read_text(encoding="utf-8").strip() != DEPENDENCY_YAML.strip():
-        return [f"{path}: expected canonical credential-free AmpliFlow beta MCP dependency"]
+        return [f"{path}: expected canonical credential-free AmpliFlow normal MCP dependency"]
     return []
 
 
@@ -290,10 +290,10 @@ def validate_package(root: Path) -> list[str]:
     servers = mcp.get("mcpServers")
     expected_server = {
         "type": "streamable-http",
-        "url": BETA_ENDPOINT,
+        "url": NORMAL_ENDPOINT,
     }
     if servers != {"ampliflow": expected_server}:
-        errors.append(f"{mcp_path}: expected only the credential-free AmpliFlow beta Streamable HTTP server")
+        errors.append(f"{mcp_path}: expected only the credential-free AmpliFlow normal Streamable HTTP server")
 
     marketplace_plugins = marketplace.get("plugins", [])
     source = next((item.get("source") for item in marketplace_plugins if item.get("name") == plugin.get("name")), None)
@@ -389,13 +389,13 @@ def validate(root: Path) -> list[str]:
 
     if declared_dispatchers != set(contract.get("supported_dispatchers", [])):
         errors.append("skill contract: supported dispatchers must equal the declared dispatcher union")
-    if contract.get("endpoint") != BETA_ENDPOINT:
-        errors.append("skill contract: endpoint must be the canonical beta MCP resource")
+    if contract.get("endpoint") != NORMAL_ENDPOINT:
+        errors.append("skill contract: endpoint must be the canonical normal MCP resource")
     if contract.get("commit_tools") != {
         "normal": "commit_ampliflow_change",
         "destructive": "commit_destructive_ampliflow_change",
     }:
-        errors.append("skill contract: expected the normal and destructive beta commit tools")
+        errors.append("skill contract: expected the normal and destructive commit tools")
     policies = {name: spec.get("operation_policy") for name, spec in contract["skills"].items()}
     if policies.get("using-ampliflow") != "confirmed_writes" or any(
         policy != "read_only" for name, policy in policies.items() if name != "using-ampliflow"
@@ -449,7 +449,7 @@ def main() -> int:
     if errors:
         print("\n".join(f"ERROR: {error}" for error in errors))
         return 1
-    print("Package and beta skill contract checks passed.")
+    print("Package and normal skill contract checks passed.")
     return 0
 
 

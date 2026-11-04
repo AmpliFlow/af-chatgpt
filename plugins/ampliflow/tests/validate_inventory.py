@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a captured beta tools/list cursor chain against local skill dispatchers."""
+"""Check a captured normal tools/list cursor chain against local skill dispatchers."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 from validate_skills import CONTRACT_PATH, supported_operation_mappings
 
-BETA_TOOL_LIMIT = 30
+TOOL_LIMIT = 30
 COMMIT_TOOLS = {"commit_ampliflow_change", "commit_destructive_ampliflow_change"}
 
 
@@ -57,20 +57,20 @@ def check_inventory(capture: object, contract: dict) -> tuple[list[str], dict]:
 
     if expected_cursor is not None:
         errors.append("incomplete catalog: nextCursor requires another page")
-    if len(names) > BETA_TOOL_LIMIT:
-        errors.append(f"beta catalog exceeds the {BETA_TOOL_LIMIT}-tool limit: {len(names)} tools")
+    if len(names) > TOOL_LIMIT:
+        errors.append(f"normal catalog exceeds the {TOOL_LIMIT}-tool limit: {len(names)} tools")
 
     operation_ids = set(supported_operation_mappings(contract))
     exposed_operations = sorted(names & operation_ids)
     if exposed_operations:
-        errors.append(f"beta catalog exposes operation IDs as top-level tools: {', '.join(exposed_operations)}")
+        errors.append(f"normal catalog exposes operation IDs as top-level tools: {', '.join(exposed_operations)}")
     unexpected = sorted(name for name in names if not name.startswith("ampliflow_") and name not in COMMIT_TOOLS)
     if unexpected:
-        errors.append(f"beta catalog contains unexpected top-level tools: {', '.join(unexpected)}")
+        errors.append(f"normal catalog contains unexpected top-level tools: {', '.join(unexpected)}")
     required_commit_tools = set(contract.get("commit_tools", {}).values())
     missing_commit_tools = sorted(required_commit_tools - names)
     if missing_commit_tools:
-        errors.append(f"beta catalog missing commit tools: {', '.join(missing_commit_tools)}")
+        errors.append(f"normal catalog missing commit tools: {', '.join(missing_commit_tools)}")
 
     for name, spec in contract["skills"].items():
         required_operations = spec.get("required_operations", {})
@@ -92,7 +92,7 @@ def check_inventory(capture: object, contract: dict) -> tuple[list[str], dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("capture", type=Path, help="beta tools/list pages with request params and response result")
+    parser.add_argument("capture", type=Path, help="normal tools/list pages with request params and response result")
     args = parser.parse_args()
     try:
         capture = json.loads(args.capture.read_text(encoding="utf-8"))
@@ -109,7 +109,7 @@ def main() -> int:
         print(f"ERROR: {error}")
     if errors:
         return 1
-    print("Captured beta catalog covers the skills' top-level dispatchers and commit tools. Optional gaps are listed above.")
+    print("Captured normal catalog covers the skills' top-level dispatchers and commit tools. Optional gaps are listed above.")
     print("This does not prove operation catalog coverage, schemas, callability, authorization, or confirmed-write behavior.")
     return 0
 

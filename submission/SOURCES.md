@@ -13,7 +13,7 @@ The current submission is a complete plugin ZIP, not the older separate portal-J
 
 ## Removed assumptions
 
-- The old tasks named the legacy `/mcp` URL. This package continues to use only `https://mcp.ampliflow.cc/mcp-beta`.
+- The owner confirmed `https://mcp.ampliflow.com/mcp` as the normal resource for candidate `0.8.0`; the `.cc` origin is beta. The published `0.7.0` beta artifact remains usable for internal tests and rollback. This source decision does not prove normal-origin TLS, routing, OAuth, deployment, or client acceptance.
 - A separate `chatgpt-app-submission.json` import is unnecessary for the documented ZIP route. Its [published schema](https://developers.openai.com/plugins/schemas/chatgpt-app-submission.v1.json) still exists, but uses different fields and does not establish current portal import support. Do not generate an empty tools object just to pass that schema.
 - No current source reviewed establishes mandatory internal committees, separate departmental signatures, a customer pilot, global-versus-EU project residency, or a universal five-skill cap. They are not added as submission gates here. Actual account eligibility and portal findings still control the real submission.
 - Task completion labels and local contract tests are not runtime acceptance evidence. The agent must execute the reviewer cases with the intended account and client before reporting a passing candidate; the submitter is not asked to perform the technical test run.
