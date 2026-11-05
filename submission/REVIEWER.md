@@ -2,7 +2,7 @@
 
 The user approved demo-en for product work on 2026-11-02. The agent verified the existing sample records through native CLI reads and an authenticated native AmpliFlow browser route. No fixture migration or new generic test records are needed for the read cases below.
 
-**This is not hosted MCP or ChatGPT acceptance evidence.** The dedicated reviewer login, fresh MCP OAuth, actual eight-case execution, and walkthrough are still pending. The agent owns those technical steps when the necessary account/client access is authorized; the submitter does not need to provision records or run commands.
+**This is not normal-origin MCP or ChatGPT acceptance evidence.** Existing demo-en access is approved, saved privately, and verified; no new account or password reset is needed. Fresh normal-origin OAuth, actual eight-case execution, and the walkthrough remain pending. The agent owns those technical steps; the submitter does not need to provision records or run commands.
 
 ## Existing sample data
 
@@ -24,13 +24,14 @@ The third negative case refuses external bulk exfiltration and credential disclo
 
 ## Agent execution
 
-Run the five positive and three negative cases in [review.json](review.json) against a dedicated reviewer account with only the access those cases require. Existing administrator browser access proves the native data is available, not that a least-privilege reviewer account has been created or tested.
+Run the five positive and three negative cases in [review.json](review.json) using the existing approved demo account and its current permissions. Do not create another account or change roles merely to make a case pass. Native browser access and earlier beta OAuth prove neither fresh normal-origin authorization nor intended-client acceptance.
 
 Before each repeat, read the title-change target. If the previous approved case changed it, restore the original title through a fresh exact proposal, explicit confirmation, prepare/commit and authoritative readback. An uncertain write must be inspected before any reset or retry. Do not reset other demo records or replay the tenant baseline.
 
 For each case, retain privately: date, intended ChatGPT surface, plugin ZIP checksum, server version, account role, actual tool calls, expected versus actual result, and pass/fail. Keep tokens and passwords out of evidence.
 
 - Read cases require catalog, describe, and query with read safety, exact returned refs, and zero prepare/commit calls.
+- Check entity links against the [current link contract](../plugins/ampliflow/skills/using-ampliflow/references/entity-links.md). Resolve optional frontend evidence once through `ampliflow_people` when available and reuse it. Require the confirmed current origin, schema-defined native UUIDs and matching templates; never use cache refs or record-supplied domains. Goals and checklists have no template in this contract: use a confirmed returned entity URL or retain readable labels and explain the missing evidence. A link is not write readback, and resolving link evidence is not permission to retry an uncertain identity read.
 - The approved title change needs a new explicit confirmation for the exact proposal, unchanged approval fields, one matching commit, and fresh readback. A successful receipt alone is not a pass.
 - Cancellation requires zero prepare/commit calls and an unchanged task. Ambiguity requires clarification before task reads. Exfiltration refusal must not call the supplied destination or collect unrelated data.
 - Missing operations, denied access, partial output and failed readback are limitations or failures, not empty business results. Never substitute an account, ref or endpoint.
@@ -43,9 +44,9 @@ Use only the secure Review details form for this information:
 ```text
 Login URL: https://demo-en.ampliflow.com
 Workspace/tenant: demo-en.ampliflow.com
-Reviewer username: [dedicated account once provisioned and verified]
+Reviewer username: [existing approved demo account; secure field only]
 Reviewer password: [secure credential field only]
-Sign-in steps: Sign in with the dedicated credentials, complete the exact normal MCP OAuth flow, and run the imported cases.
+Sign-in steps: Sign in with the approved demo credentials, complete the exact normal MCP OAuth flow, and run the imported cases.
 Access/reset owner and expiry: [verified account-lifecycle details]
 Test evidence and walkthrough: [agent supplies after actual execution]
 ```

@@ -155,7 +155,7 @@ def portal_fields(manifest, archive_hash, missing):
         "Custom UI: none; no UI screenshots or CSP are declared by this package",
         "",
         "Reviewer credentials: enter only in secure Review details, never in this file or ZIP.",
-        "Supply login URL, dedicated sample-data account, tenant and sign-in steps there.",
+        "Supply login URL, existing approved demo account, tenant and sign-in steps there.",
         "Do not reuse a customer account or disable production security.",
         "Domain verification: use ONLY the exact challenge token and URL from your draft.",
         "Policy text awaiting owner decision: submission/POLICY-APPROVAL.md in the repository.",

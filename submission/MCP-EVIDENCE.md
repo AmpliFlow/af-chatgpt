@@ -29,6 +29,6 @@ Package instructions require live catalog and describe discovery before use. Mis
 2. Capture the authenticated tool inventory privately and run the offline inventory checker. Verify operation mappings, filters, native ownership outputs, and grading definitions through live catalog/describe/query.
 3. Run the bounded personal-deviation and grading cases in [TESTING.md](../plugins/ampliflow/TESTING.md), the six focused read workflows, and the router's confirmation and recovery cases. A service principal must not be presented as a human.
 4. Verify the exact candidate in a fresh Desktop Work conversation. Desktop import/sync, OAuth, restart, and human UI steps are not performed by the offline build.
-5. Before any public-store submission, provision approved reviewer access, run [review.json](review.json), record an approved walkthrough, resolve owner policy/country decisions, and complete authorized portal checks.
+5. Before any public-store submission, verify the existing approved demo access through fresh normal-origin OAuth, run [review.json](review.json), record an approved walkthrough, resolve owner policy/country decisions, and complete authorized portal checks. Reuse the saved access; no new account or password reset is needed.
 
 No production write, account change, external store action, paid model run, or Desktop restart is authorized by this preparation. Server release, Desktop acceptance, submission, approval, and publication remain separate outcomes.

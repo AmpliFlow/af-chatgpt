@@ -20,6 +20,6 @@ The current submission is a complete plugin ZIP, not the older separate portal-J
 
 ## Evidence limits
 
-Earlier preparation checked public health, protected-resource metadata, an unauthenticated challenge, and approved synthetic product fixtures. Those historical checks do not establish candidate acceptance. No fresh authenticated MCP session, ChatGPT test, portal access, dedicated reviewer account, or domain verification is claimed for this candidate. Local contract tests validate package instructions and build behavior, not model behavior or the deployed server's full security contract. See [MCP-EVIDENCE.md](MCP-EVIDENCE.md) for the precise limits.
+Earlier preparation checked public health, protected-resource metadata, an unauthenticated challenge, and approved synthetic product fixtures. Those historical checks do not establish candidate acceptance. Existing approved demo access is saved privately; a new reviewer account is not required. No fresh normal-origin authenticated MCP session, ChatGPT test, portal access, or domain verification is claimed for this candidate. Local contract tests validate package instructions and build behavior, not model behavior or the deployed server's full security contract. See [MCP-EVIDENCE.md](MCP-EVIDENCE.md) for the precise limits.
 
 Existing license restrictions and live terms' automation prohibitions are concrete unresolved rights questions, described in [SUBMIT.md](../SUBMIT.md). No policy or license was changed or approved by this preparation.

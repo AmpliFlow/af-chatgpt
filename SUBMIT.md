@@ -14,7 +14,7 @@ The draft lacks a walkthrough URL and country choice. Support, privacy, terms, w
 
 ## Remaining access and decisions
 
-1. Provide an approved dedicated reviewer credential/provisioning path and the intended ChatGPT test surface. Native browser access is not hosted MCP OAuth. The agent must verify fresh resource-bound OAuth and execute the cases; do not put credentials in chat or attachments.
+1. Reuse the existing approved demo access saved privately; no new account or password reset is needed. Confirm the intended ChatGPT test surface and bounded test turns. The agent must verify fresh resource-bound OAuth for the normal endpoint and execute the cases; native browser access is not hosted MCP OAuth. Keep credentials out of chat and attachments.
 2. Approve the walkthrough concept and, separately, its destination/visibility before recording or uploading. Use only approved synthetic data and avoid restricted standards text.
 3. Coordinate the backend identity, ownership-filter, and live-grading delivery described in [MCP-EVIDENCE.md](submission/MCP-EVIDENCE.md). Confirm deployed contracts before claiming the package works; do not infer a production deployment authorization from this kit.
 4. Choose countries, adopt or revise the proposed rights/policy text, and provide authorized publisher/portal access for scans, domain verification, and attestations. No country scope, legal approval, account access, or store action is inferred.
