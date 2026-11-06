@@ -1,6 +1,6 @@
 # AmpliFlow submission handoff
 
-**Candidate `0.8.0` is a draft, not ready for public submission.** Source and generated ZIP use the same version. Local packaging does not prove live MCP, ChatGPT, policy, or portal acceptance. A GitHub release does not authorize a public-store submission.
+**Plugin `0.8.0` is published on GitHub, but not ready for public submission.** The normal MCP service is deployed and qualified; the remaining gates are supported-client acceptance, approved media, owner decisions and portal checks. A GitHub release does not authorize a public-store submission.
 
 ## Prepared package
 
@@ -16,7 +16,7 @@ The draft lacks a walkthrough URL and country choice. Support, privacy, terms, w
 
 1. Reuse the existing approved demo access saved privately; no new account or password reset is needed. Confirm the intended ChatGPT test surface and bounded test turns. The agent must verify fresh resource-bound OAuth for the normal endpoint and execute the cases; native browser access is not hosted MCP OAuth. Keep credentials out of chat and attachments.
 2. Approve the walkthrough concept and, separately, its destination/visibility before recording or uploading. Use only approved synthetic data and avoid restricted standards text.
-3. Coordinate the backend identity, ownership-filter, and live-grading delivery described in [MCP-EVIDENCE.md](submission/MCP-EVIDENCE.md). Confirm deployed contracts before claiming the package works; do not infer a production deployment authorization from this kit.
+3. Verify the intended client's normal-resource binding and the live operation contracts described in [MCP-EVIDENCE.md](submission/MCP-EVIDENCE.md). A client screenshot shows version `0.8.0` with the old beta URL, while the published ZIP declares the normal URL. Preserve that working connection until the owner selects and authorizes its replacement or a separate production entry. No new infrastructure task or duplicate release is needed.
 4. Choose countries, adopt or revise the proposed rights/policy text, and provide authorized publisher/portal access for scans, domain verification, and attestations. No country scope, legal approval, account access, or store action is inferred.
 
 ## Owner portal steps after verified preparation
