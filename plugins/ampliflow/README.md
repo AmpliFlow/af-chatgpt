@@ -8,7 +8,7 @@ The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the 
 
 ## What the package contains
 
-Production package `0.9.0` uses plugin/MCP identity `ampliflow-production` and declares only `https://mcp.ampliflow.com/mcp` in `mcp.json`. The marketplace also contains **AmpliFlow (Beta Channel)** in a separate generated source root, retaining legacy identity `ampliflow` and `.cc/mcp-beta`. Each package contains:
+Production package `0.10.0` uses plugin/MCP identity `ampliflow` and declares only `https://mcp.ampliflow.com/mcp` in `mcp.json`. The marketplace also contains **AmpliFlow (Beta Channel)** in a separate generated source root, using identity `ampliflow-beta` and `.cc/mcp-beta`. Each package contains:
 
 - one remote MCP connection
 - one lightweight router that loads focused domain references only when needed and handles explicit confirmed changes
@@ -18,7 +18,7 @@ Production package `0.9.0` uses plugin/MCP identity `ampliflow-production` and d
 
 OAuth is discovered from and handled for that exact MCP resource. Each user signs in with an AmpliFlow account and receives only the access allowed by that account. The new normal origin requires fresh resource-bound OAuth; never reuse or transform beta authorization.
 
-Normal and beta hosting are already qualified at MCP14.2.4. Version `0.9.0` changes package identities and marketplace entries, without deploying a server. Published earlier artifacts remain unchanged. The existing beta connection can be preserved; the fresh production identity requires its own OAuth and client acceptance.
+Normal and beta hosting are already qualified at MCP14.2.4. Version `0.10.0` corrects the package/MCP identities without deploying a server. Published earlier artifacts remain unchanged. Existing `0.9.0` installations need migration and may require fresh sign-in; verify exact-resource OAuth and client behavior separately.
 
 ## Admin installation
 
@@ -27,7 +27,7 @@ Use these steps only after a separately authorized release and verified hosted r
 1. Open **Admin > Plugins > Add > Import marketplace**.
 2. Set **Source** to `https://github.com/AmpliFlow/af-chatgpt`.
 3. Leave **Path** empty and import the marketplace.
-4. Verify both **AmpliFlow** and **AmpliFlow (Beta Channel)** and make the intended entries available to users. Preserve the working legacy beta connection; see [the migration plan](../../docs/mcp-deployment.md).
+4. Verify both **AmpliFlow** and **AmpliFlow (Beta Channel)** and make the intended entries available to users. Migrate affected existing connections; see [the migration plan](../../docs/mcp-deployment.md).
 
 See OpenAI's [marketplace import guide](https://help.openai.com/en/articles/20001504-importing-and-syncing-plugin-marketplaces-from-github) for current ChatGPT workspace administration steps.
 
@@ -74,7 +74,7 @@ Personal reads use `get_authenticated_identity` through `ampliflow_people` and p
 
 | Surface | Status |
 | --- | --- |
-| Desktop **Work** mode | Earlier beta project read verified; separate `0.9.0` channel installations and full workflows need fresh acceptance |
+| Desktop **Work** mode | Earlier beta project read verified; separate `0.10.0` channel installations and full workflows need fresh acceptance |
 | Desktop **Chat** mode | Unsupported for the imported package; no plugin MCP tools reach the cloud turn |
 | Web and mobile | Not delivered by this GitHub package; use the future **With MCP** review route |
 
@@ -92,7 +92,7 @@ Confirm the connection targets exactly `https://mcp.ampliflow.com/mcp`. Do not r
 
 ### The plugin shows no tools after an update
 
-Sync the repository marketplace and inspect both entries' actual source revision, server identity and URL. Production must use `ampliflow-production` at `.com/mcp`; legacy `ampliflow` belongs to Beta Channel at `.cc/mcp-beta`. Preserve the working beta entry and install production separately. Do not uninstall/reset it, copy authentication, add a duplicate personal connection or force a restart to hide a binding problem.
+Sync the repository marketplace and inspect both entries' actual source revision, server identity and URL. Production must use `ampliflow` at `.com/mcp`; beta uses `ampliflow-beta` at `.cc/mcp-beta`. A legacy `ampliflow` connection may retain its beta URL. Reconnect or retire that affected cached installation and reinstall production before using it for production work. Do not copy authentication, reset unrelated connections or force a restart to hide a binding problem. See [the migration plan](../../docs/mcp-deployment.md).
 
 ### A dispatcher or operation is unavailable
 

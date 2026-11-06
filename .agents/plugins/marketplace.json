@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "ampliflow-production",
+      "name": "ampliflow",
       "source": {
         "source": "local",
         "path": "./plugins/ampliflow"
@@ -17,7 +17,7 @@
       "category": "Productivity"
     },
     {
-      "name": "ampliflow",
+      "name": "ampliflow-beta",
       "source": {
         "source": "local",
         "path": "./plugins/ampliflow-beta"

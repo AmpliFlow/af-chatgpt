@@ -17,10 +17,10 @@ def load_channels():
 
 
 class MarketplaceChannelTests(unittest.TestCase):
-    def test_marketplace_has_production_and_legacy_beta_as_distinct_plugins(self):
+    def test_marketplace_has_canonical_production_and_beta_identities(self):
         catalog = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
         entries = catalog["plugins"]
-        self.assertEqual({entry["name"] for entry in entries}, {"ampliflow-production", "ampliflow"})
+        self.assertEqual({entry["name"] for entry in entries}, {"ampliflow", "ampliflow-beta"})
         self.assertEqual(len(entries), 2)
         actual = {}
         for entry in entries:
@@ -33,18 +33,18 @@ class MarketplaceChannelTests(unittest.TestCase):
                 json.loads((package / "mcp.json").read_text())["mcpServers"],
             )
         self.assertEqual(actual, {
-            "ampliflow-production": ("AmpliFlow", {
-                "ampliflow-production": {"type": "streamable-http", "url": "https://mcp.ampliflow.com/mcp"},
+            "ampliflow": ("AmpliFlow", {
+                "ampliflow": {"type": "streamable-http", "url": "https://mcp.ampliflow.com/mcp"},
             }),
-            "ampliflow": ("AmpliFlow (Beta Channel)", {
-                "ampliflow": {"type": "streamable-http", "url": "https://mcp.ampliflow.cc/mcp-beta"},
+            "ampliflow-beta": ("AmpliFlow (Beta Channel)", {
+                "ampliflow-beta": {"type": "streamable-http", "url": "https://mcp.ampliflow.cc/mcp-beta"},
             }),
         })
 
     def test_both_packages_bind_all_seven_skills_to_only_their_own_server(self):
         for directory, server, endpoint in (
-            ("ampliflow", "ampliflow-production", "https://mcp.ampliflow.com/mcp"),
-            ("ampliflow-beta", "ampliflow", "https://mcp.ampliflow.cc/mcp-beta"),
+            ("ampliflow", "ampliflow", "https://mcp.ampliflow.com/mcp"),
+            ("ampliflow-beta", "ampliflow-beta", "https://mcp.ampliflow.cc/mcp-beta"),
         ):
             package = ROOT / "plugins" / directory
             dependencies = list((package / "skills").glob("*/agents/openai.yaml"))

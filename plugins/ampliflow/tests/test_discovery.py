@@ -147,7 +147,7 @@ class SkillDiscoveryTests(unittest.TestCase):
         endpoint = "https://mcp.ampliflow.com/mcp"
         mcp = json.loads((skills.ROOT / "mcp.json").read_text())
         self.assertEqual(mcp["mcpServers"], {
-            "ampliflow-production": {"type": "streamable-http", "url": endpoint},
+            "ampliflow": {"type": "streamable-http", "url": endpoint},
         })
         self.assertEqual(CONTRACT["endpoint"], endpoint)
         for name in CONTRACT["skills"]:
@@ -188,7 +188,7 @@ class SkillDiscoveryTests(unittest.TestCase):
             ):
                 with self.subTest(url=url):
                     data = copy.deepcopy(source)
-                    data["mcpServers"]["ampliflow-production"]["url"] = url
+                    data["mcpServers"]["ampliflow"]["url"] = url
                     path.write_text(json.dumps(data))
                     self.assertTrue(skills.validate_package(package))
             source["mcpServers"]["extra"] = {
@@ -319,7 +319,7 @@ class SkillDiscoveryTests(unittest.TestCase):
 
     def test_package_version_marks_coordinated_feature_candidate(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.9.0")
+        self.assertEqual(plugin["version"], "0.10.0")
 
 
 if __name__ == "__main__":

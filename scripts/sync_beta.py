@@ -4,9 +4,9 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PRODUCTION_SERVER = "ampliflow-production"
+PRODUCTION_SERVER = "ampliflow"
 PRODUCTION_URL = "https://mcp.ampliflow.com/mcp"
-BETA_SERVER = "ampliflow"
+BETA_SERVER = "ampliflow-beta"
 BETA_URL = "https://mcp.ampliflow.cc/mcp-beta"
 _spec = importlib.util.spec_from_file_location("channel_checks", Path(__file__).with_name("check.py"))
 assert _spec is not None and _spec.loader is not None
@@ -80,7 +80,7 @@ def marketplace_errors(root):
         BETA_SERVER: "./plugins/ampliflow-beta",
     }
     if len(rows) != 2 or {row.get("name") for row in rows} != set(wanted):
-        return ["marketplace must contain exactly the distinct production and legacy-beta plugin identities"]
+        return ["marketplace must contain exactly the canonical production and beta plugin identities"]
     for row in rows:
         if row.get("source") != {"source": "local", "path": wanted[row["name"]]}:
             return ["marketplace must resolve each channel to its own local package"]
