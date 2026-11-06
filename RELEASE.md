@@ -1,32 +1,33 @@
-# Unpublished 0.8.0 normal-origin candidate
+# 0.8.0 normal-origin release
 
-Source and generated ZIP use `0.8.0`. This is an unpublished candidate, not a release or deployment. Normal-origin TLS and routing are under construction. Source agreement and offline checks do not establish hosted readiness or client acceptance.
+Version `0.8.0` targets `https://mcp.ampliflow.com/mcp`. Hosted MCP 14.2.4 is deployed from source `65592883b222ec0fb857a14bcafbbef207019e73`. The production promotion verified both normal resources against the tested compact contract and retained the qualified beta image. These hosted checks do not prove Desktop installation or model behavior; fresh supported-client acceptance remains pending.
 
 ## Release notes
 
-- Target the normal resource `https://mcp.ampliflow.com/mcp` under the existing `ampliflow` server name and in all seven skill dependencies.
-- Preserve stable dispatcher and operation IDs, six focused read-only workflows, and the router's exact confirmation, privacy, approval-field, and recovery guidance.
-- Validate the exact normal resource and reject beta, alternate, credential-bearing, and additional connections. Keep the deterministic allowlisted ZIP, reports, and checksums.
-- Require fresh resource-bound OAuth for the new origin. Never reuse or transform beta authorization.
+- Connect the existing `ampliflow` server name and all seven skill dependencies to the normal resource. Complete fresh resource-bound OAuth; never reuse or transform beta authorization.
+- Preserve six focused read-only reviews and the general router's exact-proposal confirmation, immutable approval receipt, single-commit and recovery rules.
+- Use returned frontend context and native identities for supported entity links; never guess a missing link.
+- Treat native training plans as course sessions. Preserve participants, require confirmed dates and live status options, and verify saved fields. Attendance or certificates alone do not prove competence or effectiveness.
+- Preserve effective-principal ownership filters, native grading read-back, selected-but-ungraded zero and separate non-atomic evidence. Missing capabilities remain unavailable, not empty results.
 
-The published `0.7.0` beta artifact remains usable for internal tests and rollback. Do not overwrite its artifacts or retag its release. Use that explicit artifact for beta tests, not a new beta-plugin framework or a fallback in the normal package.
+The published `0.7.0` beta artifact remains unchanged for internal tests and rollback. Use that explicit artifact for beta tests, not a fallback in the normal package.
 
-## Offline preparation
+## Normal GitHub publication
 
 1. Run `python3 -B scripts/check.py` and `python3 -B scripts/build_submission.py`.
-2. Verify `(cd dist && sha256sum -c SHA256SUMS)`. Source archives are not the allowlisted submission ZIP; never change versions only in generated files.
-3. Keep the candidate unpublished until the separately authorized delivery work below is verified. CI builds/uploads a draft artifact only; no release or store workflow is configured here.
+2. Verify `(cd dist && sha256sum -c SHA256SUMS)`. Source archives are not the allowlisted plugin ZIP.
+3. Confirm `v0.8.0` is unpublished, commit the complete source and push the matching tag. The existing Check and build submission workflow must pass on that exact revision.
+4. Create the GitHub release with curated notes and the verified ZIP, checksums and build reports. The repository has no automatic release or store workflow.
+5. Read back the release tag, source revision, body and artifact checksums. A GitHub release does not update another installation or prove public-store approval.
 
-## Later delivery, with separate authorization
+## Desktop delivery
 
-1. The backend owner delivers the compact stable MCP cutover, CI, and IaC. Verify normal-origin TLS, routing, protected-resource metadata, exact resource-bound OAuth, authenticated tool inventory, catalog/describe schemas, and deployed contract parity. This package does not deploy the service.
-2. Preserve the coordinated identity, ownership filters, grading definitions, and persisted grading read-back contracts in [MCP-EVIDENCE.md](submission/MCP-EVIDENCE.md). Missing contracts remain unavailable capabilities, not empty results. Source parity is not runtime proof.
-3. After explicit publication authorization, confirm `0.8.0` is still unpublished, commit the complete source, tag `v0.8.0`, and create the GitHub release with these curated notes and verified artifact bytes/checksums. No such action is part of this files-only preparation.
-4. For Desktop delivery, import/sync the marketplace and verify the exact source revision and candidate version. Complete fresh OAuth for exactly `https://mcp.ampliflow.com/mcp`, then perform the separately authorized Desktop restart and acceptance checks in new Work conversations. A GitHub release or ZIP does not update another installation or prove acceptance.
-5. Follow [SUBMIT.md](SUBMIT.md) for public-store preparation. GitHub publication does not authorize policy adoption, country choices, reviewer provisioning, portal submission, recording/upload, external contact, production writes, or a Desktop restart.
+Import or sync the workspace marketplace and verify the exact revision and version. Complete fresh OAuth for exactly `https://mcp.ampliflow.com/mcp`. Preserve active-client boundaries; installation/update restart must be authorized and must not interrupt an active client.
 
-## Evidence limits
+Run the acceptance checks in new ChatGPT Desktop Work conversations. Record all six focused query-only workflows, router read and confirmed-write behavior, persisted grading and ownership fields, entity links, native training semantics and failure recovery. Do not substitute SDK or static tests for supported-client execution.
 
-Local tests prove instruction and artifact contracts only, not model behavior or deployed schemas. Fresh normal-origin OAuth, tenant isolation, live operations, Desktop acceptance, and reviewer execution remain pending. Legal, country, policy, store approval, and recording boundaries are unchanged.
+## Remaining boundaries
 
-Task 1236 (entity links) now has plugin guidance and deterministic instruction/package tests in this candidate. The backend frontend-context contract and live client behavior remain unverified here. Task 1238 (training semantics) now has local plugin routing, native training-plan workflow guidance, and deterministic guidance/package tests. Its supported-client regression remains PENDING; backend delivery, publication, and live client acceptance are not established here.
+Follow [SUBMIT.md](SUBMIT.md) for public-store preparation. GitHub publication does not authorize policy adoption, country choices, reviewer provisioning, portal submission, recording/upload, external contact or production business-record writes.
+
+Task 1236 entity-link and task 1238 training guidance are included with deterministic package tests. Their fresh supported-client regressions remain pending. Keep the native identity, grading and read-back contracts in [MCP-EVIDENCE.md](submission/MCP-EVIDENCE.md); preserve unknown evidence rather than claiming atomicity, human approval or verified behavior that was not observed.

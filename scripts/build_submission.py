@@ -107,7 +107,7 @@ def submission_manifest(root, answers_path):
     else:
         valid_url(demo, "demo_recording_url")
         review["demo_recording_url"] = demo
-    publication = {"release_notes": "Target the normal AmpliFlow MCP resource; reconnect with fresh resource-bound OAuth. Preserve seven skills and existing operation and safety contracts. Offline candidate only; deployment and client acceptance remain pending."}
+    publication = {"release_notes": "Target the normal AmpliFlow MCP resource; reconnect with fresh resource-bound OAuth. Preserve seven skills and existing operation and safety contracts. Desktop pilot package; fresh client acceptance and public-store approval remain separate."}
     countries = answers.get("countries")
     if countries in (None, [], ""):
         missing.append("countries")

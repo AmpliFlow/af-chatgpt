@@ -2,7 +2,7 @@
 
 > [!NOTE]
 > **MCP endpoint**
-> Unpublished candidate `0.8.0` targets `https://mcp.ampliflow.com/mcp`. Normal-origin TLS and routing are under construction; this source change does not establish hosted readiness or client acceptance. Standalone MCP clients do not receive the bundled skills.
+> Version `0.8.0` targets `https://mcp.ampliflow.com/mcp`. Hosted MCP 14.2.4 is deployed and qualified on the normal resource. Fresh Desktop acceptance remains pending; hosted checks do not prove client installation or behavior. Standalone MCP clients do not receive the bundled skills.
 
 Use AmpliFlow from ChatGPT Desktop in **Work** mode. The imported plugin connects to AmpliFlow's hosted MCP server and adds one general router for reads and explicit user-confirmed changes plus six read-only review skills for project tasks, project portfolios, goals, risks and controls, improvements, and checklists.
 
@@ -14,7 +14,7 @@ The published `0.7.0` beta artifact remains available for internal tests and rol
 
 ## Install the desktop pilot
 
-These steps are for a separately authorized release after hosted readiness is verified, not instructions to treat this unpublished candidate as deployed.
+Use the published `0.8.0` package. GitHub publication does not automatically sync a workspace marketplace or update an existing installation.
 
 A workspace admin imports this repository:
 
@@ -41,7 +41,7 @@ See the package [setup guide](plugins/ampliflow/README.md), [acceptance checks](
 
 | Surface | Pilot status |
 | --- | --- |
-| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import verified for package `0.5.0`; candidate `0.8.0` changes the MCP resource; fresh normal-origin acceptance remains pending |
+| ChatGPT Desktop, **Work** mode | Supported pilot path; marketplace import verified for package `0.5.0`; `0.8.0` changes the MCP resource; fresh normal-origin acceptance remains pending |
 | ChatGPT Desktop, **Chat** mode | Not supported by the GitHub-imported package; the cloud conversation does not receive its local MCP tools |
 | ChatGPT web and mobile | Requires OpenAI's **With MCP** submission and review |
 
