@@ -66,7 +66,7 @@ class SubmissionBuildTests(unittest.TestCase):
                     source = self.root / ("LICENSE" if name == "LICENSE" else f"plugins/ampliflow/{name}")
                     self.assertEqual(archive.read(name), source.read_bytes())
             plugin = json.loads(archive.read("plugin.json"))
-            self.assertEqual(plugin["version"], "0.10.0")
+            self.assertEqual(plugin["version"], "0.10.1")
             extension = plugin["extensions"]["com.openai"]
             self.assertEqual(extension["interface"]["shortDescription"], "Manage work in AmpliFlow")
             self.assertEqual(extension["interface"]["supportURL"], "https://www.ampliflow.com/support/")
@@ -83,7 +83,7 @@ class SubmissionBuildTests(unittest.TestCase):
         report = json.loads(first["build-report.json"])
         source_version = json.loads((self.root / "plugins/ampliflow/plugin.json").read_text())["version"]
         self.assertEqual(report["source_package_version"], source_version)
-        self.assertEqual(report["package_version"], "0.10.0")
+        self.assertEqual(report["package_version"], "0.10.1")
         self.assertEqual(report["validation"], "local validation only; not portal or runtime acceptance")
         self.assertFalse(report["ready_for_submission"])
         self.assertEqual(report["missing_fields"], ["demo_recording_url", "countries"])

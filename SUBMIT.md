@@ -1,6 +1,6 @@
 # AmpliFlow submission handoff
 
-**The `0.10.0` production submission draft is not ready for public submission.** Its GitHub marketplace has separate production and beta plugins; this guide applies only to the production ZIP. The normal MCP service is deployed and qualified. Supported-client acceptance, approved media, owner decisions and portal checks remain separate gates.
+**The `0.10.1` production submission draft is not ready for public submission.** Its GitHub marketplace has separate production and beta plugins; this guide applies only to the production ZIP. The normal MCP service is deployed and qualified. Supported-client acceptance, approved media, owner decisions and portal checks remain separate gates.
 
 ## Prepared package
 
@@ -14,9 +14,9 @@ The draft lacks a walkthrough URL and country choice. Support, privacy, terms, w
 
 ## Remaining access and decisions
 
-1. Reuse the existing approved demo access saved privately; no new account or password reset is needed. Confirm the intended ChatGPT test surface and bounded test turns. The agent must verify fresh resource-bound OAuth for the normal endpoint and execute the cases; native browser access is not hosted MCP OAuth. Keep credentials out of chat and attachments.
+1. Reuse the existing approved demo access saved privately; no new account or password reset is needed. Confirm the intended ChatGPT test surface and bounded test turns. The user attests that af-chatgpt and all four resources work. Reuse valid exact-resource authorization and execute the remaining candidate cases without another login/sync request or interruption of the working client; native browser access alone is not hosted MCP OAuth. Keep credentials out of chat and attachments.
 2. Approve the walkthrough concept and, separately, its destination/visibility before recording or uploading. Use only approved synthetic data and avoid restricted standards text.
-3. Verify production identity `ampliflow`, its exact normal-resource binding and live operation contracts described in [MCP-EVIDENCE.md](submission/MCP-EVIDENCE.md). Beta now uses `ampliflow-beta`. Migrate affected old connections as described in [the deployment guide](docs/mcp-deployment.md); source identities do not prove the installed URL, authorization or a production-client pass. No new infrastructure work is required.
+3. Verify production identity `ampliflow`, its exact normal-resource binding and live operation contracts described in [MCP-EVIDENCE.md](submission/MCP-EVIDENCE.md). Beta now uses `ampliflow-beta`. The historical `0.10.0` migration is described in [the deployment guide](docs/mcp-deployment.md). Candidate `0.10.1` keeps those names and resources; it requires no server/IaC deployment or migration. User-attested connectivity does not establish exact candidate installation or every workflow.
 4. Choose countries, adopt or revise the proposed rights/policy text, and provide authorized publisher/portal access for scans, domain verification, and attestations. No country scope, legal approval, account access, or store action is inferred.
 
 ## Owner portal steps after verified preparation
@@ -36,6 +36,6 @@ python3 -B scripts/build_submission.py --answers /absolute/private/path/answers.
 (cd dist && sha256sum -c SHA256SUMS)
 ```
 
-Inputs are [answers.example.json](submission/answers.example.json) and [review.json](submission/review.json). Outputs are `dist/ampliflow-plugin.zip`, `PORTAL-FIELDS.txt`, `SHA256SUMS`, and `build-report.json`. A separate `dist/ampliflow-beta-plugin.zip` is a beta download and must not be uploaded to the public-store draft. The build preserves source version `0.10.0`, adapts only public listing/review/publication metadata, and copies skills and references byte-for-byte. Rebuild after approved answers or content changes; compare exact bytes before handoff. No upload or attachment is performed by these commands.
+Inputs are [answers.example.json](submission/answers.example.json) and [review.json](submission/review.json). Outputs are `dist/ampliflow-plugin.zip`, `PORTAL-FIELDS.txt`, `SHA256SUMS`, and `build-report.json`. A separate `dist/ampliflow-beta-plugin.zip` is a beta download and must not be uploaded to the public-store draft. The build preserves source version `0.10.1`, adapts only public listing/review/publication metadata, and copies skills and references byte-for-byte. Rebuild after approved answers or content changes; compare exact bytes before handoff. No upload or attachment is performed by these commands.
 
 Keep all seven skills. Do not restore the obsolete separate JSON-import workflow, assumed five-skill cap, legacy endpoint, or invented approval committees. See [release mechanics](RELEASE.md) for the separate GitHub/Desktop route.

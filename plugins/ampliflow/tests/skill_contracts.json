@@ -44,7 +44,9 @@
         "entity-links.md"
       ],
       "required_operations": {
-        "show_improvement_gradings": "ampliflow_improvements"
+        "show_improvement_gradings": "ampliflow_improvements",
+        "list_impact_grading_options": "ampliflow_projects",
+        "show_impact_grading": "ampliflow_projects"
       },
       "optional_operations": {
         "get_authenticated_identity": "ampliflow_people"

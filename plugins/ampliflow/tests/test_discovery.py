@@ -319,7 +319,7 @@ class SkillDiscoveryTests(unittest.TestCase):
 
     def test_package_version_marks_coordinated_feature_candidate(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.10.0")
+        self.assertEqual(plugin["version"], "0.10.1")
 
 
 if __name__ == "__main__":

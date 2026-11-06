@@ -8,7 +8,7 @@ The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the 
 
 ## What the package contains
 
-Production package `0.10.0` uses plugin/MCP identity `ampliflow` and declares only `https://mcp.ampliflow.com/mcp` in `mcp.json`. The marketplace also contains **AmpliFlow (Beta Channel)** in a separate generated source root, using identity `ampliflow-beta` and `.cc/mcp-beta`. Each package contains:
+Production candidate `0.10.1` uses plugin/MCP identity `ampliflow` and declares only `https://mcp.ampliflow.com/mcp` in `mcp.json`. The marketplace also contains **AmpliFlow (Beta Channel)** in a separate generated source root, using identity `ampliflow-beta` and `.cc/mcp-beta`. Each package contains:
 
 - one remote MCP connection
 - one lightweight router that loads focused domain references only when needed and handles explicit confirmed changes
@@ -16,9 +16,9 @@ Production package `0.10.0` uses plugin/MCP identity `ampliflow` and declares on
 - the AmpliFlow icon and plugin metadata
 - no credentials, server executable, CLI installer, app ID, or custom UI
 
-OAuth is discovered from and handled for that exact MCP resource. Each user signs in with an AmpliFlow account and receives only the access allowed by that account. The new normal origin requires fresh resource-bound OAuth; never reuse or transform beta authorization.
+OAuth is discovered from and handled for that exact MCP resource. Each user signs in with an AmpliFlow account and receives only the access allowed by that account. Changing resources requires fresh resource-bound OAuth; never reuse or transform beta authorization. Do not repeat login or sync for an already working client.
 
-Normal and beta hosting are already qualified at MCP14.2.4. Version `0.10.0` corrects the package/MCP identities without deploying a server. Published earlier artifacts remain unchanged. Existing `0.9.0` installations need migration and may require fresh sign-in; verify exact-resource OAuth and client behavior separately.
+Normal and beta hosting are already qualified at MCP14.2.4. Version `0.10.0` corrected the package/MCP identities. Candidate `0.10.1` changes guidance only; it requires no server/IaC deployment or migration. Published earlier artifacts remain unchanged. Existing `0.9.0` installations need migration and may require fresh sign-in; verify exact-resource OAuth and client behavior separately.
 
 ## Admin installation
 
@@ -74,11 +74,11 @@ Personal reads use `get_authenticated_identity` through `ampliflow_people` and p
 
 | Surface | Status |
 | --- | --- |
-| Desktop **Work** mode | Earlier beta project read verified; separate `0.10.0` channel installations and full workflows need fresh acceptance |
+| Desktop **Work** mode | User-attested working client and all four resources; exact `0.10.1` installation and detailed workflows not yet claimed |
 | Desktop **Chat** mode | Unsupported for the imported package; no plugin MCP tools reach the cloud turn |
 | Web and mobile | Not delivered by this GitHub package; use the future **With MCP** review route |
 
-Earlier beta-client evidence, not normal-origin acceptance: this distinction was verified on ChatGPT Desktop `26.901.20858`: the same installed package, OAuth credential, and 25-tool inventory worked in a local Work turn, while a Chat turn produced no local `thread/start`, `turn/start`, or MCP call.
+The user confirms af-chatgpt and all four resources work. This does not establish every candidate workflow. Historical beta-client evidence: this distinction was verified on ChatGPT Desktop `26.901.20858`: the same installed package, OAuth credential, and 25-tool inventory worked in a local Work turn, while a Chat turn produced no local `thread/start`, `turn/start`, or MCP call.
 
 ## Troubleshooting
 

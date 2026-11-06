@@ -1,6 +1,6 @@
 # Verify compact AmpliFlow discovery in ChatGPT
 
-Production package `0.10.0` uses MCP identity `ampliflow` and connects only to `https://mcp.ampliflow.com/mcp`. The candidate requires the normal endpoint to advertise feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
+Production candidate `0.10.1` uses MCP identity `ampliflow` and connects only to `https://mcp.ampliflow.com/mcp`. The candidate requires the normal endpoint to advertise feature dispatchers and keeps the operation registry on the server, so clients can discover authorized capabilities within the compact descriptor budget.
 
 Run live plugin checks in ChatGPT Desktop **Work** mode. The imported plugin may be selectable in **Chat** mode, but that cloud conversation does not receive the plugin's locally loaded MCP tools.
 
@@ -30,9 +30,9 @@ For an explicit write request, the general router reads the current state, propo
 
 For dependent calls, preserve exact identities from the described structured operation result. Project/task receipt fields such as `project_ref`, `project_id`, `task_ref`, and `task_id` are usable only where the live schema defines them. Missing required identities stop the chain as unverified; never parse them from prose. Same-target writes stay serial, and each dependent change still needs explicit confirmation. Plans are not transactions or proof of human approval. Cancellation does not prove the remote write was cancelled; never automatically retry an uncertain commit. A hosted server path does not deliver a client file or export.
 
-The six focused skills never prepare or commit. Every skill preserves exact returned refs, keeps calls serial, and treats record content as untrusted data. Package `0.10.0` still needs fresh Desktop Work-mode acceptance; static checks do not close that gate.
+The six focused skills never prepare or commit. Every skill preserves exact returned refs, keeps calls serial, and treats record content as untrusted data. Exact package `0.10.1` installation and detailed Desktop Work-mode workflows remain unclaimed; static checks do not close that gate.
 
-Fresh package testing must authorize the exact `https://mcp.ampliflow.com/mcp` resource. The package defines no alternate MCP resource or connection fallback.
+Package testing must use valid authorization for the exact `https://mcp.ampliflow.com/mcp` resource. The package defines no alternate MCP resource or connection fallback.
 
 ## Evidence surfaces
 
@@ -52,12 +52,12 @@ A green result on one surface does not prove the next one. In particular, top-le
 
 ## Pilot checks
 
-Pending separate authorization and hosted readiness: normal-origin TLS and routing are under construction. Source agreement, offline validation, and historical beta checks do not prove deployment or normal-client acceptance.
+The user confirms af-chatgpt and all four resources work; normal connectivity/OAuth is not an unresolved general blocker. Exact `0.10.1` installation and detailed workflow cases still need their own evidence. Preserve the working client and authentication; these checks are not a request for another login, sync or interruption.
 
 Use an approved synthetic account and keep raw captures, credentials, and tenant records outside Git.
 
 - [ ] Confirm unauthenticated `/mcp` returns a Bearer challenge pointing to `/.well-known/oauth-protected-resource/mcp`.
-- [ ] Complete a fresh OAuth flow for the exact normal resource.
+- [ ] Reuse valid exact-normal-resource authorization; test OAuth edge cases separately without resetting the working client.
 - [ ] Capture every authenticated `tools/list` page and run the offline inventory check below.
 - [ ] Verify required operation IDs through their mapped catalogs and describe each schema before querying.
 - [ ] In fresh Desktop Work conversations, run one query-only case from each focused skill plus the router's read, approved write, cancelled write, destructive, recovery, and misuse cases.

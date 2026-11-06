@@ -13,7 +13,7 @@ The request path selects the channel, not the domain alone. There are two servic
 | `https://mcp.ampliflow.com/mcp-beta` | Beta | Explicit beta configuration for new clients |
 | `https://mcp.ampliflow.cc/mcp-beta` | Beta | Existing beta clients |
 
-The `0.10.0` marketplace exposes **AmpliFlow** using production identity `ampliflow` and the first URL in [mcp.json](../plugins/ampliflow/mcp.json). **AmpliFlow (Beta Channel)** uses identity `ampliflow-beta` and the existing `.cc/mcp-beta` resource in its [separate MCP manifest](../plugins/ampliflow-beta/mcp.json). Neither package silently falls back to another channel.
+The `0.10.1` candidate marketplace exposes **AmpliFlow** using production identity `ampliflow` and the first URL in [mcp.json](../plugins/ampliflow/mcp.json). **AmpliFlow (Beta Channel)** uses identity `ampliflow-beta` and the existing `.cc/mcp-beta` resource in its [separate MCP manifest](../plugins/ampliflow-beta/mcp.json). Neither package silently falls back to another channel.
 
 Each exact URL is a separate OAuth resource, including aliases served by the same instance. A channel or resource change requires fresh resource-bound OAuth; do not copy, reuse or transform another resource's authorization. Discover the authorization server from the selected resource's metadata. Production uses issuer `https://mcp.ampliflow.com`; beta retains issuer `https://mcp.ampliflow.cc`, including for the `.com/mcp-beta` resource. Do not redirect authenticated MCP requests across domains.
 
@@ -53,12 +53,14 @@ A healthy response proves neither OAuth, tool availability nor a working install
 
 For ChatGPT, inspect the workspace installation's actual MCP URL as well as its displayed package version. GitHub publication does not automatically synchronize a workspace marketplace or replace an existing connection. Versions `0.7.0` and `0.8.0` reuse plugin name `ampliflow`, marketplace name `ampliflow-pilot` and MCP server key `ampliflow`. The displayed version alone therefore does not establish which resource the workspace uses. The precise retained binding/cache/override layer was not established from that screenshot.
 
-Version `0.10.0` uses canonical channel identities. Version `0.9.0` used `ampliflow-production` for production and legacy `ampliflow` for beta; this update deliberately changes both identities, not the resource URLs:
+Version `0.10.0` introduced canonical channel identities, retained unchanged by `0.10.1`. Version `0.9.0` used `ampliflow-production` for production and legacy `ampliflow` for beta; that historical update changed both identities, not the resource URLs:
 
 | Display name | Plugin / MCP identity | Source root |
 | --- | --- | --- |
 | AmpliFlow | `ampliflow` | `plugins/ampliflow` |
 | AmpliFlow (Beta Channel) | `ampliflow-beta` | `plugins/ampliflow-beta` |
+
+Historical `0.10.0` migration steps, only for an affected legacy installation (not required by guidance-only `0.10.1`):
 
 1. Sync the existing `ampliflow-pilot` marketplace and verify both entries at the new source revision.
 2. Install beta under `ampliflow-beta` if needed and authorize its exact `.cc/mcp-beta` resource.
@@ -77,6 +79,6 @@ As checked on 2026-11-06:
 
 - Plugin `0.8.0` is published from `1a122842e631a067c9204e7c0a173caff5f3d64b`. Its ZIP SHA-256 is `36b0157dcd6b1eb55ffb44cf8292ed873d275529fe95c053e584d9a0eeb0f71a`.
 - Hosted CLI `14.2.4` was qualified on production and beta at image digest `c9c811aeb8747535986cf5e8725c9a23d9ae3ee4e9b8c6200df09e1889eb0170`, with exact-resource OAuth and 28-tool inventories. All four health URLs returned verified HTTPS 200 during this documentation check. Infrastructure delivery is complete.
-- The user demonstrated a working Desktop project read, but a later screenshot showed version `0.8.0` still bound to `.cc/mcp-beta`. No complete normal-resource client acceptance is recorded. The authorized `0.10.0` canonical-name update addresses source identities; workspace synchronization, fresh production authorization and full client acceptance still need their own evidence. The historical `0.8.0` screenshot is not proof of that migration.
+- The user demonstrated a working Desktop project read, but a later screenshot showed version `0.8.0` still bound to `.cc/mcp-beta`. The user now confirms af-chatgpt and all four resources work. Accept this user-attested client/connectivity evidence rather than treating general normal connectivity/OAuth as unknown. Exact `0.10.1` installation and detailed workflow acceptance remain unclaimed. The historical screenshot is not evidence against the current working client. No new login/sync request or interruption is needed. Guidance-only `0.10.1` requires no server/IaC deployment or migration.
 
 Remaining client-case, persisted-field/recovery, recording, country/policy and publisher requirements are tracked in [MCP acceptance status](../submission/MCP-EVIDENCE.md) and [SUBMIT.md](../SUBMIT.md). Keep credentials, raw OAuth state, private traces, screenshots and tenant records outside this public repository. Preserve private delivery evidence separately; do not recreate resolved infrastructure work because an older task log or snapshot described it as pending.

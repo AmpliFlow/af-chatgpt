@@ -41,7 +41,7 @@ Load more than one reference for a cross-domain request. Do not load unrelated r
 
 For every dispatcher or commit response, prefer MCP `structuredContent` over text content. Every normal structured response envelope must have `ok: true`; read the business result from `result` and check the MCP error state too. Use the live describe response's `output_schema` when supplied and the commit tool's advertised output schema; do not pin an unverified result layout. If structured content is absent, use only schema-matching JSON fallback, not prose.
 
-Catalog searches operation definitions, not live record titles or form names. Use action/capability terms such as `form`, `list`, or `create`. A filtered catalog with no matches does not prove the operation is unavailable: shorten the capability query or omit it to inspect the available operations before reporting a missing capability. Keep catalog pagination within the requested discovery bound; an unfinished catalog scan is incomplete evidence.
+Catalog searches operation definitions, not live record titles or form names. Use action/capability terms such as `form`, `list`, or `create`. A filtered catalog with no matches does not prove the operation is unavailable: shorten the capability query or omit it to inspect the available operations before reporting a missing capability. Keep catalog pagination within the requested discovery bound; an unfinished catalog scan is incomplete evidence. Do not ask permission to repeat catalog discovery within the existing read bound. An authorization refusal is different: stop the affected workflow rather than broadening it.
 
 ### Read operations
 
@@ -52,6 +52,15 @@ Catalog searches operation definitions, not live record titles or form names. Us
 - [ ] On `invalid_schema`, describe once again and retry the same read operation only. On `stale_ref`, refresh the owning list once and retry the same target only. On `partial_result`, preserve earlier results and label the answer partial.
 - [ ] Treat `unknown_operation` and `unavailable_feature` as unavailable capabilities, not empty business results. Report other stable error codes without changing operation or target.
 - [ ] Distinguish pagination exhaustion from partial or unavailable evidence. A missing next page alone does not prove completeness: check the described status, partial, unavailable, and continuation fields. Stop at the request's read bound, retain exact returned identities and covered pages, and report incomplete coverage rather than a complete count or empty collection.
+
+### Resolve improvement prerequisites
+
+These read-only prerequisite lookups do not need write confirmation. The user's report request permits bounded discovery of its form, grading definitions and required field choices; it does not approve a mutation.
+
+1. Read the published form and its field definitions. Resolve customer and user selections by their owning read tools before proposing a write. Use `ampliflow_customers` for customer lookup and `ampliflow_people` for users, with each operation's live catalog and describe schema. Match the user's named choice to an exact returned identity. Ask only if a bounded lookup leaves no match, multiple matches, missing facts or an access limit; do not ask the user to supply an ID that an authorized lookup can resolve.
+2. Read grading options and the selected categories' definitions through `ampliflow_projects`, following the grading reference. Do not estimate a score from a category name or generic severity. If definitions are missing from options, fetch the detail before asking for a scoring decision.
+3. Build the complete draft with resolved field IDs, selected values and evidenced grades. Do not seek confirmation for a draft containing unresolved selection placeholders. A request to discover choices is not the exact write proposal. If facts remain missing, ask a factual question without preparing a change.
+4. Once the draft is complete, follow the confirmed-write sequence below. A changed grade or selection needs a changed proposal and fresh confirmation; never treat an earlier confirmation as approval of the correction.
 
 ### Confirmed write operations
 
@@ -71,6 +80,8 @@ Reviewed read mappings (still require live catalog and describe; identity is opt
 | --- | --- | --- |
 | `get_authenticated_identity` | `ampliflow_people` | Optional current frontend evidence for entity links; reuse an existing identity result. |
 | `show_improvement_gradings` | `ampliflow_improvements` | Verify persisted improvement impact and category scores. |
+| `list_impact_grading_options` | `ampliflow_projects` | Resolve active grading category identities. |
+| `show_impact_grading` | `ampliflow_projects` | Read a category description and all five score definitions. |
 
 For improvement creation or grading updates, step 9 must include the native `show_improvement_gradings` read through `ampliflow_improvements`, following `references/processes-risks-controls-and-improvements.md`. Generic detail cannot verify the persisted category map. Keep this read after the confirmed write; its non-atomic evidence neither proves approval nor permits another mutation.
 

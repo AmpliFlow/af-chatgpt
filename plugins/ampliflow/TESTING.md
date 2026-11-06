@@ -2,7 +2,7 @@
 
 Run all local checks with `python3 scripts/check.py`, or build the public submission ZIP with `python3 scripts/build_submission.py`. Both run the checks below. Public submission preparation and remaining human checks are in [SUBMIT.md](../../SUBMIT.md).
 
-The `0.10.0` marketplace must show exactly **AmpliFlow** (`ampliflow`, `.com/mcp`) and **AmpliFlow (Beta Channel)** (`ampliflow-beta`, `.cc/mcp-beta`). Verify the actual URLs after migration; a cached legacy `ampliflow` connection may still point to beta and must not be used as production. Each package has seven dependencies pointing only to its own server. Generate beta with `python3 -B scripts/sync_beta.py`; the managed checks reject stale/extra files, shared identities and wrong resources. Both ZIPs are deterministic and separate; the production submission must never contain the beta bundle.
+The `0.10.1` candidate marketplace must show exactly **AmpliFlow** (`ampliflow`, `.com/mcp`) and **AmpliFlow (Beta Channel)** (`ampliflow-beta`, `.cc/mcp-beta`). Verify the actual URLs after migration; a cached legacy `ampliflow` connection may still point to beta and must not be used as production. Each package has seven dependencies pointing only to its own server. Generate beta with `python3 -B scripts/sync_beta.py`; the managed checks reject stale/extra files, shared identities and wrong resources. Both ZIPs are deterministic and separate; the production submission must never contain the beta bundle.
 
 Individual deterministic commands:
 
@@ -18,6 +18,12 @@ The self-test proves the validator rejects a known-bad read skill. The contract 
 Entity-link instruction tests cover all seven skills' default Markdown links, optional frontend-context discovery (preserving required improvement identity reads), native UUID/parent requirements, exact templates, encoding, label escaping, origin and tenant-switch boundaries, and missing-evidence handling. Validator tests reject missing or unlisted shared references and writes in the read-only link reference. The temporary package build must include that reference byte-for-byte; it does not update the repository's candidate ZIP.
 
 These checks do not prove live operation availability, schemas, authorization, installation, OAuth, or answer quality.
+
+## Pre-release model comparison
+
+Before publication, run deterministic checks and a bounded synthetic model comparison with an approved credential source and spending limit. Record source revisions, model, case results, coverage and limits. Keep failed runs rather than replacing their results. Synthetic model results do not prove Desktop workflows.
+
+See [MCP acceptance status](../../submission/MCP-EVIDENCE.md) for current connectivity evidence and workflow limits. Preserve working authentication and active clients; this guidance-only patch does not require reconnecting them.
 
 ## Manual test rules
 
@@ -72,7 +78,7 @@ Local training instruction tests cover routing, native semantics, identity/parti
 
 ## Bounded composition cases
 
-Run these in fresh Desktop Work conversations with package `0.10.0` and the explicitly selected channel. Use one synthetic project and at most one task per chain, no concurrent calls, and stop on an unresolved result. These cases remain pending live acceptance, including the write acceptance tracked separately from this package change.
+Run these in fresh Desktop Work conversations with package `0.10.1` and the explicitly selected channel. Use one synthetic project and at most one task per chain, no concurrent calls, and stop on an unresolved result. These cases remain pending live acceptance, including the write acceptance tracked separately from this package change.
 
 | Case | Prompt and fixture | Required result |
 | --- | --- | --- |
@@ -198,11 +204,11 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 - Compare live descriptors with scanned or published metadata and workspace action policy before claiming a ChatGPT surface can use them.
 - Confirm the package contains no credentials, tenant records, credential-bearing headers, OAuth secrets, hooks, server executable, or local runtime state.
 - Scan package prose and review descriptions for claims beyond tested behavior.
-- Import the published marketplace, complete fresh normal OAuth, restart Desktop, select Work mode, and verify every skill is discoverable.
+- In an owner-coordinated idle test client, verify the exact candidate installation in Work mode and every skill's discovery. Reuse valid exact-resource authorization; do not force a login, sync or restart of the working active client.
 - Run one read workflow per focused skill plus the router's read, approved normal write, cancelled write, destructive write, recovery, boundary, and misuse cases in fresh Work conversations. Confirm zero prepare or commit calls in focused skills and cancelled cases.
 - Build the complete public plugin ZIP with all seven skills. Use the current ZIP-submission guide rather than the older separate five-skill import assumption.
 - Confirm the GitHub-imported package is identified as desktop-only, verify Work-mode execution, and record Chat mode as unsupported for this pilot.
 - Verify customer workspace access separately before promising self-service installation.
 - Before public **With MCP** submission, verify the exact normal deployment, resource-bound OAuth, PKCE `S256`, public-client registration, tool security declarations, privacy posture, reviewer access, and exact five positive plus three negative cases.
 
-The package stays a pilot until fresh installation, normal OAuth, Work-mode dispatcher and operation discovery, the router's read, confirmed-write and bounded composition workflows, all six focused query-only workflows, and answer quality are recorded. Deterministic package checks and earlier live-provider smoke with synthetic tool responses do not replace fresh Desktop acceptance.
+The package stays a pilot until exact candidate installation, Work-mode dispatcher and operation discovery, the router's read, confirmed-write and bounded composition workflows, all six focused query-only workflows, and answer quality are recorded. Deterministic package checks and earlier live-provider smoke with synthetic tool responses do not replace fresh Desktop acceptance.

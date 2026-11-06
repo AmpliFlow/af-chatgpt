@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ampliflow",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Connect ChatGPT to AmpliFlow. Read live records, run focused reviews, and make explicit user-confirmed changes.",
   "author": {
     "name": "AmpliFlow",
