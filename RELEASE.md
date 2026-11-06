@@ -14,9 +14,11 @@ The published `0.7.0` beta artifact remains unchanged for internal tests and rol
 
 ## Normal GitHub publication
 
+Publication of `0.8.0` is complete. Do not recreate its tag/release or replace its verified assets. The steps below describe the publication process for a future authorized version. Server deployment and promotion are separate; see [MCP servers and deployment](docs/mcp-deployment.md).
+
 1. Run `python3 -B scripts/check.py` and `python3 -B scripts/build_submission.py`.
 2. Verify `(cd dist && sha256sum -c SHA256SUMS)`. Source archives are not the allowlisted plugin ZIP.
-3. Confirm `v0.8.0` is unpublished, commit the complete source and push the matching tag. The existing Check and build submission workflow must pass on that exact revision.
+3. Confirm the intended new version is unpublished, commit the complete source and push the matching tag. The existing Check and build submission workflow must pass on that exact revision.
 4. Create the GitHub release with curated notes and the verified ZIP, checksums and build reports. The repository has no automatic release or store workflow.
 5. Read back the release tag, source revision, body and artifact checksums. A GitHub release does not update another installation or prove public-store approval.
 

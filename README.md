@@ -52,15 +52,15 @@ The general skill supports only explicit user-confirmed writes discovered throug
 ## Troubleshooting
 
 - **`@AmpliFlow` is visible, but the answer says no tools are available:** start a new conversation in **Work**, not Chat.
-- **Authentication is requested:** complete OAuth for the exact normal resource, then restart Desktop and open a new Work conversation.
+- **Authentication is requested:** complete OAuth for the exact normal resource. Coordinate any required restart with the owner; do not interrupt an active client.
 - **A required dispatcher or operation is missing:** report the unavailable workflow. Do not add another MCP server or fall back to another endpoint.
-- **An old AmpliFlow pilot source is also installed:** remove the obsolete source so only the current workspace installation owns the `ampliflow` MCP server name.
+- **The version is current but the MCP URL is still beta, or two sources own the same server name:** inspect the workspace's actual connection, preserve the working client and obtain approval for the selected migration. Do not uninstall or reset it solely from the version label. See [MCP deployment and channel diagnosis](docs/mcp-deployment.md).
 
 ## Repository ownership
 
 - **This repository:** plugin manifests, marketplace catalog, skills, icon, tests, and pilot documentation.
 - **[af-cli](https://github.com/AmpliFlow/af-cli):** public CLI releases and installer.
-- Hosted MCP implementation and deployment are maintained separately from this public package.
+- Hosted MCP implementation and deployment are maintained separately from this public package. See [MCP servers and deployment](docs/mcp-deployment.md) for production/beta URLs, OAuth boundaries, deployment ownership, promotion/recovery and current acceptance limits.
 
 Package changes require a version bump and the checks in [plugins/ampliflow/TESTING.md](plugins/ampliflow/TESTING.md). Keep credentials, tenant records, screenshots, `.af/`, and other local runtime state out of Git.
 
