@@ -23,7 +23,7 @@ Each exact URL is a separate OAuth resource, including aliases served by the sam
 | --- | --- |
 | Plugin manifests, marketplace, skills, packaging and client acceptance | This repository: [release](../RELEASE.md), [testing](../plugins/ampliflow/TESTING.md) and [submission](../SUBMIT.md) guides |
 | Hosted MCP implementation, image build and qualification | [af-cli-dev](https://github.com/AmpliFlow/af-cli-dev), especially `.github/workflows/mcp-deploy.yml` and `mcp-promote.yml` |
-| Routing, certificates, service units, private state, limits, deployment receivers and recovery | [ampliflow-iac deployment runbook](https://github.com/pbjorklund/ampliflow-iac/blob/main/docs/mcp-server-deployment.md) |
+| Routing, certificates, service units, private state, limits, deployment receivers and recovery | [ampliflow-iac deployment runbook](https://github.com/pbjorklund/ampliflow-iac/blob/master/docs/mcp-server-deployment.md) |
 
 The implementation and IaC repositories require their own access. Follow the authoritative IaC runbook for execution rather than copying deployment commands into this package.
 
