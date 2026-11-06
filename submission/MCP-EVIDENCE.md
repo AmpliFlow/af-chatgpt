@@ -1,10 +1,12 @@
 # MCP acceptance status
 
-Plugin [`0.8.0`](https://github.com/AmpliFlow/af-chatgpt/releases/tag/v0.8.0) is published from source `1a122842e631a067c9204e7c0a173caff5f3d64b`. Its four release assets and 69-test CI are verified. This file summarizes the acceptance limits; private traces and account details remain outside the repository.
+Version `0.9.0` separates the production and legacy-beta marketplace entries and their MCP identities. Package/model checks, workspace synchronization and full supported-client acceptance remain separate evidence layers.
+
+Historical release checkpoint: [`0.8.0`](https://github.com/AmpliFlow/af-chatgpt/releases/tag/v0.8.0) was published from source `1a122842e631a067c9204e7c0a173caff5f3d64b`. Its four release assets and 69-test CI are verified. This file summarizes the acceptance limits; private traces and account details remain outside the repository.
 
 As checked on 2026-11-06, the normal MCP service is deployed at CLI `14.2.4`; strict HTTPS, fresh resource-bound OAuth and its 28-tool inventory are qualified. The previous certificate/deployment blocker is resolved. Beta and normal remain separate; beta authorization cannot be reused or transformed.
 
-A user-supplied Desktop screenshot shows version `0.8.0` but the beta URL `https://mcp.ampliflow.cc/mcp-beta`. The verified release ZIP declares only `https://mcp.ampliflow.com/mcp`. Both versions reuse plugin name `ampliflow` and MCP server key `ampliflow`; the displayed workspace binding differs from the artifact. The precise cache/override layer is unproven. A working beta-bound project read is not a normal-client pass. Preserve the active client and its authentication until the owner authorizes the selected connection change.
+A user-supplied Desktop screenshot shows version `0.8.0` but the beta URL `https://mcp.ampliflow.cc/mcp-beta`. The verified release ZIP declares only `https://mcp.ampliflow.com/mcp`. Both versions reuse plugin name `ampliflow` and MCP server key `ampliflow`; the displayed workspace binding differs from the artifact. The precise cache/override layer is unproven. A working beta-bound project read is not a normal-client pass. Preserve the active client and its authentication. The authorized `0.9.0` marketplace split now keeps legacy `ampliflow` explicitly on beta and adds fresh production identity `ampliflow-production`; this source change is not a workspace-sync or normal-client pass. See [the migration plan](../docs/mcp-deployment.md).
 
 Infrastructure delivery is complete. Remaining client binding, reviewer cases, persisted-field/recovery evidence and submission preparation belong to the client/server owners; no new infrastructure work is requested here.
 

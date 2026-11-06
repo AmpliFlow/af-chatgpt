@@ -15,12 +15,16 @@ _spec = importlib.util.spec_from_file_location("submission_checks", Path(__file_
 assert _spec is not None and _spec.loader is not None
 _checks = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_checks)
+_beta_spec = importlib.util.spec_from_file_location("beta_projection", Path(__file__).with_name("sync_beta.py"))
+assert _beta_spec is not None and _beta_spec.loader is not None
+_beta = importlib.util.module_from_spec(_beta_spec)
+_beta_spec.loader.exec_module(_beta)
 
 SKILLS = (
     "using-ampliflow", "reviewing-project-tasks", "reviewing-project-portfolio",
     "reviewing-risks-and-controls", "reviewing-checklists", "reviewing-goals", "reviewing-improvements",
 )
-OUTPUTS = {"ampliflow-plugin.zip", "SHA256SUMS", "build-report.json", "PORTAL-FIELDS.txt"}
+OUTPUTS = {"ampliflow-plugin.zip", "ampliflow-beta-plugin.zip", "SHA256SUMS", "build-report.json", "PORTAL-FIELDS.txt"}
 URL_FIELDS = {
     "support_url": "supportURL", "privacy_policy_url": "privacyPolicyURL",
     "terms_of_service_url": "termsOfServiceURL",
@@ -136,6 +140,7 @@ def portal_fields(manifest, archive_hash, missing):
         "NOT READY FOR SUBMISSION: owner approvals, live tests and portal checks remain.",
         "",
         "Upload ONLY ampliflow-plugin.zip at https://platform.openai.com/plugins",
+        "ampliflow-beta-plugin.zip is an explicit beta download, not a public-store upload.",
         f"Package version: {manifest['version']}",
         f"ZIP SHA-256: {archive_hash}",
         "MCP server URL: https://mcp.ampliflow.com/mcp",
@@ -167,6 +172,17 @@ def portal_fields(manifest, archive_hash, missing):
     return ("\n".join(lines) + "\n").encode("utf-8")
 
 
+def archive_bytes(members):
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_STORED) as archive:
+        for name, data in sorted(members.items()):
+            info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+            info.create_system = 3
+            info.external_attr = 0o100644 << 16
+            archive.writestr(info, data)
+    return buffer.getvalue()
+
+
 def build(root, output, answers_path=None):
     root, output = root.absolute(), output.absolute()
     _checks.safe_path(root, output)
@@ -192,14 +208,10 @@ def build(root, output, answers_path=None):
         members[path.relative_to(plugin_root).as_posix()] = path.read_bytes()
     members["LICENSE"] = _checks.safe_path(root, root / "LICENSE").read_bytes()
     members = dict(sorted(members.items()))
-    buffer = io.BytesIO()
-    with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_STORED) as archive:
-        for name, data in members.items():
-            info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
-            info.create_system = 3
-            info.external_attr = 0o100644 << 16
-            archive.writestr(info, data)
-    archive_data = buffer.getvalue()
+    archive_data = archive_bytes(members)
+    beta_members = _beta.beta_files(root)
+    beta_members["LICENSE"] = members["LICENSE"]
+    beta_data = archive_bytes(beta_members)
     report = {
         "source_package_version": source_version,
         "package_version": source_version,
@@ -212,13 +224,14 @@ def build(root, output, answers_path=None):
         "adaptation": "Generated manifest only: public subtitle, website, review and publication metadata, and supplied answer URLs. Version comes from the source manifest. All seven skills and references remain byte-for-byte unchanged; Desktop sources are unchanged.",
         "allowlist": ["plugin.json (generated)", "mcp.json", "assets/icon.png", "skills/ (seven explicit skill directories)", "LICENSE"],
         "archive": {"name": "ampliflow-plugin.zip", "sha256": digest(archive_data)},
+        "beta_archive": {"name": "ampliflow-beta-plugin.zip", "sha256": digest(beta_data), "scope": "explicit beta download; not the public-store submission"},
         "files": [{"path": name, "sha256": digest(data), "size": len(data)} for name, data in members.items()],
     }
     fields_data = portal_fields(manifest, digest(archive_data), missing)
     report["portal_fields_sha256"] = digest(fields_data)
     report_data = (json.dumps(report, indent=2, sort_keys=True) + "\n").encode("utf-8")
-    sums = f"{digest(archive_data)}  ampliflow-plugin.zip\n{digest(report_data)}  build-report.json\n{digest(fields_data)}  PORTAL-FIELDS.txt\n"
-    for name, data in (("ampliflow-plugin.zip", archive_data), ("build-report.json", report_data), ("PORTAL-FIELDS.txt", fields_data), ("SHA256SUMS", sums.encode("ascii"))):
+    sums = f"{digest(archive_data)}  ampliflow-plugin.zip\n{digest(beta_data)}  ampliflow-beta-plugin.zip\n{digest(report_data)}  build-report.json\n{digest(fields_data)}  PORTAL-FIELDS.txt\n"
+    for name, data in (("ampliflow-plugin.zip", archive_data), ("ampliflow-beta-plugin.zip", beta_data), ("build-report.json", report_data), ("PORTAL-FIELDS.txt", fields_data), ("SHA256SUMS", sums.encode("ascii"))):
         (output / name).write_bytes(data)
     return report
 

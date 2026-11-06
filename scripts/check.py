@@ -96,7 +96,7 @@ def run_checks(root):
     if errors:
         raise ValueError("\n".join(errors))
     validator = str(TESTS / "validate_skills.py")
-    for args in ([validator, "--self-test"], [validator], ["-m", "unittest", "discover", "-s", str(TESTS), "-p", "test_*.py"]):
+    for args in ([validator, "--self-test"], [validator], ["scripts/sync_beta.py", "--check"], ["-m", "unittest", "discover", "-s", str(TESTS), "-p", "test_*.py"]):
         subprocess.run([sys.executable, "-B", *args], cwd=root, check=True)
 
 

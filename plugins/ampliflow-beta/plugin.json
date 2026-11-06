@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ampliflow",
+  "version": "0.9.0",
+  "description": "Use the AmpliFlow beta channel with focused reviews and explicit user-confirmed changes.",
+  "author": {
+    "name": "AmpliFlow",
+    "url": "https://www.ampliflow.com"
+  },
+  "homepage": "https://www.ampliflow.com",
+  "repository": "https://github.com/AmpliFlow/af-chatgpt",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "AmpliFlow (Beta Channel)",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png",
+        "shortDescription": "Try the AmpliFlow beta channel",
+        "longDescription": "Explicit beta-channel plugin, separate from AmpliFlow production. AmpliFlow brings processes, goals, risks, projects, and documents into one management system, connecting ownership, ways of working, and follow-up. This package connects to AmpliFlow's compact hosted MCP endpoint and adds a general router for reads and explicit user-confirmed changes, plus read-only review skills for project tasks, portfolio status, goals, risks and controls, improvements, and checklists. Each user authenticates with an AmpliFlow account. Available reads and changes depend on the live connection, tenant features, and that account's permissions.",
+        "developerName": "AmpliFlow",
+        "category": "Productivity",
+        "defaultPrompt": [
+          "Show incomplete tasks in a project, including assignees and due dates. Do not change anything.",
+          "Review the project portfolio and show which projects need attention. Do not change anything.",
+          "Review goals and measurements, including progress evidence and action gaps. Do not change anything."
+        ]
+      }
+    }
+  }
+}

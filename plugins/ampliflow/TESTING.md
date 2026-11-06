@@ -2,6 +2,8 @@
 
 Run all local checks with `python3 scripts/check.py`, or build the public submission ZIP with `python3 scripts/build_submission.py`. Both run the checks below. Public submission preparation and remaining human checks are in [SUBMIT.md](../../SUBMIT.md).
 
+The `0.9.0` marketplace must show exactly **AmpliFlow** (`ampliflow-production`, `.com/mcp`) and **AmpliFlow (Beta Channel)** (legacy `ampliflow`, `.cc/mcp-beta`). Each package has seven dependencies pointing only to its own server. Generate beta with `python3 -B scripts/sync_beta.py`; the managed checks reject stale/extra files, shared identities and wrong resources. Both ZIPs are deterministic and separate; the production submission must never contain the beta bundle.
+
 Individual deterministic commands:
 
 ```text
@@ -70,7 +72,7 @@ Local training instruction tests cover routing, native semantics, identity/parti
 
 ## Bounded composition cases
 
-Run these in fresh Desktop Work conversations with package `0.8.0`. Use one synthetic project and at most one task per chain, no concurrent calls, and stop on an unresolved result. These cases remain pending live acceptance, including the write acceptance tracked separately from this package change.
+Run these in fresh Desktop Work conversations with package `0.9.0` and the explicitly selected channel. Use one synthetic project and at most one task per chain, no concurrent calls, and stop on an unresolved result. These cases remain pending live acceptance, including the write acceptance tracked separately from this package change.
 
 | Case | Prompt and fixture | Required result |
 | --- | --- | --- |
@@ -203,4 +205,4 @@ These are live acceptance cases, not automated model-eval results. Run the top-l
 - Verify customer workspace access separately before promising self-service installation.
 - Before public **With MCP** submission, verify the exact normal deployment, resource-bound OAuth, PKCE `S256`, public-client registration, tool security declarations, privacy posture, reviewer access, and exact five positive plus three negative cases.
 
-The package stays a pilot until fresh installation, normal OAuth, Work-mode dispatcher and operation discovery, the router's read, confirmed-write and bounded composition workflows, all six focused query-only workflows, and answer quality are recorded. Package `0.8.0` deterministic checks do not replace fresh Desktop acceptance.
+The package stays a pilot until fresh installation, normal OAuth, Work-mode dispatcher and operation discovery, the router's read, confirmed-write and bounded composition workflows, all six focused query-only workflows, and answer quality are recorded. Package `0.9.0` deterministic checks and live-provider smoke with synthetic tool responses do not replace fresh Desktop acceptance.

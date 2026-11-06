@@ -22,6 +22,7 @@ jobs:
           if-no-files-found: error
           path: |
             dist/ampliflow-plugin.zip
+            dist/ampliflow-beta-plugin.zip
             dist/SHA256SUMS
             dist/build-report.json
             dist/PORTAL-FIELDS.txt

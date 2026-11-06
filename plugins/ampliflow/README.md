@@ -8,7 +8,7 @@ The AmpliFlow plugin works in ChatGPT Desktop **Work** mode. It connects to the 
 
 ## What the package contains
 
-Package `0.8.0` declares only `https://mcp.ampliflow.com/mcp` in `mcp.json`. It contains:
+Production package `0.9.0` uses plugin/MCP identity `ampliflow-production` and declares only `https://mcp.ampliflow.com/mcp` in `mcp.json`. The marketplace also contains **AmpliFlow (Beta Channel)** in a separate generated source root, retaining legacy identity `ampliflow` and `.cc/mcp-beta`. Each package contains:
 
 - one remote MCP connection
 - one lightweight router that loads focused domain references only when needed and handles explicit confirmed changes
@@ -18,7 +18,7 @@ Package `0.8.0` declares only `https://mcp.ampliflow.com/mcp` in `mcp.json`. It 
 
 OAuth is discovered from and handled for that exact MCP resource. Each user signs in with an AmpliFlow account and receives only the access allowed by that account. The new normal origin requires fresh resource-bound OAuth; never reuse or transform beta authorization.
 
-Candidate `0.8.0` is unpublished. Normal-origin TLS and routing are under construction; source agreement is not deployment or client acceptance. The published `0.7.0` beta artifact remains usable for internal tests and rollback, without changing this candidate's connection or adding a fallback.
+Normal and beta hosting are already qualified at MCP14.2.4. Version `0.9.0` changes package identities and marketplace entries, without deploying a server. Published earlier artifacts remain unchanged. The existing beta connection can be preserved; the fresh production identity requires its own OAuth and client acceptance.
 
 ## Admin installation
 
@@ -27,7 +27,7 @@ Use these steps only after a separately authorized release and verified hosted r
 1. Open **Admin > Plugins > Add > Import marketplace**.
 2. Set **Source** to `https://github.com/AmpliFlow/af-chatgpt`.
 3. Leave **Path** empty and import the marketplace.
-4. Make **AmpliFlow pilot** available to the pilot users.
+4. Verify both **AmpliFlow** and **AmpliFlow (Beta Channel)** and make the intended entries available to users. Preserve the working legacy beta connection; see [the migration plan](../../docs/mcp-deployment.md).
 
 See OpenAI's [marketplace import guide](https://help.openai.com/en/articles/20001504-importing-and-syncing-plugin-marketplaces-from-github) for current ChatGPT workspace administration steps.
 
@@ -35,7 +35,7 @@ See OpenAI's [marketplace import guide](https://help.openai.com/en/articles/2000
 
 1. Install **AmpliFlow** from the Plugins Directory.
 2. Complete AmpliFlow authentication when prompted.
-3. Fully quit and reopen ChatGPT Desktop.
+3. Coordinate any required installation/update restart with the owner and use an idle client.
 4. On the new-conversation screen, select **Work** at the top.
 5. Add `@AmpliFlow` in the composer.
 6. Ask: `What projects do I have?`
@@ -74,7 +74,7 @@ Personal reads use `get_authenticated_identity` through `ampliflow_people` and p
 
 | Surface | Status |
 | --- | --- |
-| Desktop **Work** mode | Package `0.5.0` pilot path verified; package `0.8.0` acceptance pending |
+| Desktop **Work** mode | Earlier beta project read verified; separate `0.9.0` channel installations and full workflows need fresh acceptance |
 | Desktop **Chat** mode | Unsupported for the imported package; no plugin MCP tools reach the cloud turn |
 | Web and mobile | Not delivered by this GitHub package; use the future **With MCP** review route |
 
@@ -88,11 +88,11 @@ Confirm that the conversation was created in **Work** mode. Switching to or retr
 
 ### Authentication does not complete
 
-Confirm the connection targets exactly `https://mcp.ampliflow.com/mcp`. Do not reuse credentials for another resource. Complete the prompted OAuth flow, restart Desktop, and retry in a new Work conversation.
+Confirm the connection targets exactly `https://mcp.ampliflow.com/mcp`. Do not reuse credentials for another resource. Complete the prompted OAuth flow and use a new Work conversation; coordinate any required restart without interrupting active work.
 
 ### The plugin shows no tools after an update
 
-Fully quit and reopen Desktop. If an obsolete AmpliFlow marketplace is still configured, remove it so only one installed plugin owns the `ampliflow` MCP server name. Do not add a duplicate personal MCP connection.
+Sync the repository marketplace and inspect both entries' actual source revision, server identity and URL. Production must use `ampliflow-production` at `.com/mcp`; legacy `ampliflow` belongs to Beta Channel at `.cc/mcp-beta`. Preserve the working beta entry and install production separately. Do not uninstall/reset it, copy authentication, add a duplicate personal connection or force a restart to hide a binding problem.
 
 ### A dispatcher or operation is unavailable
 

@@ -28,7 +28,7 @@ WRITE_MODE_PATTERN = re.compile(r'["\']mode["\']\s*:\s*["\']prepare["\']', re.IG
 DEPENDENCY_YAML = f'''dependencies:
   tools:
     - type: "mcp"
-      value: "ampliflow"
+      value: "ampliflow-production"
       description: "Read AmpliFlow management-system records"
       transport: "streamable_http"
       url: "{NORMAL_ENDPOINT}"
@@ -292,7 +292,7 @@ def validate_package(root: Path) -> list[str]:
         "type": "streamable-http",
         "url": NORMAL_ENDPOINT,
     }
-    if servers != {"ampliflow": expected_server}:
+    if servers != {"ampliflow-production": expected_server}:
         errors.append(f"{mcp_path}: expected only the credential-free AmpliFlow normal Streamable HTTP server")
 
     marketplace_plugins = marketplace.get("plugins", [])

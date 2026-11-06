@@ -1,35 +1,38 @@
-# 0.8.0 normal-origin release
+# 0.9.0 production and beta plugins
 
-Version `0.8.0` targets `https://mcp.ampliflow.com/mcp`. Hosted MCP 14.2.4 is deployed from source `65592883b222ec0fb857a14bcafbbef207019e73`. The production promotion verified both normal resources against the tested compact contract and retained the qualified beta image. These hosted checks do not prove Desktop installation or model behavior; fresh supported-client acceptance remains pending.
+Version `0.9.0` splits the GitHub marketplace into **AmpliFlow** for production and **AmpliFlow (Beta Channel)** for beta. This is a package/identity change; it does not deploy or modify the hosted MCP services.
 
 ## Release notes
 
-- Connect the existing `ampliflow` server name and all seven skill dependencies to the normal resource. Complete fresh resource-bound OAuth; never reuse or transform beta authorization.
-- Preserve six focused read-only reviews and the general router's exact-proposal confirmation, immutable approval receipt, single-commit and recovery rules.
-- Use returned frontend context and native identities for supported entity links; never guess a missing link.
-- Treat native training plans as course sessions. Preserve participants, require confirmed dates and live status options, and verify saved fields. Attendance or certificates alone do not prove competence or effectiveness.
-- Preserve effective-principal ownership filters, native grading read-back, selected-but-ungraded zero and separate non-atomic evidence. Missing capabilities remain unavailable, not empty results.
+- Add production plugin and MCP identity `ampliflow-production` at `https://mcp.ampliflow.com/mcp`.
+- Retain legacy plugin and MCP identity `ampliflow` at its exact existing `https://mcp.ampliflow.cc/mcp-beta` resource, now explicitly labelled **AmpliFlow (Beta Channel)**. Preserve its working connection; production starts with fresh resource-bound OAuth.
+- Keep the marketplace ID `ampliflow-pilot`. Each entry has its own local source root, MCP identity and seven skill dependencies, so installing production does not replace beta's server binding.
+- Generate the beta bundle deterministically from reviewed shared skills. Checks reject stale files, extra connections, wrong resources and channel-identity collisions.
+- Publish separate production and beta ZIP downloads. Only `ampliflow-plugin.zip` is the normal-resource public-store submission draft; `ampliflow-beta-plugin.zip` is explicitly beta.
+- Preserve six focused read-only reviews, the general router's exact confirmation and immutable approval receipt, single-commit/read-back/recovery rules, native grading/ownership semantics, entity links and training-session guidance.
 
-The published `0.7.0` beta artifact remains unchanged for internal tests and rollback. Use that explicit artifact for beta tests, not a fallback in the normal package.
+Published `0.8.0` and earlier releases remain immutable. Do not recreate their tags or replace their assets.
 
-## Normal GitHub publication
+## Build and publish
 
-Publication of `0.8.0` is complete. Do not recreate its tag/release or replace its verified assets. The steps below describe the publication process for a future authorized version. Server deployment and promotion are separate; see [MCP servers and deployment](docs/mcp-deployment.md).
+```sh
+python3 -B scripts/sync_beta.py
+python3 -B scripts/build_submission.py
+(cd dist && sha256sum -c SHA256SUMS)
+```
 
-1. Run `python3 -B scripts/check.py` and `python3 -B scripts/build_submission.py`.
-2. Verify `(cd dist && sha256sum -c SHA256SUMS)`. Source archives are not the allowlisted plugin ZIP.
-3. Confirm the intended new version is unpublished, commit the complete source and push the matching tag. The existing Check and build submission workflow must pass on that exact revision.
-4. Create the GitHub release with curated notes and the verified ZIP, checksums and build reports. The repository has no automatic release or store workflow.
-5. Read back the release tag, source revision, body and artifact checksums. A GitHub release does not update another installation or prove public-store approval.
+The build runs the canonical production skill checks, beta projection check and unit suite. Confirm the intended new version is unpublished, commit the complete source and push the matching tag through the normal GitHub workflow. Verify exact-source CI before creating the release.
 
-## Desktop delivery
+Publish all five generated assets: `ampliflow-plugin.zip`, `ampliflow-beta-plugin.zip`, `SHA256SUMS`, `build-report.json` and `PORTAL-FIELDS.txt`. Read back the release tag/source, curated body and each asset's downloaded bytes/checksum. The repository has no automatic release or store workflow.
 
-Import or sync the workspace marketplace and verify the exact revision and version. Complete fresh OAuth for exactly `https://mcp.ampliflow.com/mcp`. Preserve active-client boundaries; installation/update restart must be authorized and must not interrupt an active client.
+## Workspace migration and acceptance
 
-Run the acceptance checks in new ChatGPT Desktop Work conversations. Record all six focused query-only workflows, router read and confirmed-write behavior, persisted grading and ownership fields, entity links, native training semantics and failure recovery. Do not substitute SDK or static tests for supported-client execution.
+Sync the existing repository marketplace and verify both entries at the new revision. The legacy entry becomes explicitly beta without changing its identity or resource. Install the fresh production entry separately and complete OAuth for exactly `https://mcp.ampliflow.com/mcp`. Preserve active-client boundaries; no uninstall, reset, authentication copying or forced restart is part of this migration. See [MCP servers and deployment](docs/mcp-deployment.md).
+
+Verify the actual MCP URL and server identity for each installed entry, then run supported-client acceptance in fresh Desktop **Work** conversations with the selected plugin. Record all six focused query-only workflows, router read and confirmed-write behavior, persisted grading/ownership fields, links, training semantics and failure recovery. Static checks, live-provider smoke with synthetic tool responses and SDK checks are separate evidence layers; none replaces fresh Desktop acceptance.
 
 ## Remaining boundaries
 
-Follow [SUBMIT.md](SUBMIT.md) for public-store preparation. GitHub publication does not authorize policy adoption, country choices, reviewer provisioning, portal submission, recording/upload, external contact or production business-record writes.
+Hosted MCP 14.2.4 production and beta delivery is already qualified. This package change needs no new infrastructure work, server release or promotion. Existing deployment evidence and exact resource/issuer boundaries are in [the deployment guide](docs/mcp-deployment.md).
 
-Task 1236 entity-link and task 1238 training guidance are included with deterministic package tests. Their fresh supported-client regressions remain pending. Keep the native identity, grading and read-back contracts in [MCP-EVIDENCE.md](submission/MCP-EVIDENCE.md); preserve unknown evidence rather than claiming atomicity, human approval or verified behavior that was not observed.
+Follow [SUBMIT.md](SUBMIT.md) for public-store preparation. Package publication does not authorize recording/upload, policy adoption, countries, publisher attestations, store submission, tenant/account creation, or production business-record changes. Keep pending client cases and authorization limits explicit.
