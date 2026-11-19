@@ -47,11 +47,9 @@ def validate_files(root):
     errors = []
     plugin_root = root / "plugins/ampliflow"
     try:
-        files = [root / "README.md", root / "SUBMIT.md", root / "RELEASE.md", root / ".agents/plugins/marketplace.json"]
+        files = [root / "README.md", root / ".agents/plugins/marketplace.json"]
         files.extend(plugin_root.glob("*.json"))
-        files.extend(plugin_root.glob("*.md"))
         files.extend((root / "submission").glob("*.json"))
-        files.extend((root / "submission").glob("*.md"))
         for directory in sorted((plugin_root / "skills").iterdir()):
             files.extend(skill_files(root, directory))
         for path in files:

@@ -28,8 +28,7 @@ class SubmissionBuildTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         shutil.copytree(ROOT / "plugins", self.root / "plugins")
         shutil.copytree(ROOT / ".agents", self.root / ".agents")
-        shutil.copytree(ROOT / "docs", self.root / "docs")
-        for name in ("README.md", "SUBMIT.md", "RELEASE.md", "LICENSE"):
+        for name in ("README.md", "LICENSE"):
             shutil.copyfile(ROOT / name, self.root / name)
         review = {"test_cases": {
             "positive": [{"description": "Synthetic read", "prompt": "Read records", "tools_triggered": "ampliflow_projects", "expected_behavior": "Read only"}] * 5,

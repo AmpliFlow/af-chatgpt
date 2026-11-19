@@ -1,4 +1,5 @@
-.af/
+**/.af/*
+!/.af/config
 /AGENTS.md
 __pycache__/
 *.pyc

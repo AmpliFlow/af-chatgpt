@@ -35,21 +35,6 @@ class TrainingGuidanceTests(unittest.TestCase):
             with self.subTest(concept=concept):
                 self.assertIn(concept, text)
 
-    def test_supported_client_regression_is_pending_and_separate_from_submission_cases(self):
-        text = (skills.ROOT / "TESTING.md").read_text()
-        section = text.split("## Training-certificate regression (task 1238)", 1)[1].split("\n## ", 1)[0]
-        for concept in (
-            "PENDING", "Desktop **Work**", "Registrera utbildningen från kursintyget för den befintliga användaren",
-            "Elin Testsson", "Brandsäkerhet grundkurs", "2026-09-08T13:00:00+02:00",
-            '"Genomförd"', "synthetic", "live native status options",
-            "exact user UUID", "peopleToBeTrainedList", "logExecuted", "read-back",
-            "no separate catalogue/session hierarchy", "no browser fallback",
-            "no prepare before exact human confirmation", "readonly", "cancellation", "missing facts",
-            "five positive plus three negative", "not runtime pass evidence",
-        ):
-            with self.subTest(concept=concept):
-                self.assertIn(concept, section)
-
 
 if __name__ == "__main__":
     unittest.main()

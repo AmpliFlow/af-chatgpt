@@ -163,8 +163,7 @@ def portal_fields(manifest, archive_hash, missing):
         "Supply login URL, existing approved demo account, tenant and sign-in steps there.",
         "Do not reuse a customer account or disable production security.",
         "Domain verification: use ONLY the exact challenge token and URL from your draft.",
-        "Policy text awaiting owner decision: submission/POLICY-APPROVAL.md in the repository.",
-        "Test setup and expected results: submission/REVIEWER.md and submission/review.json in the repository.",
+        "Test cases and expected results: submission/review.json."
         "Local validation and prepared expected results are not live test passes.",
         "Run the five positive and three negative cases before attesting or submitting.",
         "OpenAI approval and Publish plugin are later actions, not part of this handoff.",
