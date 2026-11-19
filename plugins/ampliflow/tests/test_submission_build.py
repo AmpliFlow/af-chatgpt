@@ -28,6 +28,7 @@ class SubmissionBuildTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         shutil.copytree(ROOT / "plugins", self.root / "plugins")
         shutil.copytree(ROOT / ".agents", self.root / ".agents")
+        shutil.copytree(ROOT / "docs/images", self.root / "docs/images")
         for name in ("README.md", "LICENSE"):
             shutil.copyfile(ROOT / name, self.root / name)
         review = {"test_cases": {

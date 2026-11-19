@@ -30,19 +30,16 @@ AmpliFlow uses the permissions of your connected account. The six focused review
 
 If ChatGPT says it can't access AmpliFlow or load the instructions for a task such as creating an improvement, try these checks in order:
 
-```mermaid
-flowchart TD
-    accTitle: Restore the AmpliFlow connection
-    accDescr: Try a read in a new Work chat. If tools are missing, check AmpliFlow sign-in and the installed plugin.
-    A["Start a new Work chat"] --> B{"Can AmpliFlow list projects?"}
-    B -->|Yes| C["Return to your task"]
-    B -->|No| D["Check AmpliFlow sign-in"]
-    D -->|Still unavailable| E["Check the installed plugin"]
-```
-
 1. In ChatGPT Desktop, start a new **Work** conversation. Add `@AmpliFlow` and ask "What projects do I have?" This checks the connection without changing records. The mention can also appear in **Chat** mode, where the imported tools aren't available.
-2. If the read fails, open **Settings > Connect** in ChatGPT Desktop. Find AmpliFlow under **From plugins** and select **Authenticate** if prompted. Then test again in a new **Work** conversation.
-3. If AmpliFlow is missing or still unavailable, open **Plugins** in ChatGPT Desktop and check which AmpliFlow entry is installed. Use **AmpliFlow** for production or **AmpliFlow (Beta Channel)** for beta. If an older entry points to the wrong URL, ask your workspace admin to sync the marketplace, then reinstall only the affected entry and sign in again. Authorization is specific to the connection URL.
+2. If the read fails, open **Plugins**, select your installed AmpliFlow plugin, and click the gear next to **AmpliFlow** under **MCP servers**.
+
+   ![ChatGPT Desktop plugin page with callouts on the installed AmpliFlow entry and its MCP server settings gear](docs/images/ampliflow-plugin-settings.png)
+
+3. Under **From plugins**, select **Authenticate** next to `ampliflow` if the button is shown. Then try the project read again in a new **Work** conversation.
+
+   ![ChatGPT Desktop MCP settings with an arrow pointing to Authenticate on the ampliflow row](docs/images/ampliflow-authenticate.png)
+
+4. If the plugin is missing or still unavailable, check which entry is installed. Use **AmpliFlow** for production or **AmpliFlow (Beta Channel)** for beta. If an older entry points to the wrong URL, ask your workspace admin to sync the marketplace, then reinstall only the affected entry and sign in again. Authorization is specific to the connection URL.
 
 If the project read works but the improvement still can't be created, contact support with the plugin name and version, the error text, and a redacted example prompt. If a create request may already have been sent, check AmpliFlow for the record before trying again.
 
