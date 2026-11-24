@@ -1,3 +1,4 @@
+import hashlib
 import json
 import re
 import struct
@@ -8,6 +9,7 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 TESTS = Path("plugins/ampliflow/tests")
+SKILLS_PIN = "18a94e180be9566d74cf8971ecaab4735297f674504ca7b235368b3063dbe4c4"
 
 
 def safe_path(root, path):
@@ -41,6 +43,24 @@ def skill_files(root, directory):
             raise ValueError(f"credential-like skill input: {path.name}")
         files.append(path)
     return files
+
+
+def verify_skill_pin(root):
+    plugin = root / "plugins/ampliflow"
+    directory = plugin / "skills"
+    raw = safe_path(root, plugin / "skills.manifest.json").read_bytes()
+    if hashlib.sha256(raw).hexdigest() != SKILLS_PIN:
+        raise ValueError("ChatGPT skills manifest does not match the reviewed digest")
+    manifest = json.loads(raw)
+    if (manifest["schema"], manifest["version"], manifest["host"]) != (1, "0.1.0", "chatgpt"):
+        raise ValueError("not the pinned ChatGPT skill bundle")
+    files = {
+        path.relative_to(directory).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+        for skill in directory.iterdir()
+        for path in skill_files(root, skill)
+    }
+    if files != manifest["files"]:
+        raise ValueError("production skill files disagree with the pinned bundle")
 
 
 def validate_files(root):
@@ -90,6 +110,7 @@ def validate_files(root):
 
 
 def run_checks(root):
+    verify_skill_pin(root)
     errors = validate_files(root)
     if errors:
         raise ValueError("\n".join(errors))

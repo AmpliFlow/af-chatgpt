@@ -1,0 +1,29 @@
+{
+  "files": {
+    "reviewing-checklists/SKILL.md": "799841b40459c3b9a54e65e942ad580d787a88f08c2cd1380e34ea291d9d0704",
+    "reviewing-checklists/agents/openai.yaml": "18477ba60d6887e03cabbba96c5fe89b2a45c42d6ed7af6f23fd90fa05ffb905",
+    "reviewing-goals/SKILL.md": "7d3cdc44771b2704ffedaf1b9f0022c4069c1f28946e9979e4614c7531ae9093",
+    "reviewing-goals/agents/openai.yaml": "18477ba60d6887e03cabbba96c5fe89b2a45c42d6ed7af6f23fd90fa05ffb905",
+    "reviewing-improvements/SKILL.md": "f138bfbe1e9c5db1ef164f4a16586f6f3b8d3045dead65a2911881f8a36822c4",
+    "reviewing-improvements/agents/openai.yaml": "18477ba60d6887e03cabbba96c5fe89b2a45c42d6ed7af6f23fd90fa05ffb905",
+    "reviewing-project-portfolio/SKILL.md": "6e001e6a09b9e57f5acf3055ba7bcab39f78c9dc92c41e25e53c6b99cadcf54a",
+    "reviewing-project-portfolio/agents/openai.yaml": "18477ba60d6887e03cabbba96c5fe89b2a45c42d6ed7af6f23fd90fa05ffb905",
+    "reviewing-project-tasks/SKILL.md": "96ca15d3a6ffe92650e1ed11c8254a026f40c0f3c9e410bb963f35482d0e280a",
+    "reviewing-project-tasks/agents/openai.yaml": "18477ba60d6887e03cabbba96c5fe89b2a45c42d6ed7af6f23fd90fa05ffb905",
+    "reviewing-risks-and-controls/SKILL.md": "338b96ed480ca0a07a70d55512cfb2d132ea9e6eebc823319faa1390e5068265",
+    "reviewing-risks-and-controls/agents/openai.yaml": "18477ba60d6887e03cabbba96c5fe89b2a45c42d6ed7af6f23fd90fa05ffb905",
+    "using-ampliflow/SKILL.md": "0507c5aa1dccd78dfc45193b0ae20db0231147546c169f5384023eb70e8ef8b0",
+    "using-ampliflow/agents/openai.yaml": "18477ba60d6887e03cabbba96c5fe89b2a45c42d6ed7af6f23fd90fa05ffb905",
+    "using-ampliflow/references/assurance-content-and-planning.md": "418fe02ce8a30a86839060eac2900df245109662362fd7a8881d670bd37a3010",
+    "using-ampliflow/references/context-and-obligations.md": "6dbb3603e7223ed2fb594a92d7dd5d4100a938181e69c2390e5c5b90c9ac75c7",
+    "using-ampliflow/references/entity-links.md": "3fb641bec6802c931d7346f72dff55d72582857027231314194ebea1d660ab17",
+    "using-ampliflow/references/goals-and-performance.md": "dba3fd1daee5a877ee4502587cef5373716a9d3ea77024779cda8aa0450d92a4",
+    "using-ampliflow/references/people-and-training.md": "eb783f96a78986d402d0629d8cba8285c05990ff4beaf10f4047aeb748c3d785",
+    "using-ampliflow/references/processes-risks-controls-and-improvements.md": "01ca609f7cbceceb7bf9241d11c72b28e96481fa28ebff5198393ca6575d098c",
+    "using-ampliflow/references/projects-work-and-time.md": "92cc3255d6693cdcdd09109a87fa08d37a787530904c08d48468dba927eee4e0",
+    "using-ampliflow/references/supply-and-assets.md": "0a5a05acb5c2ee13b1b6a7d7aad5116d02559407b40c939cf1557a6aea35a0d0"
+  },
+  "host": "chatgpt",
+  "schema": 1,
+  "version": "0.1.0"
+}

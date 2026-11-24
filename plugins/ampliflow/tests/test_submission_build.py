@@ -44,6 +44,13 @@ class SubmissionBuildTests(unittest.TestCase):
             checks.assert_called_once_with(self.root)
         return report
 
+    def test_skill_projection_rejects_content_drift(self):
+        self.check.verify_skill_pin(self.root)
+        path = self.root / "plugins/ampliflow/skills/using-ampliflow/SKILL.md"
+        path.write_bytes(path.read_bytes() + b"\nUnpinned change\n")
+        with self.assertRaisesRegex(ValueError, "disagree with the pinned bundle"):
+            self.check.verify_skill_pin(self.root)
+
     def test_deterministic_full_plugin_root_paths_and_unchanged_skills(self):
         (self.root / ".af").mkdir()
         (self.root / ".af/credentials").write_text("not for distribution")

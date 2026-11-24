@@ -220,6 +220,7 @@ def build(root, output, answers_path=None):
         "missing_fields": missing,
         "checks": ["JSON, path, relative-link and PNG asset safety", "validate_skills self-test", "validate_skills", "unittest discovery", "submission metadata structure"],
         "skills": list(SKILLS),
+        "skills_source_manifest_sha256": digest(_checks.safe_path(root, plugin_root / "skills.manifest.json").read_bytes()),
         "adaptation": "Generated manifest only: public subtitle, website, review and publication metadata, and supplied answer URLs. Version comes from the source manifest. All seven skills and references remain byte-for-byte unchanged; Desktop sources are unchanged.",
         "allowlist": ["plugin.json (generated)", "mcp.json", "assets/icon.png", "skills/ (seven explicit skill directories)", "LICENSE"],
         "archive": {"name": "ampliflow-plugin.zip", "sha256": digest(archive_data)},

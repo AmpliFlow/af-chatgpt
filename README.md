@@ -50,6 +50,10 @@ If the project read works but the improvement still can't be created, contact su
 
 For help with your AmpliFlow account or connection, contact [AmpliFlow support](https://www.ampliflow.com/support/).
 
+## Maintainer build
+
+`plugins/ampliflow/skills/` is the vendored ChatGPT projection from the shared skills producer. Make guidance changes in the producer. Update the projection, `plugins/ampliflow/skills.manifest.json`, and the reviewed digest in `scripts/check.py` together. Regenerate beta with `python3 -B scripts/sync_beta.py`, then run `python3 -B scripts/build_submission.py` to validate and build both packages locally. The bundled skill bytes are available without a network fetch.
+
 ## License
 
 Copyright (c) 2026 Cognit Consulting AB, trading as AmpliFlow. All rights reserved. See [LICENSE](LICENSE).
