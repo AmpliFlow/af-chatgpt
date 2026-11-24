@@ -19,6 +19,8 @@ def load_channels():
 class MarketplaceChannelTests(unittest.TestCase):
     def test_marketplace_has_canonical_production_and_beta_identities(self):
         catalog = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
+        self.assertEqual(catalog["name"], "ampliflow")
+        self.assertEqual(catalog["interface"]["displayName"], "AmpliFlow")
         entries = catalog["plugins"]
         self.assertEqual({entry["name"] for entry in entries}, {"ampliflow", "ampliflow-beta"})
         self.assertEqual(len(entries), 2)
@@ -37,14 +39,14 @@ class MarketplaceChannelTests(unittest.TestCase):
                 "ampliflow": {"type": "streamable-http", "url": "https://mcp.ampliflow.com/mcp"},
             }),
             "ampliflow-beta": ("AmpliFlow (Beta Channel)", {
-                "ampliflow-beta": {"type": "streamable-http", "url": "https://mcp.ampliflow.cc/mcp-beta"},
+                "ampliflow-beta": {"type": "streamable-http", "url": "https://mcp.ampliflow.com/mcp-beta"},
             }),
         })
 
     def test_both_packages_bind_all_seven_skills_to_only_their_own_server(self):
         for directory, server, endpoint in (
             ("ampliflow", "ampliflow", "https://mcp.ampliflow.com/mcp"),
-            ("ampliflow-beta", "ampliflow-beta", "https://mcp.ampliflow.cc/mcp-beta"),
+            ("ampliflow-beta", "ampliflow-beta", "https://mcp.ampliflow.com/mcp-beta"),
         ):
             package = ROOT / "plugins" / directory
             dependencies = list((package / "skills").glob("*/agents/openai.yaml"))
@@ -85,7 +87,7 @@ class MarketplaceChannelTests(unittest.TestCase):
             beta = root / "plugins/ampliflow-beta"
             dependency = beta / "skills/using-ampliflow/agents/openai.yaml"
             original = dependency.read_bytes()
-            dependency.write_text(dependency.read_text().replace("https://mcp.ampliflow.cc/mcp-beta", "https://mcp.ampliflow.com/mcp"))
+            dependency.write_text(dependency.read_text().replace("https://mcp.ampliflow.com/mcp-beta", "https://mcp.ampliflow.com/mcp"))
             wrong = dependency.read_bytes()
             self.assertTrue(channels.validate_beta(root))
             self.assertEqual(dependency.read_bytes(), wrong)

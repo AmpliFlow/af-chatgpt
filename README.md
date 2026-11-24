@@ -46,7 +46,7 @@ If the project read works but the improvement still can't be created, contact su
 | Plugin | Connection URL |
 | --- | --- |
 | AmpliFlow | `https://mcp.ampliflow.com/mcp` |
-| AmpliFlow (Beta Channel) | `https://mcp.ampliflow.cc/mcp-beta` |
+| AmpliFlow (Beta Channel) | `https://mcp.ampliflow.com/mcp-beta` |
 
 For help with your AmpliFlow account or connection, contact [AmpliFlow support](https://www.ampliflow.com/support/).
 

@@ -163,7 +163,7 @@ class SkillDiscoveryTests(unittest.TestCase):
             path.write_text(source.replace(current, endpoint))
             self.assertEqual(skills.validate_dependency(path), [])
             for url in (
-                "https://mcp.ampliflow.cc/mcp-beta",
+                "https://mcp.example.com/mcp",
                 "https://mcp.ampliflow.com/mcp-beta",
                 endpoint + "/",
                 endpoint + "?resource=beta",
@@ -182,7 +182,7 @@ class SkillDiscoveryTests(unittest.TestCase):
             path = package / "mcp.json"
             source = json.loads(path.read_text())
             for url in (
-                "https://mcp.ampliflow.cc/mcp-beta",
+                "https://mcp.example.com/mcp",
                 "https://mcp.ampliflow.com/mcp-beta",
                 "https://mcp.ampliflow.com/mcp/",
             ):
@@ -319,7 +319,7 @@ class SkillDiscoveryTests(unittest.TestCase):
 
     def test_package_version_marks_coordinated_feature_candidate(self):
         plugin = json.loads((skills.ROOT / "plugin.json").read_text())
-        self.assertEqual(plugin["version"], "0.10.1")
+        self.assertEqual(plugin["version"], "0.10.2")
 
 
 if __name__ == "__main__":

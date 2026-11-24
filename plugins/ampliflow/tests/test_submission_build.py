@@ -73,7 +73,7 @@ class SubmissionBuildTests(unittest.TestCase):
                     source = self.root / ("LICENSE" if name == "LICENSE" else f"plugins/ampliflow/{name}")
                     self.assertEqual(archive.read(name), source.read_bytes())
             plugin = json.loads(archive.read("plugin.json"))
-            self.assertEqual(plugin["version"], "0.10.1")
+            self.assertEqual(plugin["version"], "0.10.2")
             extension = plugin["extensions"]["com.openai"]
             self.assertEqual(extension["interface"]["shortDescription"], "Manage work in AmpliFlow")
             self.assertEqual(extension["interface"]["supportURL"], "https://www.ampliflow.com/support/")
@@ -90,7 +90,7 @@ class SubmissionBuildTests(unittest.TestCase):
         report = json.loads(first["build-report.json"])
         source_version = json.loads((self.root / "plugins/ampliflow/plugin.json").read_text())["version"]
         self.assertEqual(report["source_package_version"], source_version)
-        self.assertEqual(report["package_version"], "0.10.1")
+        self.assertEqual(report["package_version"], source_version)
         self.assertEqual(report["validation"], "local validation only; not portal or runtime acceptance")
         self.assertFalse(report["ready_for_submission"])
         self.assertEqual(report["missing_fields"], ["demo_recording_url", "countries"])
@@ -109,7 +109,7 @@ class SubmissionBuildTests(unittest.TestCase):
             self.assertEqual(manifest["extensions"]["com.openai"]["interface"]["displayName"], "AmpliFlow (Beta Channel)")
             self.assertNotIn("review", manifest["extensions"]["com.openai"])
             self.assertEqual(json.loads(archive.read("mcp.json"))["mcpServers"], {
-                "ampliflow-beta": {"type": "streamable-http", "url": "https://mcp.ampliflow.cc/mcp-beta"},
+                "ampliflow-beta": {"type": "streamable-http", "url": "https://mcp.ampliflow.com/mcp-beta"},
             })
             self.assertEqual(len({name.split("/")[1] for name in archive.namelist() if name.startswith("skills/")}), 7)
             self.assertIn("LICENSE", archive.namelist())
@@ -126,11 +126,11 @@ class SubmissionBuildTests(unittest.TestCase):
             for name in archive.namelist():
                 with self.subTest(member=name):
                     data = archive.read(name)
-                    self.assertNotIn(b"mcp.ampliflow.cc", data)
                     self.assertNotIn(b"/mcp-beta", data)
         fields = (self.root / "dist/PORTAL-FIELDS.txt").read_text()
-        self.assertIn("MCP server URL: https://mcp.ampliflow.com/mcp\n", fields)
-        self.assertNotIn("mcp.ampliflow.cc", fields)
+        self.assertEqual([line for line in fields.splitlines() if line.startswith("MCP server URL:")], [
+            "MCP server URL: https://mcp.ampliflow.com/mcp",
+        ])
 
     def test_bundle_uses_source_release_version_without_an_independent_override(self):
         manifest = self.root / "plugins/ampliflow/plugin.json"

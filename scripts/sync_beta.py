@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PRODUCTION_SERVER = "ampliflow"
 PRODUCTION_URL = "https://mcp.ampliflow.com/mcp"
 BETA_SERVER = "ampliflow-beta"
-BETA_URL = "https://mcp.ampliflow.cc/mcp-beta"
+BETA_URL = "https://mcp.ampliflow.com/mcp-beta"
 _spec = importlib.util.spec_from_file_location("channel_checks", Path(__file__).with_name("check.py"))
 assert _spec is not None and _spec.loader is not None
 _checks = importlib.util.module_from_spec(_spec)

@@ -1,7 +1,7 @@
 {
-  "name": "ampliflow-pilot",
+  "name": "ampliflow",
   "interface": {
-    "displayName": "AmpliFlow pilot"
+    "displayName": "AmpliFlow"
   },
   "plugins": [
     {
