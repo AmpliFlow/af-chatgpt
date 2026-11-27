@@ -16,19 +16,16 @@ Guide the user through a full removal and reimport of the AmpliFlow marketplace,
 Seeing **Plus**, **ChatGPT**, or **Codex** does not establish how the plugin was installed. If you cannot access workspace settings, ask how AmpliFlow was installed before choosing the next path.
 
 - **Workspace import:** Start with Step 1. If the user is not an admin, give them Steps 1–2 to forward to their workspace admin.
-- **Personal install or source unknown:** Start with **Personal marketplace** below. If the user was expecting a managed workspace but cannot find it, ask its admin to confirm the user has access before changing anything.
+- **Personal install or source unknown:** Follow **If Workspace Settings is missing** below.
 
-### Personal marketplace: remove and add the source again
+### If Workspace Settings is missing
 
-Use this path for a user-installed GitHub marketplace. It does not require a ChatGPT workspace admin. OpenAI documents the following marketplace commands for **Codex CLI**, and documents that configured marketplaces appear in the Desktop **Work** or **Codex** Plugins Directory. This path requires an existing Codex CLI on the same Windows PC; the commands are documented, but this recovery path has not been tested on Windows Desktop.
+Keep this path in ChatGPT Desktop. Do not ask the user to run terminal commands or install developer tools.
 
-1. Open **PowerShell** on the Windows PC that runs ChatGPT Desktop.
-2. Run `codex plugin marketplace list`. Paste back only the AmpliFlow marketplace name you see, without local paths. If `codex` is not recognized, stop and report that the CLI is missing. Do not install software or delete Windows app data to resolve that error.
-3. If the list contains `ampliflow-pilot`, run `codex plugin marketplace remove ampliflow-pilot`. If it contains `ampliflow`, run `codex plugin marketplace remove ampliflow`. Remove only those AmpliFlow entries that are listed. If neither is listed, skip removal.
-4. Run `codex plugin marketplace add https://github.com/AmpliFlow/af-chatgpt`. Paste whether it succeeded or the error, without credentials or local paths.
-5. Reopen ChatGPT Desktop in **Work**. Open **Plugins** and select **AmpliFlow** as the marketplace source. Continue at Step 3, using that source instead of **Your workspace**. If the source is missing, stop and capture the Plugins Directory listing. A successful CLI add alone does not verify Desktop can see it.
-
-[OpenAI's marketplace commands](https://learn.chatgpt.com/docs/developer-commands) and [where marketplaces appear in Desktop](https://learn.chatgpt.com/plugins/build/plugins)
+1. In ChatGPT Desktop **Work**, click **Plugins**. Copy the AmpliFlow entries and marketplace names you see, or paste a cropped screenshot of that part of the list.
+2. If you find the AmpliFlow marketplace, open it. Tell ChatGPT which controls for adding or removing a marketplace are visible. An **Uninstall** button on a plugin is not a marketplace removal control.
+3. If Desktop offers both marketplace removal and reimport, confirm you can open the add form before removing the old source. Reimport `https://github.com/AmpliFlow/af-chatgpt`, then continue at Step 3 using the new AmpliFlow source. If the add form is missing or disabled, leave the old source in place.
+4. If your company is supposed to provide AmpliFlow, ask its ChatGPT workspace admin to confirm you are using the intended account and can access the workspace. If this is a personal install and you have no marketplace controls, send the support log to Patrik. There is no verified customer reinstall path from that screen. Do not reset Windows to make missing controls appear.
 
 ## 1. Delete the old marketplace (workspace admin)
 
@@ -84,6 +81,10 @@ Use these steps if **Import marketplace** says **Enable the GitHub plugin to imp
 4. Come back to this conversation and say whether an AmpliFlow tool call completed. If it failed, paste the error text or a cropped screenshot with project names and records hidden.
 
 A completed tool call can return zero projects. A plugin mention or an answer without a tool result is unverified.
+
+**Personal account: plugin installed and signed in, but no tools in Work.** Try the same read once in a new **Chat** conversation with the same plugin selected. We observed a project result in Chat with the production GitHub plugin on Pro, while Work did not return a tool result. Desktop Codex also worked in that test profile. Record each mode separately and check the activity for an actual AmpliFlow call. If Chat works, the user can use it for that read while support investigates Work. This has not been verified for Beta. If neither mode works, give the user the support log. Record the plan, workspace type, install method, channel, URL, test time with time zone, and sanitized error. Do not repeat the reinstall, reset Windows, or recommend a different plan based on this symptom.
+
+**Support comparison:** A direct custom MCP connection to `https://mcp.ampliflow.com/mcp`, created in Desktop with **Add custom MCP server** and OAuth **Dynamic Client Registration (DCR)**, completed a project read. This tests a different setup from the imported marketplace plugin. If the packaged plugin fails and the direct connection works on the same account, channel, and Desktop mode, investigate how the marketplace installation makes tools available in Work. This test covered production, not Beta. Do not present the direct connection as a verified fix for the customer's Beta installation.
 
 ## If the new plugin still fails
 

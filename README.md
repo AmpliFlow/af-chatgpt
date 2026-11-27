@@ -2,7 +2,7 @@
 
 Use AmpliFlow in ChatGPT Desktop **Work** mode to review project tasks, portfolios, goals, risks and controls, improvements, and checklists. The general AmpliFlow skill can also answer other questions about your records and make changes you explicitly confirm.
 
-This GitHub marketplace does not make AmpliFlow tools available in Desktop **Chat** mode, on the web, or on mobile.
+Use the Desktop app for this GitHub marketplace. Tool availability can differ between **Chat**, **Work**, and **Codex**, even when the same plugin is installed. Web and mobile use are not verified for this package.
 
 ## Import the marketplace
 
@@ -30,7 +30,7 @@ AmpliFlow uses the permissions of your connected account. The six focused review
 
 If ChatGPT says it can't access AmpliFlow or load the instructions for a task such as creating an improvement, try these checks in order:
 
-1. In ChatGPT Desktop, start a new **Work** conversation. Add `@AmpliFlow` and ask "What projects do I have?" This checks the connection without changing records. The mention can also appear in **Chat** mode, where the imported tools aren't available.
+1. In ChatGPT Desktop, start a new **Work** conversation. Add `@AmpliFlow` and ask "What projects do I have?" This checks the connection without changing records. If Work cannot call the installed plugin, try the same read once in a new **Chat** conversation. Check the activity for an AmpliFlow tool call; the mention alone does not verify the connection. See the [Windows troubleshooting guide](docs/reinstall-ampliflow-chatgpt-windows.md).
 2. If the read fails, open **Plugins**, select your installed AmpliFlow plugin, and click the gear next to **AmpliFlow** under **MCP servers**.
 
    ![ChatGPT Desktop plugin page with callouts on the installed AmpliFlow entry and its MCP server settings gear](docs/images/ampliflow-plugin-settings.png)
